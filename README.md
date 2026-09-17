@@ -257,6 +257,18 @@ Permission::required('POST', Endpoint::DOMAINS); // ["domains:manage"]
 | `spec/version.yaml` | The api-spec commit and version that specification was taken from |
 | `tests/` | PHPUnit tests, including a fixture specification that exercises the generator end to end |
 
+### Examples
+
+`examples/` holds scripts that run against the sandbox and print what happens: registering, renewing and updating
+a domain. They read the key from the `OPUSDNS_API_KEY` environment variable or from a `.env` file in the
+repository root; copy `.env.example` to `.env` and fill in a sandbox key.
+
+```bash
+php examples/register-domain.php
+php examples/renew-domain.php opusdns-php-client-1234abcd.com
+php examples/update-domain.php opusdns-php-client-1234abcd.com
+```
+
 ### Commands
 
 ```bash
