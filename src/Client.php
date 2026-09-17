@@ -85,6 +85,9 @@ final class Client
             ->withHeader('User-Agent', $this->config->userAgent)
             ->withHeader('X-Api-Key', $this->config->apiKey);
 
+        if ($this->config->clientToken !== '') {
+            $request = $request->withHeader('X-OpusDNS-Client', $this->config->clientToken);
+        }
         foreach (array_merge($this->config->headers, $headers) as $name => $value) {
             if ($value !== null) {
                 $request = $request->withHeader($name, $value);

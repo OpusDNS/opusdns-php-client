@@ -41,10 +41,25 @@ final class ClientTest extends TestCase
         self::assertSame('https://sandbox.opusdns.com/v1/dns', (string) $request->getUri());
         self::assertSame('secret', $request->getHeaderLine('X-Api-Key'));
         self::assertSame('application/json', $request->getHeaderLine('Accept'));
-        self::assertSame(Config::USER_AGENT, $request->getHeaderLine('User-Agent'));
+        self::assertMatchesRegularExpression('#^opusdns-php-client/(\d+\.\d+\.\d+\S*|dev)$#', $request->getHeaderLine('X-OpusDNS-Client'));
+        self::assertSame(Config::defaultClientToken(), $request->getHeaderLine('X-OpusDNS-Client'));
+        self::assertSame(Config::defaultClientToken(), $request->getHeaderLine('User-Agent'));
         self::assertSame('override', $request->getHeaderLine('X-Trace'));
         self::assertFalse($request->hasHeader('X-Skip'));
         self::assertFalse($request->hasHeader('Content-Type'));
+    }
+
+    public function testClientTokenAndUserAgentCanBeOverriddenOrOmitted(): void
+    {
+        [$client, $http] = ClientFactory::create(new Config('k', Config::SANDBOX_URL, userAgent: 'billing/2.0', clientToken: 'my-integration/3.1'));
+        $client->request('GET', '/v1/dns');
+        self::assertSame('billing/2.0', $http->lastRequest()->getHeaderLine('User-Agent'));
+        self::assertSame('my-integration/3.1', $http->lastRequest()->getHeaderLine('X-OpusDNS-Client'));
+
+        [$client, $http] = ClientFactory::create(new Config('k', Config::SANDBOX_URL, clientToken: ''));
+        $client->request('GET', '/v1/dns');
+        self::assertFalse($http->lastRequest()->hasHeader('X-OpusDNS-Client'));
+        self::assertSame(Config::defaultClientToken(), $http->lastRequest()->getHeaderLine('User-Agent'));
     }
 
     public function testBaseUrls(): void

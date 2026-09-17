@@ -63,10 +63,11 @@ use OpusDNS\Client\Config;
 $config = new Config(
     apiKey: 'opk_...',
     baseUrl: Config::PRODUCTION_URL,      // or Config::SANDBOX_URL
-    userAgent: 'my-billing-app/2.0',
+    userAgent: 'my-billing-app/2.0',      // defaults to the client token
     headers: ['X-Request-Source' => 'billing'],
     timeout: 30.0,                        // seconds, applied when Client::create() builds Guzzle
     connectTimeout: 5.0,
+    clientToken: 'my-billing-app/2.0',    // sent as X-OpusDNS-Client; '' omits the header
 );
 
 // Guzzle, built by the client
@@ -77,6 +78,8 @@ $client = new Client($config, $psr18Client, $requestFactory, $streamFactory);
 ```
 
 `Config::production($apiKey)` and `Config::sandbox($apiKey)` are shortcuts for the two environments.
+
+Every request carries the header `X-OpusDNS-Client: opusdns-php-client/<version>`.
 
 ## Services
 
