@@ -49,4 +49,12 @@ final readonly class PremiumPricingAction implements ApiModel
             'price' => $this->price,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

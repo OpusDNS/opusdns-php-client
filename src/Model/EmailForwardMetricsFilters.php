@@ -53,4 +53,12 @@ final readonly class EmailForwardMetricsFilters implements ApiModel
             'start_time' => $this->startTime,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

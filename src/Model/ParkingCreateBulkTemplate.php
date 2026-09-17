@@ -41,4 +41,12 @@ final readonly class ParkingCreateBulkTemplate implements ApiModel
             'enabled' => $this->enabled,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

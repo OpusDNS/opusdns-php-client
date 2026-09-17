@@ -50,6 +50,14 @@ final readonly class ConversationListResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<Conversation>
      */
     public function results(): array

@@ -52,4 +52,12 @@ final readonly class TmNotExactMatch implements ApiModel
             'udrp' => $this->udrp,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

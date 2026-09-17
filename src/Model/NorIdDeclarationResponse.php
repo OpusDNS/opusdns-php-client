@@ -83,4 +83,12 @@ final readonly class NorIdDeclarationResponse implements ApiModel
             'identity_value' => $this->identityValue,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -41,4 +41,12 @@ final readonly class ContactAttestReq implements ApiModel
             'attestations' => $this->attestations,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

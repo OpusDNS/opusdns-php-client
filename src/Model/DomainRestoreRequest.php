@@ -49,4 +49,12 @@ final readonly class DomainRestoreRequest implements ApiModel
             'reason' => $this->reason,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

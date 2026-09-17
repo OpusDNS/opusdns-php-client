@@ -53,4 +53,12 @@ final readonly class MailTemplateBlock implements ApiModel
             'multiline' => $this->multiline,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -73,4 +73,12 @@ final readonly class DnsZoneResponse implements ApiModel
             'vanity_nameserver_set_id' => $this->vanityNameserverSetId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

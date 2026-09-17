@@ -41,4 +41,12 @@ final readonly class Legal implements ApiModel
             'terms_url' => $this->termsUrl,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

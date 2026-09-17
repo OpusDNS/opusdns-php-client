@@ -41,4 +41,12 @@ final readonly class DomainHostResponse implements ApiModel
             'host_id' => $this->hostId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

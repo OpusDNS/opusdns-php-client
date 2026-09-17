@@ -48,4 +48,12 @@ final readonly class TmUdrp implements ApiModel
             'udrp_provider' => $this->udrpProvider,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

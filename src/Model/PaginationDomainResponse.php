@@ -52,6 +52,14 @@ final readonly class PaginationDomainResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<DomainResponse>
      */
     public function results(): array

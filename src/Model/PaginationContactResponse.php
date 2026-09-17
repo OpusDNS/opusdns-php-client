@@ -52,6 +52,14 @@ final readonly class PaginationContactResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<ContactResponse>
      */
     public function results(): array

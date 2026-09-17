@@ -48,4 +48,12 @@ final readonly class HttpRedirectRemove implements ApiModel
             'request_subdomain' => $this->requestSubdomain,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

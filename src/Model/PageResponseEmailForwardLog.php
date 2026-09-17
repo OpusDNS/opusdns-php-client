@@ -52,6 +52,14 @@ final readonly class PageResponseEmailForwardLog implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<EmailForwardLog>
      */
     public function results(): array

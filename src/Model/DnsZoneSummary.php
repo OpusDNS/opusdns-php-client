@@ -45,4 +45,12 @@ final readonly class DnsZoneSummary implements ApiModel
             'zones_by_dnssec' => $this->zonesByDnssec,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

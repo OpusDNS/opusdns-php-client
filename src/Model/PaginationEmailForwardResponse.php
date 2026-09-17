@@ -52,6 +52,14 @@ final readonly class PaginationEmailForwardResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<EmailForwardResponse>
      */
     public function results(): array

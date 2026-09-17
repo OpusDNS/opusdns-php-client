@@ -53,4 +53,12 @@ final readonly class SignupCreate implements ApiModel
             'terms_of_service' => $this->termsOfService,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

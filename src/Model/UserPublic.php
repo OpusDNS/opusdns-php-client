@@ -76,4 +76,12 @@ final readonly class UserPublic implements ApiModel
             'user_id' => $this->userId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

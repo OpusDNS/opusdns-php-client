@@ -42,4 +42,12 @@ final readonly class NorIdDeclarationConfirmRequest implements ApiModel
             'accept_name' => $this->acceptName,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

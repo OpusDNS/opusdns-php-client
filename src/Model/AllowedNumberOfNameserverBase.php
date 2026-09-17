@@ -45,4 +45,12 @@ final readonly class AllowedNumberOfNameserverBase implements ApiModel
             'min' => $this->min,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

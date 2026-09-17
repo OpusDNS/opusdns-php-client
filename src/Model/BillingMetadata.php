@@ -49,4 +49,12 @@ final readonly class BillingMetadata implements ApiModel
             'customer_number' => $this->customerNumber,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

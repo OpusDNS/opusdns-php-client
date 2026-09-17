@@ -45,4 +45,12 @@ final readonly class EmailForwardDeleteBulkInstance implements ApiModel
             'hostname' => $this->hostname,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

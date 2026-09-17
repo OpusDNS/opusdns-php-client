@@ -41,4 +41,12 @@ final readonly class DomainAvailabilityRequest implements ApiModel
             'domains' => $this->domains,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

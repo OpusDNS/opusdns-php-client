@@ -44,4 +44,12 @@ final readonly class PreviewMailRes implements ApiModel
             'text' => $this->text,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

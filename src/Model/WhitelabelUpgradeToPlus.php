@@ -65,4 +65,12 @@ final readonly class WhitelabelUpgradeToPlus implements ApiModel
             'dashboard_subdomain' => $this->dashboardSubdomain,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -41,4 +41,12 @@ final readonly class DnsZoneVanitySetUpdateRes implements ApiModel
             'zone' => $this->zone,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

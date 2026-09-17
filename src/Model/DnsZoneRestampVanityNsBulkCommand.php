@@ -52,4 +52,12 @@ final readonly class DnsZoneRestampVanityNsBulkCommand implements ApiModel
             'version' => $this->version,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

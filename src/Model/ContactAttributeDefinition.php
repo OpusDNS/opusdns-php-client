@@ -69,4 +69,12 @@ final readonly class ContactAttributeDefinition implements ApiModel
             'values' => $this->values,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

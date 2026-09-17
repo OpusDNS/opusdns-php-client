@@ -49,4 +49,12 @@ final readonly class DnsRecordResponse implements ApiModel
             'protected_reason' => $this->protectedReason,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

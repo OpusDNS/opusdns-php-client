@@ -45,4 +45,12 @@ final readonly class VanityNameserverDTO implements ApiModel
             'position' => $this->position,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

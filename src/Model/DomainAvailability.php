@@ -48,4 +48,12 @@ final readonly class DomainAvailability implements ApiModel
             'error' => $this->error,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

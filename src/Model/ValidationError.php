@@ -54,4 +54,12 @@ final readonly class ValidationError implements ApiModel
             'input' => $this->input,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

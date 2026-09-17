@@ -84,4 +84,12 @@ final readonly class OrganizationUpdate implements ApiModel
             'tax_rate' => $this->taxRate,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

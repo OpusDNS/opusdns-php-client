@@ -52,4 +52,12 @@ final readonly class ParkingSignupStatusResponse implements ApiModel
             'agreement_version' => $this->agreementVersion,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

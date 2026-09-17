@@ -45,4 +45,12 @@ final readonly class DomainTransitResponse implements ApiModel
             'success' => $this->success,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

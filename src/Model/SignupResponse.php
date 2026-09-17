@@ -41,4 +41,12 @@ final readonly class SignupResponse implements ApiModel
             'user' => $this->user,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

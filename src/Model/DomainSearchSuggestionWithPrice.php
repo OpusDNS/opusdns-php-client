@@ -50,4 +50,12 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
             'renewal_price' => $this->renewalPrice,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -46,4 +46,12 @@ final readonly class DomainForwardPatchOp implements ApiModel
             'redirect' => $this->redirect,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

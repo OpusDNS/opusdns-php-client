@@ -81,4 +81,12 @@ final readonly class UserPublicWithRole implements ApiModel
             'user_id' => $this->userId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

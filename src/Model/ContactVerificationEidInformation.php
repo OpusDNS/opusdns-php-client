@@ -42,4 +42,12 @@ final readonly class ContactVerificationEidInformation implements ApiModel
             'level_of_assurance' => $this->levelOfAssurance,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

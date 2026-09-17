@@ -110,4 +110,12 @@ final readonly class TldSpecificationResponse implements ApiModel
             'whois' => $this->whois,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

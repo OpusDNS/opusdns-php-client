@@ -53,4 +53,12 @@ final readonly class PaginationMetadata implements ApiModel
             'total_pages' => $this->totalPages,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

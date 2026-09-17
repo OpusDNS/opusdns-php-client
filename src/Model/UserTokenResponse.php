@@ -50,4 +50,12 @@ final readonly class UserTokenResponse implements ApiModel
             'token_type' => $this->tokenType,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -89,6 +89,10 @@ final class ModelEmitter
         $toArray->addComment('@return array<string, mixed>');
         $toArray->setBody($this->toArrayBody($properties));
 
+        $jsonSerialize = $class->addMethod('jsonSerialize')->setReturnType('array');
+        $jsonSerialize->addComment('@return array<string, mixed>');
+        $jsonSerialize->setBody('return $this->toArray();');
+
         if ($pageItem !== null) {
             $results = $class->addMethod('results')->setReturnType('array');
             $results->addComment("@return list<{$pageItem}>");

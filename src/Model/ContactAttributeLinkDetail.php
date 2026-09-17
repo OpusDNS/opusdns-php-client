@@ -54,4 +54,12 @@ final readonly class ContactAttributeLinkDetail implements ApiModel
             'tld' => $this->tld,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

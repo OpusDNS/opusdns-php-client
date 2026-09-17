@@ -52,6 +52,14 @@ final readonly class PaginationInvoiceResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<InvoiceResponse>
      */
     public function results(): array

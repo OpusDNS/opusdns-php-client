@@ -87,4 +87,12 @@ final readonly class JobBatchStatusResponse implements ApiModel
             'paused' => $this->paused,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

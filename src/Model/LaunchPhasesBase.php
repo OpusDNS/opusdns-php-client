@@ -47,4 +47,12 @@ final readonly class LaunchPhasesBase implements ApiModel
             'trademark_claims' => $this->trademarkClaims,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

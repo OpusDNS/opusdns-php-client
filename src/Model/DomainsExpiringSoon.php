@@ -49,4 +49,12 @@ final readonly class DomainsExpiringSoon implements ApiModel
             'next_90_days' => $this->next90Days,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

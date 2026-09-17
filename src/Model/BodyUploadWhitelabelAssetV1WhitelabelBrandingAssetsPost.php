@@ -41,4 +41,12 @@ final readonly class BodyUploadWhitelabelAssetV1WhitelabelBrandingAssetsPost imp
             'file' => $this->file,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -118,4 +118,12 @@ final readonly class DomainLifecycleBase implements ApiModel
             'transfer_renewal_periods' => $this->transferRenewalPeriods,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

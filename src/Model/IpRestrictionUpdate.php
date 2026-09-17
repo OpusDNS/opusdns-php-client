@@ -50,4 +50,12 @@ final readonly class IpRestrictionUpdate implements ApiModel
             'last_used_on' => $this->lastUsedOn,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -50,4 +50,12 @@ final readonly class AiInferenceUsageSummaryResponse implements ApiModel
             'product' => $this->product,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

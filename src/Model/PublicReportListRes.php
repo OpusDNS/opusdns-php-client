@@ -50,6 +50,14 @@ final readonly class PublicReportListRes implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<PublicReportRes>
      */
     public function results(): array

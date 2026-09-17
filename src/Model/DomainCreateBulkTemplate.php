@@ -92,4 +92,12 @@ final readonly class DomainCreateBulkTemplate implements ApiModel
             'nameservers' => $this->nameservers,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

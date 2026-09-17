@@ -62,4 +62,12 @@ final readonly class HostIpSchema implements ApiModel
             'updated_on' => $this->updatedOn,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

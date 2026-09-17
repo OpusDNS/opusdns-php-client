@@ -41,4 +41,12 @@ final readonly class DomainTransitRequest implements ApiModel
             'disconnect' => $this->disconnect,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

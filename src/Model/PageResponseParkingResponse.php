@@ -52,6 +52,14 @@ final readonly class PageResponseParkingResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<ParkingResponse>
      */
     public function results(): array

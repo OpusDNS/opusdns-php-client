@@ -52,4 +52,12 @@ final readonly class MessageCreateRequest implements ApiModel
             'n8n_history_id' => $this->n8nHistoryId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

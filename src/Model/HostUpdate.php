@@ -41,4 +41,12 @@ final readonly class HostUpdate implements ApiModel
             'ip_addresses' => $this->ipAddresses,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

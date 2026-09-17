@@ -54,4 +54,12 @@ final readonly class DnsChangesResponse implements ApiModel
             'dnssec_registry_publish' => $this->dnssecRegistryPublish,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

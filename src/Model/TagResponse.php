@@ -71,4 +71,12 @@ final readonly class TagResponse implements ApiModel
             'object_count' => $this->objectCount,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

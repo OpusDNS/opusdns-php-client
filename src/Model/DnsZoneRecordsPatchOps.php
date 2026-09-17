@@ -41,4 +41,12 @@ final readonly class DnsZoneRecordsPatchOps implements ApiModel
             'ops' => $this->ops,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

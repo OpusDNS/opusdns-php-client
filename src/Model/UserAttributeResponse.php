@@ -45,4 +45,12 @@ final readonly class UserAttributeResponse implements ApiModel
             'value' => $this->value,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

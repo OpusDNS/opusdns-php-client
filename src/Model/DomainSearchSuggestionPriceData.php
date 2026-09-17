@@ -44,4 +44,12 @@ final readonly class DomainSearchSuggestionPriceData implements ApiModel
             'amount' => $this->amount,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

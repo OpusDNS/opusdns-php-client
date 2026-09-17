@@ -53,4 +53,12 @@ final readonly class CustomRoleUpdate implements ApiModel
             'permissions' => $this->permissions,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

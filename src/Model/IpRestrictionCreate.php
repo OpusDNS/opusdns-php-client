@@ -52,4 +52,12 @@ final readonly class IpRestrictionCreate implements ApiModel
             'organization_id' => $this->organizationId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

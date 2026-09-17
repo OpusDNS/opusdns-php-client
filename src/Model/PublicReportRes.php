@@ -72,4 +72,12 @@ final readonly class PublicReportRes implements ApiModel
             'record_count' => $this->recordCount,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

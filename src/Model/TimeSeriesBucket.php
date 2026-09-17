@@ -41,4 +41,12 @@ final readonly class TimeSeriesBucket implements ApiModel
             'total' => $this->total,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

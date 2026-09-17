@@ -65,4 +65,12 @@ final readonly class UserUpdate implements ApiModel
             'username' => $this->username,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

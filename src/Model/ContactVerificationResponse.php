@@ -72,4 +72,12 @@ final readonly class ContactVerificationResponse implements ApiModel
             'verified_on' => $this->verifiedOn,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

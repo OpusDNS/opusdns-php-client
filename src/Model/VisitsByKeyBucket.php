@@ -44,4 +44,12 @@ final readonly class VisitsByKeyBucket implements ApiModel
             'unique' => $this->unique,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

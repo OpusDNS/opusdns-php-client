@@ -47,4 +47,12 @@ final readonly class NorIdResellerDeclarationRequest implements ApiModel
             'accept_date' => $this->acceptDate,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

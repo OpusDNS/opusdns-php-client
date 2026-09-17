@@ -45,4 +45,12 @@ final readonly class VanityNsCheckPublicReq implements ApiModel
             'set_id' => $this->setId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

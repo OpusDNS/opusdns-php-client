@@ -46,4 +46,12 @@ final readonly class VerificationResponse implements ApiModel
             'deadlines' => $this->deadlines,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

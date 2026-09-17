@@ -60,4 +60,12 @@ final readonly class DnsRrsetResponse implements ApiModel
             'records' => $this->records,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

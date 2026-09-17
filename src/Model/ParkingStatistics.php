@@ -62,4 +62,12 @@ final readonly class ParkingStatistics implements ApiModel
             'views' => $this->views,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

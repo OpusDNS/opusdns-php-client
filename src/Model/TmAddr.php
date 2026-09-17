@@ -57,4 +57,12 @@ final readonly class TmAddr implements ApiModel
             'sp' => $this->sp,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

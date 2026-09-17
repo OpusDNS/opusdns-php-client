@@ -49,4 +49,12 @@ final readonly class DomainRenewRequest implements ApiModel
             'expected_price' => $this->expectedPrice,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

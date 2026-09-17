@@ -48,4 +48,12 @@ final readonly class RequiredClaim implements ApiModel
             'accepted_proofs' => $this->acceptedProofs,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

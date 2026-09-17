@@ -72,4 +72,12 @@ final readonly class DomainDnssecDataCreate implements ApiModel
             'public_key' => $this->publicKey,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

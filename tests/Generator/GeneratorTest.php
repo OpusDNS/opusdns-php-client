@@ -157,6 +157,8 @@ final class GeneratorTest extends TestCase
             'toys' => [['name' => 'ball']],
             'event' => ['adopter' => 'Ada', 'event_type' => 'adopted'],
         ], $pet->toArray());
+        self::assertInstanceOf(\JsonSerializable::class, $pet);
+        self::assertSame(json_encode($pet->toArray()), json_encode($pet));
     }
 
     public function testPageModelsImplementPage(): void

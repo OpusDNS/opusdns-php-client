@@ -72,4 +72,12 @@ final readonly class CreateJobBatchResponse implements ApiModel
             'jobs_duplicated' => $this->jobsDuplicated,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

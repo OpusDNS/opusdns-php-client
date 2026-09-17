@@ -49,4 +49,12 @@ final readonly class EmailForwardAliasMetrics implements ApiModel
             'total_logs' => $this->totalLogs,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

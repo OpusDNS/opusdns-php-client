@@ -44,4 +44,12 @@ final readonly class ParkingSignupRequest implements ApiModel
             'agreement' => $this->agreement,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

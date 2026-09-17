@@ -42,4 +42,12 @@ final readonly class CreateReportReq implements ApiModel
             'report_type' => $this->reportType,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

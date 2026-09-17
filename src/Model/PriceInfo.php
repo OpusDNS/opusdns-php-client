@@ -56,4 +56,12 @@ final readonly class PriceInfo implements ApiModel
             'product_class' => $this->productClass,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

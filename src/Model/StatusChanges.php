@@ -46,4 +46,12 @@ final readonly class StatusChanges implements ApiModel
             'remove' => $this->remove,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

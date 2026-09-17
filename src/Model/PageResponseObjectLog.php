@@ -52,6 +52,14 @@ final readonly class PageResponseObjectLog implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<ObjectLog>
      */
     public function results(): array

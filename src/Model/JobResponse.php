@@ -119,4 +119,12 @@ final readonly class JobResponse implements ApiModel
             'started_at' => $this->startedAt,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

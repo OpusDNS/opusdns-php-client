@@ -41,4 +41,12 @@ final readonly class ListBrandingAssetsResponse implements ApiModel
             'assets' => $this->assets,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

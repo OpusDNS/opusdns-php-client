@@ -45,4 +45,12 @@ final readonly class TransferLockPolicyBase implements ApiModel
             'supported_by_registry' => $this->supportedByRegistry,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

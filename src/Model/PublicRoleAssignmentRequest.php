@@ -42,4 +42,12 @@ final readonly class PublicRoleAssignmentRequest implements ApiModel
             'role' => $this->role,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

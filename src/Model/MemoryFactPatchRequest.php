@@ -44,4 +44,12 @@ final readonly class MemoryFactPatchRequest implements ApiModel
             'value' => $this->value,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

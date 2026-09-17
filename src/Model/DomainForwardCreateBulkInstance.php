@@ -53,4 +53,12 @@ final readonly class DomainForwardCreateBulkInstance implements ApiModel
             'https' => $this->https,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

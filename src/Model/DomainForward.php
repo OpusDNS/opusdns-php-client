@@ -62,4 +62,12 @@ final readonly class DomainForward implements ApiModel
             'parking_id' => $this->parkingId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

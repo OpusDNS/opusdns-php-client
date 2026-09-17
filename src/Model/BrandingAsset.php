@@ -57,4 +57,12 @@ final readonly class BrandingAsset implements ApiModel
             'content_type' => $this->contentType,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

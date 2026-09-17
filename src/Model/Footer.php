@@ -47,4 +47,12 @@ final readonly class Footer implements ApiModel
             'vat_id' => $this->vatId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

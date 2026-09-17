@@ -68,4 +68,12 @@ final readonly class UserCreate implements ApiModel
             'user_attributes' => $this->userAttributes,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

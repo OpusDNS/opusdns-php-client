@@ -51,4 +51,12 @@ final readonly class DomainRegistrarCredentialResponse implements ApiModel
             'registrar_credential_id' => $this->registrarCredentialId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

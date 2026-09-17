@@ -116,4 +116,12 @@ final readonly class TransferPoliciesBase implements ApiModel
             'transfer_time' => $this->transferTime,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

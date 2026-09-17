@@ -62,4 +62,12 @@ final readonly class DomainSummaryData implements ApiModel
             'total_count' => $this->totalCount,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

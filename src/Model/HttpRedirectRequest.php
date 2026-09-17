@@ -52,4 +52,12 @@ final readonly class HttpRedirectRequest implements ApiModel
             'target_protocol' => $this->targetProtocol,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

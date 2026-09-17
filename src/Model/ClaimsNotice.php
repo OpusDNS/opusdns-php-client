@@ -77,4 +77,12 @@ final readonly class ClaimsNotice implements ApiModel
             'rendered_html' => $this->renderedHtml,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

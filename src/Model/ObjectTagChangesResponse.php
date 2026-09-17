@@ -49,4 +49,12 @@ final readonly class ObjectTagChangesResponse implements ApiModel
             'unresolved' => $this->unresolved,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

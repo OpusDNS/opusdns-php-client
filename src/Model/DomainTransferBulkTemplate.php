@@ -89,4 +89,12 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
             'period' => $this->period,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

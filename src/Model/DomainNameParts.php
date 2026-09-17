@@ -44,4 +44,12 @@ final readonly class DomainNameParts implements ApiModel
             'suffix' => $this->suffix,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

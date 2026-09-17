@@ -44,4 +44,12 @@ final readonly class MemoryFactListResponse implements ApiModel
             'next_cursor' => $this->nextCursor,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

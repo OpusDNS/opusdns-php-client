@@ -41,4 +41,12 @@ final readonly class TermsOfServiceAccept implements ApiModel
             'accepted' => $this->accepted,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

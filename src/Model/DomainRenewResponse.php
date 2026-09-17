@@ -49,4 +49,12 @@ final readonly class DomainRenewResponse implements ApiModel
             'period_extended' => $this->periodExtended,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

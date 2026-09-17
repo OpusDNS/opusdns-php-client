@@ -45,4 +45,12 @@ final readonly class ParkingTotalMetricsResponse implements ApiModel
             'total_metrics' => $this->totalMetrics,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

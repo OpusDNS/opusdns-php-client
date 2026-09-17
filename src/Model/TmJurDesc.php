@@ -48,4 +48,12 @@ final readonly class TmJurDesc implements ApiModel
             'jur_cc' => $this->jurCc,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

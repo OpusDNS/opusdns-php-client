@@ -52,6 +52,14 @@ final readonly class PageResponseJobResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<JobResponse>
      */
     public function results(): array

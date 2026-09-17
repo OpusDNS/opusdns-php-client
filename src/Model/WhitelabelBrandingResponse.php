@@ -120,4 +120,12 @@ final readonly class WhitelabelBrandingResponse implements ApiModel
             'subscription' => $this->subscription,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

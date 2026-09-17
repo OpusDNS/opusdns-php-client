@@ -41,4 +41,12 @@ final readonly class DnsRecordDTO implements ApiModel
             'rdata' => $this->rdata,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

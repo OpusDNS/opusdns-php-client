@@ -53,4 +53,12 @@ final readonly class Content implements ApiModel
             'support' => $this->support,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

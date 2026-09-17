@@ -59,4 +59,12 @@ final readonly class Message implements ApiModel
             'metadata' => $this->metadata,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

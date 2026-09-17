@@ -53,4 +53,12 @@ final readonly class ContactAttestVerificationReq implements ApiModel
             'eid' => $this->eid,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

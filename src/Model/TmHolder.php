@@ -60,4 +60,12 @@ final readonly class TmHolder implements ApiModel
             'voice' => $this->voice,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

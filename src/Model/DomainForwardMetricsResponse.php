@@ -47,4 +47,12 @@ final readonly class DomainForwardMetricsResponse implements ApiModel
             'unique_visits' => $this->uniqueVisits,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

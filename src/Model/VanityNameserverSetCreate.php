@@ -57,4 +57,12 @@ final readonly class VanityNameserverSetCreate implements ApiModel
             'soa_rname' => $this->soaRname,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

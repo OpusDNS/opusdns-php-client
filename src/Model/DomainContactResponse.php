@@ -52,4 +52,12 @@ final readonly class DomainContactResponse implements ApiModel
             'attributes' => $this->attributes,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

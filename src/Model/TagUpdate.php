@@ -50,4 +50,12 @@ final readonly class TagUpdate implements ApiModel
             'label' => $this->label,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

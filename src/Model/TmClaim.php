@@ -68,4 +68,12 @@ final readonly class TmClaim implements ApiModel
             'not_exact_match' => $this->notExactMatch,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

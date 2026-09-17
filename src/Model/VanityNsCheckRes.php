@@ -58,4 +58,12 @@ final readonly class VanityNsCheckRes implements ApiModel
             'checks' => $this->checks,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

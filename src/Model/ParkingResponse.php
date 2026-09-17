@@ -74,4 +74,12 @@ final readonly class ParkingResponse implements ApiModel
             'note' => $this->note,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

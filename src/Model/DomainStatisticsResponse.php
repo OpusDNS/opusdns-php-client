@@ -73,4 +73,12 @@ final readonly class DomainStatisticsResponse implements ApiModel
             'data_available_from' => $this->dataAvailableFrom,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

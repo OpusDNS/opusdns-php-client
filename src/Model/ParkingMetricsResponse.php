@@ -54,4 +54,12 @@ final readonly class ParkingMetricsResponse implements ApiModel
             'revenue_progress' => $this->revenueProgress,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

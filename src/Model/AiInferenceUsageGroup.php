@@ -57,4 +57,12 @@ final readonly class AiInferenceUsageGroup implements ApiModel
             'request_count' => $this->requestCount,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

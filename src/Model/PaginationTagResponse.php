@@ -52,6 +52,14 @@ final readonly class PaginationTagResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<TagResponse>
      */
     public function results(): array

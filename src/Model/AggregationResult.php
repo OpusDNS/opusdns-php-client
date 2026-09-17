@@ -60,4 +60,12 @@ final readonly class AggregationResult implements ApiModel
             'values' => $this->values,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

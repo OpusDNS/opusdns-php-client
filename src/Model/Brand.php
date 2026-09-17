@@ -41,4 +41,12 @@ final readonly class Brand implements ApiModel
             'name' => $this->name,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

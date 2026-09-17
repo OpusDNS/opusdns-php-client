@@ -41,4 +41,12 @@ final readonly class DomainRenewalDetails implements ApiModel
             'detail_type' => $this->detailType,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

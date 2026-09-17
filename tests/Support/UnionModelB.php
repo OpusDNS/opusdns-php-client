@@ -21,4 +21,9 @@ final class UnionModelB implements ApiModel
     {
         return ['kind' => $this->kind, 'left' => $this->left, 'right' => $this->right];
     }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

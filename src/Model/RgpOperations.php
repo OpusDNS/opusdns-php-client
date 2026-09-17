@@ -45,4 +45,12 @@ final readonly class RgpOperations implements ApiModel
             'request' => $this->request,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

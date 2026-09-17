@@ -74,4 +74,12 @@ final readonly class DomainStatisticsBucketResponse implements ApiModel
             'transfer_out' => $this->transferOut,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

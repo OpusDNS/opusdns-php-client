@@ -48,4 +48,12 @@ final readonly class DomainForwardZone implements ApiModel
             'zone_name' => $this->zoneName,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

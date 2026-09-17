@@ -102,4 +102,12 @@ final readonly class DomainTransferIn implements ApiModel
             'period' => $this->period,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

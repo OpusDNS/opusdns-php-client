@@ -62,4 +62,12 @@ final readonly class EmailForwardMetrics implements ApiModel
             'by_alias' => $this->byAlias,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

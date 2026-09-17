@@ -75,4 +75,12 @@ final readonly class CommonModelsDomainDomainDomainAvailabilityResponse implemen
             'reason' => $this->reason,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

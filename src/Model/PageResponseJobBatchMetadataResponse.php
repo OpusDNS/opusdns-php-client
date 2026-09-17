@@ -52,6 +52,14 @@ final readonly class PageResponseJobBatchMetadataResponse implements ApiModel, P
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<JobBatchMetadataResponse>
      */
     public function results(): array

@@ -42,4 +42,12 @@ final readonly class SetVanityNameserverSetDefaultRes implements ApiModel
             'vanity_nameserver_set' => $this->vanityNameserverSet,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

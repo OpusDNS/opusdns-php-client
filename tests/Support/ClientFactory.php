@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace OpusDNS\Client\Tests\Support;
 
-use GuzzleHttp\Psr7\HttpFactory;
 use OpusDNS\Client\Client;
 use OpusDNS\Client\Config;
+use OpusDNS\Client\Testing\FakeHttpClient;
 
 final class ClientFactory
 {
@@ -14,8 +14,7 @@ final class ClientFactory
     public static function create(?Config $config = null): array
     {
         $http = new FakeHttpClient();
-        $factory = new HttpFactory();
 
-        return [new Client($config ?? Config::sandbox('test-key'), $http, $factory, $factory), $http];
+        return [$http->client($config ?? Config::sandbox('test-key')), $http];
     }
 }

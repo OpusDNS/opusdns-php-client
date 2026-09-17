@@ -50,4 +50,12 @@ final readonly class TldBase implements ApiModel
             'third_level_structure' => $this->thirdLevelStructure,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

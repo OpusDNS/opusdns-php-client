@@ -44,4 +44,12 @@ final readonly class OrganizationTokenResponse implements ApiModel
             'token_type' => $this->tokenType,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

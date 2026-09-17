@@ -78,4 +78,12 @@ final readonly class VanityNsCheckResultDTO implements ApiModel
             'remediation' => $this->remediation,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

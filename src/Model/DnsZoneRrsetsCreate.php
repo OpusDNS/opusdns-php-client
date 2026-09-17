@@ -41,4 +41,12 @@ final readonly class DnsZoneRrsetsCreate implements ApiModel
             'rrsets' => $this->rrsets,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

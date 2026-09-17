@@ -70,4 +70,12 @@ final readonly class ContactAttributeSetResponse implements ApiModel
             'linked_contacts' => $this->linkedContacts,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -53,4 +53,12 @@ final readonly class TrademarkClaimsBase implements ApiModel
             'tmch_required' => $this->tmchRequired,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

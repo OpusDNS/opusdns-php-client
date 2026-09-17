@@ -44,4 +44,12 @@ final readonly class EmailForwardAliasCreate implements ApiModel
             'forward_to' => $this->forwardTo,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

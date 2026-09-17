@@ -66,4 +66,12 @@ final readonly class WhitelabelSubscriptionInfo implements ApiModel
             'renew_scheduled_at' => $this->renewScheduledAt,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

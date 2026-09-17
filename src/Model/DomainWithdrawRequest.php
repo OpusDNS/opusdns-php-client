@@ -43,4 +43,12 @@ final readonly class DomainWithdrawRequest implements ApiModel
             'zone_delete' => $this->zoneDelete,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -50,4 +50,12 @@ final readonly class ContextPayloadRegistrarDomain implements ApiModel
             'pagination' => $this->pagination,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -135,4 +135,12 @@ final readonly class Palette implements ApiModel
             'warning' => $this->warning,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

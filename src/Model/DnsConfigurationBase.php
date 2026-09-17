@@ -81,4 +81,12 @@ final readonly class DnsConfigurationBase implements ApiModel
             'host_parent_check_tlds' => $this->hostParentCheckTlds,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

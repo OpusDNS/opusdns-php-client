@@ -101,4 +101,12 @@ final readonly class DomainTransferBulkInstance implements ApiModel
             'renewal_mode' => $this->renewalMode,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

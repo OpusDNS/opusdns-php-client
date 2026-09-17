@@ -49,4 +49,12 @@ final readonly class DomainRestoreResponse implements ApiModel
             'restored_at' => $this->restoredAt,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

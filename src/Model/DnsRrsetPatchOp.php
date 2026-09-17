@@ -42,4 +42,12 @@ final readonly class DnsRrsetPatchOp implements ApiModel
             'rrset' => $this->rrset,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

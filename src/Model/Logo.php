@@ -47,4 +47,12 @@ final readonly class Logo implements ApiModel
             'light' => $this->light,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

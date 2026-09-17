@@ -42,4 +42,12 @@ final readonly class OutboundTransferRequest implements ApiModel
             'action' => $this->action,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -59,4 +59,12 @@ final readonly class JobCountsByStatus implements ApiModel
             'succeeded' => $this->succeeded,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

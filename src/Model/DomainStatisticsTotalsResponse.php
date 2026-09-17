@@ -69,4 +69,12 @@ final readonly class DomainStatisticsTotalsResponse implements ApiModel
             'transfer_out' => $this->transferOut,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

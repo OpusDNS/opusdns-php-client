@@ -53,4 +53,12 @@ final readonly class RegistryLockBase implements ApiModel
             'requires_manual_request' => $this->requiresManualRequest,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

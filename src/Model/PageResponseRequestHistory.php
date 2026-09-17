@@ -52,6 +52,14 @@ final readonly class PageResponseRequestHistory implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<RequestHistory>
      */
     public function results(): array

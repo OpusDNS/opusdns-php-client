@@ -41,4 +41,12 @@ final readonly class RdapBase implements ApiModel
             'rdap_server' => $this->rdapServer,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

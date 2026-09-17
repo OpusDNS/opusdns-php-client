@@ -41,4 +41,12 @@ final readonly class ParkingDisableBulkInstance implements ApiModel
             'parking_reference' => $this->parkingReference,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

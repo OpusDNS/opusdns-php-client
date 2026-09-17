@@ -135,4 +135,12 @@ final readonly class OrganizationWithBillingData implements ApiModel
             'users' => $this->users,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

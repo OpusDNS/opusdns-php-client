@@ -56,4 +56,12 @@ final readonly class DomainVerificationDetails implements ApiModel
             'verification_deadlines' => $this->verificationDeadlines,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

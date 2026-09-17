@@ -53,4 +53,12 @@ final readonly class EmailForwardMetricsRates implements ApiModel
             'refused_rate' => $this->refusedRate,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

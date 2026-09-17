@@ -52,6 +52,14 @@ final readonly class PaginationDomainForward implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<DomainForward>
      */
     public function results(): array

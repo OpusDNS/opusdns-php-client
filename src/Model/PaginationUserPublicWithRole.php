@@ -52,6 +52,14 @@ final readonly class PaginationUserPublicWithRole implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<UserPublicWithRole>
      */
     public function results(): array

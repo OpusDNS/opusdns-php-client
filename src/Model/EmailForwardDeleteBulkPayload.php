@@ -41,4 +41,12 @@ final readonly class EmailForwardDeleteBulkPayload implements ApiModel
             'instances' => $this->instances,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

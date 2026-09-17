@@ -50,4 +50,12 @@ final readonly class Theme implements ApiModel
             'radius' => $this->radius,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

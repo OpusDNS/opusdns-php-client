@@ -52,6 +52,14 @@ final readonly class PaginationContactAttributeSetResponse implements ApiModel, 
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<ContactAttributeSetResponse>
      */
     public function results(): array

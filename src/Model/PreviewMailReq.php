@@ -51,4 +51,12 @@ final readonly class PreviewMailReq implements ApiModel
             'branding_document' => $this->brandingDocument,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

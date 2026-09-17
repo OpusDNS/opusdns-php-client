@@ -53,4 +53,12 @@ final readonly class RegistrarRRSet implements ApiModel
             'record' => $this->record,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

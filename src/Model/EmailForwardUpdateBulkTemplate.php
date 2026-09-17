@@ -45,4 +45,12 @@ final readonly class EmailForwardUpdateBulkTemplate implements ApiModel
             'aliases' => $this->aliases,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -45,4 +45,12 @@ final readonly class DomainSummaryResponse implements ApiModel
             'organization_id' => $this->organizationId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

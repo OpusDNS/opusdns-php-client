@@ -52,6 +52,14 @@ final readonly class PaginationOrganization implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<Organization>
      */
     public function results(): array

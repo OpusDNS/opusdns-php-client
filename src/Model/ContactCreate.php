@@ -91,4 +91,12 @@ final readonly class ContactCreate implements ApiModel
             'title' => $this->title,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

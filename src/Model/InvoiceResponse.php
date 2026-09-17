@@ -98,4 +98,12 @@ final readonly class InvoiceResponse implements ApiModel
             'file_url' => $this->fileUrl,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

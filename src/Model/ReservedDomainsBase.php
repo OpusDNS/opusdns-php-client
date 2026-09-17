@@ -50,4 +50,12 @@ final readonly class ReservedDomainsBase implements ApiModel
             'url' => $this->url,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

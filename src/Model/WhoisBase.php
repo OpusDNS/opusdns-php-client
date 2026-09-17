@@ -41,4 +41,12 @@ final readonly class WhoisBase implements ApiModel
             'whois_server' => $this->whoisServer,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

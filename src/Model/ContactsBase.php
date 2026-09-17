@@ -94,4 +94,12 @@ final readonly class ContactsBase implements ApiModel
             'update_supported_roles' => $this->updateSupportedRoles,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

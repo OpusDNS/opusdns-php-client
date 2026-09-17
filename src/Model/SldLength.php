@@ -45,4 +45,12 @@ final readonly class SldLength implements ApiModel
             'min' => $this->min,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

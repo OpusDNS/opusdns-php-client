@@ -87,4 +87,12 @@ final readonly class RequestHistory implements ApiModel
             'response_body' => $this->responseBody,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

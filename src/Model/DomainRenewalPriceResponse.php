@@ -55,4 +55,12 @@ final readonly class DomainRenewalPriceResponse implements ApiModel
             'price' => $this->price,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

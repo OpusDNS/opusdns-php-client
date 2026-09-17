@@ -52,6 +52,14 @@ final readonly class PaginationEmailForwardZone implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<EmailForwardZone>
      */
     public function results(): array

@@ -49,4 +49,12 @@ final readonly class ProductCreateRes implements ApiModel
             'subscription_id' => $this->subscriptionId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

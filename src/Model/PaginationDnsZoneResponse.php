@@ -52,6 +52,14 @@ final readonly class PaginationDnsZoneResponse implements ApiModel, Page
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<DnsZoneResponse>
      */
     public function results(): array

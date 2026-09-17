@@ -172,4 +172,12 @@ final readonly class DomainResponse implements ApiModel
             'verification_required' => $this->verificationRequired,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

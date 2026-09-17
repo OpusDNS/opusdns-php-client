@@ -153,6 +153,8 @@ is a backed `enum` in `OpusDNS\Client\Enum`.
 - Construct request models with named arguments. Required fields come first and have no default; optional fields
   default to `null` or to the default the specification declares.
 - Every service method that takes a body accepts either the model or a plain array with the JSON field names.
+- Models implement `JsonSerializable`, so `json_encode($domain)` and framework JSON responses produce the API's
+  own shape.
 - `toArray()` omits properties that are `null`. `new DomainUpdate(authCode: null)` therefore leaves the auth code
   untouched. To send an explicit `null`, pass a plain array: `updateDomain('example.com', ['auth_code' => null])`.
 - Enumerated fields are typed as enums, so `$domain->renewalMode === RenewalMode::EXPIRE` works and `match`
@@ -227,6 +229,28 @@ try {
     // retry later
 }
 ```
+
+## Testing your integration
+
+`OpusDNS\Client\Testing\FakeHttpClient` is a PSR-18 client that records requests and answers from a queue, so
+code using this client can be tested without the network:
+
+```php
+use OpusDNS\Client\Config;
+use OpusDNS\Client\Testing\FakeHttpClient;
+
+$http = new FakeHttpClient();
+$client = $http->client(Config::sandbox('test-key'));
+
+$http->queueJson(200, ['name' => 'example.com', 'roid' => 'D1-OPUS', 'sld' => 'example', 'tld' => 'com']);
+$domain = $client->domain()->getDomain('example.com');
+
+$http->lastRequest()->getUri();   // https://sandbox.opusdns.com/v1/domains/example.com
+$http->requests;                  // every request sent so far
+```
+
+`queue()` accepts any PSR-7 response or a throwable to simulate a transport failure. An empty queue answers
+`200` with an empty JSON object.
 
 ## Lower-level access
 

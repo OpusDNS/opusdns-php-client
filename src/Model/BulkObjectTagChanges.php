@@ -59,4 +59,12 @@ final readonly class BulkObjectTagChanges implements ApiModel
             'replace' => $this->replace,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

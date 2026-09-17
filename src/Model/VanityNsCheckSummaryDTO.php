@@ -46,4 +46,12 @@ final readonly class VanityNsCheckSummaryDTO implements ApiModel
             'state' => $this->state,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

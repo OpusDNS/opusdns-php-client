@@ -50,4 +50,12 @@ final readonly class PublicAuthRequestForm implements ApiModel
             'grant_type' => $this->grantType,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

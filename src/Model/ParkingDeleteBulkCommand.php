@@ -52,4 +52,12 @@ final readonly class ParkingDeleteBulkCommand implements ApiModel
             'version' => $this->version,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -41,4 +41,12 @@ final readonly class AggregationRow implements ApiModel
             'key' => $this->key,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

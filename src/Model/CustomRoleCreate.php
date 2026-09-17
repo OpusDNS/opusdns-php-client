@@ -53,4 +53,12 @@ final readonly class CustomRoleCreate implements ApiModel
             'description' => $this->description,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

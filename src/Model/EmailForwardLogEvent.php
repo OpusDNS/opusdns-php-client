@@ -65,4 +65,12 @@ final readonly class EmailForwardLogEvent implements ApiModel
             'status' => $this->status,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

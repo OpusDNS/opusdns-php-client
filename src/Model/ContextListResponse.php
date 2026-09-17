@@ -53,4 +53,12 @@ final readonly class ContextListResponse implements ApiModel
             'results' => $this->results,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

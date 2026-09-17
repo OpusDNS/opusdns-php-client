@@ -103,4 +103,12 @@ final readonly class EmailForwardLog implements ApiModel
             'sender_name' => $this->senderName,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

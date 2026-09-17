@@ -41,4 +41,12 @@ final readonly class DomainForwardSetRequest implements ApiModel
             'redirects' => $this->redirects,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

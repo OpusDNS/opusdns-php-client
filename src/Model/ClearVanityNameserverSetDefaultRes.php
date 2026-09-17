@@ -41,4 +41,12 @@ final readonly class ClearVanityNameserverSetDefaultRes implements ApiModel
             'cleared' => $this->cleared,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -52,4 +52,12 @@ final readonly class DnsChangeResponse implements ApiModel
             'ttl' => $this->ttl,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

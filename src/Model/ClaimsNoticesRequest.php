@@ -42,4 +42,12 @@ final readonly class ClaimsNoticesRequest implements ApiModel
             'claims_keys' => $this->claimsKeys,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

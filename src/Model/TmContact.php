@@ -60,4 +60,12 @@ final readonly class TmContact implements ApiModel
             'org' => $this->org,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

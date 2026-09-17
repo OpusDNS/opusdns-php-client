@@ -56,4 +56,12 @@ final readonly class TmCourt implements ApiModel
             'region' => $this->region,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

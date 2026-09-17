@@ -46,4 +46,12 @@ final readonly class UserOrganizationMeta implements ApiModel
             'parent_organization_id' => $this->parentOrganizationId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

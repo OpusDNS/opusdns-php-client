@@ -47,4 +47,12 @@ final readonly class CommonModelsAvailabilityDatasourceDomainAvailabilityRespons
             'results' => $this->results,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

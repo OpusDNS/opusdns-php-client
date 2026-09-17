@@ -93,4 +93,12 @@ final readonly class DomainUpdate implements ApiModel
             'statuses' => $this->statuses,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

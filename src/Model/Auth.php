@@ -49,4 +49,12 @@ final readonly class Auth implements ApiModel
             'client_id' => $this->clientId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

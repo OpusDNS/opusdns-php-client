@@ -53,4 +53,12 @@ final readonly class WhitelabelBaseCreate implements ApiModel
             'tier' => $this->tier,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -44,4 +44,12 @@ final readonly class AiInferenceUsageBucket implements ApiModel
             'period_start' => $this->periodStart,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

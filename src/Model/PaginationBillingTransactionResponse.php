@@ -52,6 +52,14 @@ final readonly class PaginationBillingTransactionResponse implements ApiModel, P
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return list<BillingTransactionResponse>
      */
     public function results(): array

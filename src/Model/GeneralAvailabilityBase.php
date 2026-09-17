@@ -41,4 +41,12 @@ final readonly class GeneralAvailabilityBase implements ApiModel
             'start_date' => $this->startDate,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -50,4 +50,12 @@ final readonly class OutboundTransferResponse implements ApiModel
             'domain_name' => $this->domainName,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -75,4 +75,12 @@ final readonly class ObjectLog implements ApiModel
             'server_request_id' => $this->serverRequestId,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

@@ -64,4 +64,12 @@ final readonly class HttpRedirectListResponse implements ApiModel
             'request_subdomain' => $this->requestSubdomain,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

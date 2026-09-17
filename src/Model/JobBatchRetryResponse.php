@@ -53,4 +53,12 @@ final readonly class JobBatchRetryResponse implements ApiModel
             'queued_count' => $this->queuedCount,
         ]);
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }
