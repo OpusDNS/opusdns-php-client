@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$root = dirname(__DIR__);
+$specPath = $argv[1] ?? $root . '/spec/openapi.yaml';
+$outDir = $argv[2] ?? $root . '/src';
+
+$started = microtime(true);
+$report = (new OpusDNS\Generator\Generator())->generate($specPath, $outDir);
+
+printf("Generated from spec %s into %s\n", $report['spec_version'], $outDir);
+foreach ($report as $key => $value) {
+    if ($key !== 'spec_version') {
+        printf("  %-12s %s\n", $key, $value);
+    }
+}
+printf("Done in %.1fs\n", microtime(true) - $started);

@@ -1,0 +1,172 @@
+openapi: 3.1.0
+info:
+  title: Fixture API
+  version: 2026-01-01-000000
+paths:
+  /v1/pets:
+    get:
+      tags: [pet]
+      operationId: list_pets_v1_pets_get
+      summary: List pets
+      description: Returns every pet.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema: {type: integer, default: 1}
+        - name: status
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - {$ref: '#/components/schemas/FixturePetStatus'}
+              - {type: 'null'}
+        - name: tag_ids
+          in: query
+          required: false
+          description: Filter by tag. Can be repeated.
+          schema:
+            anyOf:
+              - {type: array, items: {type: string}}
+              - {type: 'null'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {type: array, items: {$ref: '#/components/schemas/FixturePet'}}
+    post:
+      tags: [pet]
+      operationId: create_pet_v1_pets_post
+      summary: Create a pet
+      x-required-permissions: [pets:write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FixturePetCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/FixturePet'}
+        '202':
+          description: Accepted
+  /v1/pets/{pet_id}:
+    delete:
+      tags: [pet]
+      operationId: delete_pet_v1_pets__pet_id__delete
+      summary: Delete a pet
+      parameters:
+        - {name: pet_id, in: path, required: true, schema: {type: string}}
+        - name: If-Match
+          in: header
+          required: false
+          schema:
+            anyOf: [{type: string}, {type: 'null'}]
+      responses:
+        '204': {description: Deleted}
+  /v1/pets/tld-specific/be/{pet_id}/auth:
+    post:
+      tags: [pet]
+      operationId: request_auth_v1_pets_tld_specific_be__pet_id__auth_post
+      summary: Request auth (be)
+      parameters:
+        - {name: pet_id, in: path, required: true, schema: {type: string}}
+      responses:
+        '204': {description: Done}
+  /v1/pets/tld-specific/cz/{pet_id}/auth:
+    post:
+      tags: [pet]
+      operationId: request_auth_v1_pets_tld_specific_cz__pet_id__auth_post
+      summary: Request auth (cz)
+      parameters:
+        - {name: pet_id, in: path, required: true, schema: {type: string}}
+      responses:
+        '204': {description: Done}
+components:
+  schemas:
+    FixturePetStatus:
+      type: string
+      enum: [available, pending-adoption, '1d', HARD-BOUNCE]
+    FixtureRedirectCode:
+      type: integer
+      enum: [301, 302]
+    FixturePet:
+      type: object
+      title: Pet
+      description: A pet in the shop.
+      required: [id, name, status, created_on, weight]
+      properties:
+        id: {type: string, format: typeid, x-typeid-prefix: pet}
+        name: {type: string, description: The pet's name}
+        status: {$ref: '#/components/schemas/FixturePetStatus'}
+        created_on: {type: string, format: date-time}
+        nickname:
+          anyOf: [{type: string}, {type: 'null'}]
+        weight: {type: number}
+        tags: {type: array, items: {type: string}, default: []}
+        owner:
+          anyOf: [{$ref: '#/components/schemas/FixtureOwner'}, {type: 'null'}]
+        attributes: {type: object, additionalProperties: {type: string}}
+        kind: {type: string, const: pet}
+        redirect_code: {$ref: '#/components/schemas/FixtureRedirectCode', default: 301}
+        toys: {type: array, items: {$ref: '#/components/schemas/FixtureToy'}}
+        event:
+          anyOf:
+            - oneOf:
+                - {$ref: '#/components/schemas/FixtureAdoptedEvent'}
+                - {$ref: '#/components/schemas/FixtureLostEvent'}
+              discriminator:
+                propertyName: event_type
+                mapping:
+                  adopted: '#/components/schemas/FixtureAdoptedEvent'
+                  lost: '#/components/schemas/FixtureLostEvent'
+            - {type: 'null'}
+    FixtureOwner:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+        email:
+          anyOf: [{type: string, format: email}, {type: 'null'}]
+    FixtureToy:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+    FixtureAdoptedEvent:
+      type: object
+      required: [event_type, adopter]
+      properties:
+        event_type: {type: string, const: adopted}
+        adopter: {type: string}
+    FixtureLostEvent:
+      type: object
+      required: [event_type, last_seen]
+      properties:
+        event_type: {type: string, const: lost}
+        last_seen: {type: string, format: date-time}
+    FixturePetCreate:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+        status: {$ref: '#/components/schemas/FixturePetStatus', default: available}
+    PaginationMetadata:
+      type: object
+      required: [current_page, has_next_page, has_previous_page, page_size, total_items, total_pages]
+      properties:
+        current_page: {type: integer}
+        has_next_page: {type: boolean}
+        has_previous_page: {type: boolean}
+        page_size: {type: integer}
+        total_items: {type: integer}
+        total_pages: {type: integer}
+    FixturePetPage:
+      type: object
+      required: [pagination, results]
+      properties:
+        pagination: {$ref: '#/components/schemas/PaginationMetadata'}
+        results: {type: array, items: {$ref: '#/components/schemas/FixturePet'}}

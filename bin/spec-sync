@@ -1,0 +1,123 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Copies the published OpenAPI specification from OpusDNS/api-spec into spec/ and records which commit it came from.
+ *
+ *   bin/spec-sync                follow the main branch of api-spec
+ *   bin/spec-sync --ref <ref>    pin to a branch, tag or commit of api-spec
+ *   bin/spec-sync --check        report whether upstream moved on; exit 1 if so, write nothing
+ *
+ * Needs no credentials. A GITHUB_TOKEN or GH_TOKEN environment variable is used for the GitHub API when present,
+ * which avoids the unauthenticated rate limit.
+ */
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Yaml\Yaml;
+
+const REPOSITORY = 'OpusDNS/api-spec';
+const SPEC_PATH = 'src/openapi.yaml';
+
+$root = dirname(__DIR__);
+$options = getopt('', ['ref::', 'check', 'help']);
+if (isset($options['help'])) {
+    echo "Usage: bin/spec-sync [--ref <ref>] [--check]\n";
+    exit(0);
+}
+$ref = is_string($options['ref'] ?? null) && $options['ref'] !== '' ? $options['ref'] : 'main';
+$check = isset($options['check']);
+
+/** @param list<string> $headers */
+function fetch(string $url, array $headers = []): string
+{
+    $headers[] = 'User-Agent: opusdns-php-client spec-sync';
+    $token = getenv('GITHUB_TOKEN') ?: getenv('GH_TOKEN');
+    if (is_string($token) && $token !== '' && str_starts_with($url, 'https://api.github.com/')) {
+        $headers[] = "Authorization: Bearer {$token}";
+    }
+    $context = stream_context_create(['http' => ['header' => implode("\r\n", $headers), 'ignore_errors' => true, 'timeout' => 60]]);
+    $stream = @fopen($url, 'r', false, $context);
+    if ($stream === false) {
+        fwrite(STDERR, "Failed to connect to {$url}\n");
+        exit(2);
+    }
+    $body = stream_get_contents($stream);
+    $statusLine = (string) (stream_get_meta_data($stream)['wrapper_data'][0] ?? '');
+    fclose($stream);
+    $status = preg_match('/\s(\d{3})\s/', $statusLine, $match) === 1 ? (int) $match[1] : 0;
+    if ($body === false || $status >= 400) {
+        fwrite(STDERR, "Failed to fetch {$url} (HTTP {$status})\n");
+        exit(2);
+    }
+
+    return $body;
+}
+
+/** @return array{string, string} Sha and committer date of the newest commit at $ref that touched $path */
+function latestCommit(string $ref, string $path): array
+{
+    $url = sprintf(
+        'https://api.github.com/repos/%s/commits?path=%s&sha=%s&per_page=1',
+        REPOSITORY,
+        rawurlencode($path),
+        rawurlencode($ref),
+    );
+    $commits = json_decode(fetch($url, ['Accept: application/vnd.github+json']), true);
+    $sha = $commits[0]['sha'] ?? null;
+    $date = $commits[0]['commit']['committer']['date'] ?? '';
+    if (!is_string($sha) || !is_string($date)) {
+        fwrite(STDERR, "Could not resolve the latest commit of {$path} at '{$ref}'\n");
+        exit(2);
+    }
+
+    return [$sha, $date];
+}
+
+[$specCommit, $specDate] = latestCommit($ref, SPEC_PATH);
+[$packageCommit, $packageDate] = latestCommit($ref, 'package.json');
+$commit = $packageDate >= $specDate ? $packageCommit : $specCommit;
+
+$versionFile = $root . '/spec/version.yaml';
+$specFile = $root . '/spec/openapi.yaml';
+$current = is_file($versionFile) ? Yaml::parseFile($versionFile) : [];
+$currentCommit = is_array($current) ? ($current['api_spec_commit'] ?? null) : null;
+
+if ($check) {
+    if ($currentCommit === $commit) {
+        echo "spec is up to date with api-spec@{$commit}\n";
+        exit(0);
+    }
+    echo "spec is behind: local " . ($currentCommit ?? 'none') . ", upstream {$commit}\n";
+    exit(1);
+}
+
+if ($currentCommit === $commit && is_file($specFile)) {
+    echo "spec is already at api-spec@{$commit}\n";
+    exit(0);
+}
+
+$raw = 'https://raw.githubusercontent.com/' . REPOSITORY . '/' . $commit . '/';
+$spec = fetch($raw . SPEC_PATH);
+$package = json_decode(fetch($raw . 'package.json'), true);
+$npmVersion = is_array($package) && is_string($package['version'] ?? null) ? $package['version'] : 'unknown';
+$parsed = Yaml::parse($spec);
+$infoVersion = is_array($parsed) ? (string) ($parsed['info']['version'] ?? '') : '';
+
+if (!is_dir($root . '/spec') && !mkdir($root . '/spec', 0775, true)) {
+    fwrite(STDERR, "Cannot create {$root}/spec\n");
+    exit(2);
+}
+file_put_contents($specFile, $spec);
+file_put_contents($versionFile, <<<YAML
+# Which published OpenAPI specification spec/openapi.yaml was taken from.
+# Written by bin/spec-sync; do not edit by hand.
+npm_version: {$npmVersion}
+info_version: {$infoVersion}
+api_spec_commit: {$commit}
+
+YAML);
+
+echo "updated spec to api-spec@{$commit} (package {$npmVersion}, spec {$infoVersion})\n";

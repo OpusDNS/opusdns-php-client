@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * This file is generated from the OpenAPI specification by bin/generate.
+ * Do not edit it by hand; regenerate it instead.
+ */
+
+declare(strict_types=1);
+
+namespace OpusDNS\Client\Model;
+
+use OpusDNS\Client\ApiModel;
+use OpusDNS\Client\Serializer;
+
+final readonly class ConversationPatchRequest implements ApiModel
+{
+    /**
+     * @param array<string, mixed>|null $metadata
+     */
+    public function __construct(
+        public ?array $metadata = null,
+        public ?string $title = null,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        return new self(
+            metadata: $data['metadata'] ?? null,
+            title: $data['title'] ?? null,
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return Serializer::normalize([
+            'metadata' => $this->metadata,
+            'title' => $this->title,
+        ]);
+    }
+}

@@ -1,0 +1,70 @@
+name: CI
+
+# On push and pull request: verify that the committed client matches the committed specification and passes
+# the checks. On the weekly schedule or a manual run: also pull the latest specification from api-spec,
+# regenerate, and commit the result when anything changed.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: api-spec branch, tag or commit to sync the specification from
+        required: false
+        default: main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - run: composer install --no-interaction --no-progress
+
+      - name: Sync the specification from api-spec
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: bin/spec-sync --ref "${{ github.event.inputs.ref || 'main' }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: composer generate
+
+      - run: composer test
+
+      - run: composer stan
+
+      - name: Generated code must match the committed specification
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: |
+          git diff --exit-code -- src spec
+          test -z "$(git status --porcelain -- src spec)"
+
+      - name: Commit the updated specification and client
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          if [ -z "$(git status --porcelain -- src spec)" ]; then
+            echo "nothing changed"
+            exit 0
+          fi
+          commit=$(sed -n 's/^api_spec_commit: //p' spec/version.yaml | cut -c1-7)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src spec
+          git commit -m "update api spec to ${commit}"
+          git push
