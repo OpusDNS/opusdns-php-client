@@ -65,6 +65,6 @@ final class DomainSearchService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainSearchResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainSearchResponse => DomainSearchResponse::fromArray($data));
     }
 }

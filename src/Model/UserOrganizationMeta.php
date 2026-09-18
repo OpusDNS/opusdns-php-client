@@ -16,11 +16,11 @@ use OpusDNS\Client\Serializer;
 final readonly class UserOrganizationMeta implements ApiModel
 {
     /**
-     * @param Currency|null $currency Currency used by the user's organization.
+     * @param Currency|string|null $currency Currency used by the user's organization.
      * @param string|null $parentOrganizationId ID of the parent organization, if any.
      */
     public function __construct(
-        public ?Currency $currency = null,
+        public Currency|string|null $currency = null,
         public ?string $parentOrganizationId = null,
     ) {
     }
@@ -31,7 +31,7 @@ final readonly class UserOrganizationMeta implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            currency: isset($data['currency']) ? Currency::from($data['currency']) : null,
+            currency: isset($data['currency']) ? Currency::tryFrom($data['currency']) ?? $data['currency'] : null,
             parentOrganizationId: $data['parent_organization_id'] ?? null,
         );
     }

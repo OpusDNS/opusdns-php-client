@@ -51,7 +51,7 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return UserPublic::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): UserPublic => UserPublic::fromArray($data));
     }
 
     /**
@@ -75,7 +75,7 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return UserProfile::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): UserProfile => UserProfile::fromArray($data));
     }
 
     /**
@@ -103,7 +103,7 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return UserPublicWithAttributes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): UserPublicWithAttributes => UserPublicWithAttributes::fromArray($data));
     }
 
     /**
@@ -131,7 +131,7 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return UserPublicWithAttributes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): UserPublicWithAttributes => UserPublicWithAttributes::fromArray($data));
     }
 
     /**
@@ -175,7 +175,7 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicPermissionSet::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicPermissionSet => PublicPermissionSet::fromArray($data));
     }
 
     /**
@@ -198,7 +198,7 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicRoleAssignment::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicRoleAssignment => PublicRoleAssignment::fromArray($data));
     }
 
     /**
@@ -225,6 +225,6 @@ final class UserService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicRoleAssignment::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicRoleAssignment => PublicRoleAssignment::fromArray($data));
     }
 }

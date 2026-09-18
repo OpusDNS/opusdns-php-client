@@ -17,11 +17,11 @@ use OpusDNS\Client\Serializer;
 final readonly class HttpRedirectRequest implements ApiModel
 {
     public function __construct(
-        public RedirectCode $redirectCode,
+        public RedirectCode|int $redirectCode,
         public string $requestPath,
         public string $targetHostname,
         public string $targetPath,
-        public HttpProtocol $targetProtocol,
+        public HttpProtocol|string $targetProtocol,
     ) {
     }
 
@@ -31,11 +31,11 @@ final readonly class HttpRedirectRequest implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            redirectCode: RedirectCode::from($data['redirect_code']),
+            redirectCode: RedirectCode::tryFrom($data['redirect_code']) ?? $data['redirect_code'],
             requestPath: $data['request_path'],
             targetHostname: $data['target_hostname'],
             targetPath: $data['target_path'],
-            targetProtocol: HttpProtocol::from($data['target_protocol']),
+            targetProtocol: HttpProtocol::tryFrom($data['target_protocol']) ?? $data['target_protocol'],
         );
     }
 

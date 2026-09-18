@@ -22,10 +22,10 @@ final readonly class EventResponse implements ApiModel
      * @param \DateTimeImmutable|null $acknowledgedOn When the event was acknowledged
      * @param string|null $eventId TypeID prefix: event.
      * @param string|null $objectId The id of the object that the event is about
-     * @param EventObjectType $objectType The type of object that the event is about
-     * @param EventSubtype|null $subtype The specific type/result of operation (considering the type property), more
-     *     detailed (e.g., 'NOTIFICATION' with the 'DOMAIN_MODIFICATION' class)
-     * @param EventType|null $type The type of the event - indicates the kind of operation occurring (e.g.,
+     * @param EventObjectType|string $objectType The type of object that the event is about
+     * @param EventSubtype|string|null $subtype The specific type/result of operation (considering the type
+     *     property), more detailed (e.g., 'NOTIFICATION' with the 'DOMAIN_MODIFICATION' class)
+     * @param EventType|string|null $type The type of the event - indicates the kind of operation occurring (e.g.,
      *     'ACCOUNT_CREATE', 'DOMAIN_MODIFICATION')
      */
     public function __construct(
@@ -34,9 +34,9 @@ final readonly class EventResponse implements ApiModel
         public ?\DateTimeImmutable $acknowledgedOn = null,
         public ?string $eventId = null,
         public ?string $objectId = null,
-        public EventObjectType $objectType = EventObjectType::RAW,
-        public ?EventSubtype $subtype = null,
-        public ?EventType $type = null,
+        public EventObjectType|string $objectType = EventObjectType::RAW,
+        public EventSubtype|string|null $subtype = null,
+        public EventType|string|null $type = null,
     ) {
     }
 
@@ -51,9 +51,9 @@ final readonly class EventResponse implements ApiModel
             acknowledgedOn: isset($data['acknowledged_on']) ? new \DateTimeImmutable($data['acknowledged_on']) : null,
             eventId: $data['event_id'] ?? null,
             objectId: $data['object_id'] ?? null,
-            objectType: isset($data['object_type']) ? EventObjectType::from($data['object_type']) : EventObjectType::RAW,
-            subtype: isset($data['subtype']) ? EventSubtype::from($data['subtype']) : null,
-            type: isset($data['type']) ? EventType::from($data['type']) : null,
+            objectType: isset($data['object_type']) ? EventObjectType::tryFrom($data['object_type']) ?? $data['object_type'] : EventObjectType::RAW,
+            subtype: isset($data['subtype']) ? EventSubtype::tryFrom($data['subtype']) ?? $data['subtype'] : null,
+            type: isset($data['type']) ? EventType::tryFrom($data['type']) ?? $data['type'] : null,
         );
     }
 

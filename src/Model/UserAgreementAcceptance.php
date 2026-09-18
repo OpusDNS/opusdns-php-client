@@ -17,13 +17,13 @@ final readonly class UserAgreementAcceptance implements ApiModel
 {
     /**
      * @param bool $accepted Whether the agreement has been accepted.
-     * @param AgreementType $type Type of agreement being accepted.
+     * @param AgreementType|string $type Type of agreement being accepted.
      * @param string|null $url URL where the agreement can be found.
      * @param string|null $version Version of the agreement being accepted.
      */
     public function __construct(
         public bool $accepted,
-        public AgreementType $type,
+        public AgreementType|string $type,
         public ?string $url = null,
         public ?string $version = null,
     ) {
@@ -36,7 +36,7 @@ final readonly class UserAgreementAcceptance implements ApiModel
     {
         return new self(
             accepted: $data['accepted'],
-            type: AgreementType::from($data['type']),
+            type: AgreementType::tryFrom($data['type']) ?? $data['type'],
             url: $data['url'] ?? null,
             version: $data['version'] ?? null,
         );

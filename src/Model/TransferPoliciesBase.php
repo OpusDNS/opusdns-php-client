@@ -30,11 +30,11 @@ final readonly class TransferPoliciesBase implements ApiModel
      *     itself
      * @param bool|null $infoContactAuthinfo Whether querying a foreign contact with authinfo is possible
      * @param bool|null $infoDomainAuthinfo Whether querying a foreign domain with authinfo is possible
-     * @param list<PostTransferRequirements>|null $postTransferRequirements Post-transfer requirements: lists the
+     * @param list<PostTransferRequirements|string>|null $postTransferRequirements Post-transfer requirements: lists the
      *     behaviors, as in ['update_contacts', 'set_transfer_lock'] or [ 'tld_specific' ] for specific behavior
-     * @param TransferAckType|null $transferAck Whether a transfer can be approved
+     * @param TransferAckType|string|null $transferAck Whether a transfer can be approved
      * @param bool|null $transferEmailRequired Whether an email confirmation is required to perform the transfer
-     * @param TransferAckType|null $transferNack Whether a transfer can be denied
+     * @param TransferAckType|string|null $transferNack Whether a transfer can be denied
      * @param string|null $transferRenewalPeriod If transfer_renews_domain is true, the renewal period (e.g., '1Y'
      *     for 1 year)
      * @param bool|null $transferRenewsDomain Whether a transfer triggers a domain renewal
@@ -54,9 +54,9 @@ final readonly class TransferPoliciesBase implements ApiModel
         public ?bool $infoContactAuthinfo = null,
         public ?bool $infoDomainAuthinfo = null,
         public ?array $postTransferRequirements = null,
-        public ?TransferAckType $transferAck = null,
+        public TransferAckType|string|null $transferAck = null,
         public ?bool $transferEmailRequired = null,
-        public ?TransferAckType $transferNack = null,
+        public TransferAckType|string|null $transferNack = null,
         public ?string $transferRenewalPeriod = null,
         public ?bool $transferRenewsDomain = null,
         public ?string $transferTime = null,
@@ -80,10 +80,10 @@ final readonly class TransferPoliciesBase implements ApiModel
             contactsInTransferCommand: $data['contacts_in_transfer_command'] ?? false,
             infoContactAuthinfo: $data['info_contact_authinfo'] ?? null,
             infoDomainAuthinfo: $data['info_domain_authinfo'] ?? null,
-            postTransferRequirements: isset($data['post_transfer_requirements']) ? array_map(static fn (string $item): PostTransferRequirements => PostTransferRequirements::from($item), $data['post_transfer_requirements']) : null,
-            transferAck: isset($data['transfer_ack']) ? TransferAckType::from($data['transfer_ack']) : null,
+            postTransferRequirements: isset($data['post_transfer_requirements']) ? array_map(static fn (string $item): PostTransferRequirements|string => PostTransferRequirements::tryFrom($item) ?? $item, $data['post_transfer_requirements']) : null,
+            transferAck: isset($data['transfer_ack']) ? TransferAckType::tryFrom($data['transfer_ack']) ?? $data['transfer_ack'] : null,
             transferEmailRequired: $data['transfer_email_required'] ?? null,
-            transferNack: isset($data['transfer_nack']) ? TransferAckType::from($data['transfer_nack']) : null,
+            transferNack: isset($data['transfer_nack']) ? TransferAckType::tryFrom($data['transfer_nack']) ?? $data['transfer_nack'] : null,
             transferRenewalPeriod: $data['transfer_renewal_period'] ?? null,
             transferRenewsDomain: $data['transfer_renews_domain'] ?? null,
             transferTime: $data['transfer_time'] ?? null,

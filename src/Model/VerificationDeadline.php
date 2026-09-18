@@ -17,7 +17,7 @@ final readonly class VerificationDeadline implements ApiModel
 {
     public function __construct(
         public \DateTimeImmutable $date,
-        public VerificationDeadlineType $type,
+        public VerificationDeadlineType|string $type,
     ) {
     }
 
@@ -28,7 +28,7 @@ final readonly class VerificationDeadline implements ApiModel
     {
         return new self(
             date: new \DateTimeImmutable($data['date']),
-            type: VerificationDeadlineType::from($data['type']),
+            type: VerificationDeadlineType::tryFrom($data['type']) ?? $data['type'],
         );
     }
 

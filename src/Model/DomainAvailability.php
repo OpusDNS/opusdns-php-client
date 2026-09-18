@@ -20,7 +20,7 @@ final readonly class DomainAvailability implements ApiModel
      */
     public function __construct(
         public string $domain,
-        public DomainAvailabilityStatus $status,
+        public DomainAvailabilityStatus|string $status,
         public ?DomainAvailabilityError $error = null,
     ) {
     }
@@ -32,7 +32,7 @@ final readonly class DomainAvailability implements ApiModel
     {
         return new self(
             domain: $data['domain'],
-            status: DomainAvailabilityStatus::from($data['status']),
+            status: DomainAvailabilityStatus::tryFrom($data['status']) ?? $data['status'],
             error: isset($data['error']) ? DomainAvailabilityError::fromArray($data['error']) : null,
         );
     }

@@ -17,7 +17,7 @@ final readonly class ContactVerificationEidInformation implements ApiModel
 {
     public function __construct(
         public string $eidScheme,
-        public LevelOfAssurance $levelOfAssurance,
+        public LevelOfAssurance|string $levelOfAssurance,
     ) {
     }
 
@@ -28,7 +28,7 @@ final readonly class ContactVerificationEidInformation implements ApiModel
     {
         return new self(
             eidScheme: $data['eid_scheme'],
-            levelOfAssurance: LevelOfAssurance::from($data['level_of_assurance']),
+            levelOfAssurance: LevelOfAssurance::tryFrom($data['level_of_assurance']) ?? $data['level_of_assurance'],
         );
     }
 

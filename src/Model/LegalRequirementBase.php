@@ -18,14 +18,15 @@ final readonly class LegalRequirementBase implements ApiModel
 {
     /**
      * @param string $key Unique identifier for the legal requirement
-     * @param list<LegalRequirementOperationType> $operations Operations this requirement applies to
-     * @param LegalRequirementType $type Whether this is an informational notice or requires explicit confirmation
+     * @param list<LegalRequirementOperationType|string> $operations Operations this requirement applies to
+     * @param LegalRequirementType|string $type Whether this is an informational notice or requires explicit
+     *     confirmation
      * @param string|null $url Link to the legal document
      */
     public function __construct(
         public string $key,
         public array $operations,
-        public LegalRequirementType $type,
+        public LegalRequirementType|string $type,
         public ?string $url = null,
     ) {
     }
@@ -37,8 +38,8 @@ final readonly class LegalRequirementBase implements ApiModel
     {
         return new self(
             key: $data['key'],
-            operations: array_map(static fn (string $item): LegalRequirementOperationType => LegalRequirementOperationType::from($item), $data['operations']),
-            type: LegalRequirementType::from($data['type']),
+            operations: array_map(static fn (string $item): LegalRequirementOperationType|string => LegalRequirementOperationType::tryFrom($item) ?? $item, $data['operations']),
+            type: LegalRequirementType::tryFrom($data['type']) ?? $data['type'],
             url: $data['url'] ?? null,
         );
     }

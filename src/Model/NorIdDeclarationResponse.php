@@ -24,7 +24,7 @@ final readonly class NorIdDeclarationResponse implements ApiModel
      * @param \DateTimeImmutable $expiresOn When the unconfirmed create request expires
      * @param string $organizationId The organization that owns the domain; used to brand the page TypeID prefix:
      *     organization.
-     * @param NorIdDeclarationStatus $status The declaration status
+     * @param NorIdDeclarationStatus|string $status The declaration status
      * @param string $subscriberName The domain name subscriber (registrant)
      * @param string|null $identityType The subscriber identity type
      * @param string|null $identityValue The subscriber identity (organization number or Person-ID)
@@ -37,7 +37,7 @@ final readonly class NorIdDeclarationResponse implements ApiModel
         public string $domainName,
         public \DateTimeImmutable $expiresOn,
         public string $organizationId,
-        public NorIdDeclarationStatus $status,
+        public NorIdDeclarationStatus|string $status,
         public string $subscriberName,
         public ?string $identityType = null,
         public ?string $identityValue = null,
@@ -57,7 +57,7 @@ final readonly class NorIdDeclarationResponse implements ApiModel
             domainName: $data['domain_name'],
             expiresOn: new \DateTimeImmutable($data['expires_on']),
             organizationId: $data['organization_id'],
-            status: NorIdDeclarationStatus::from($data['status']),
+            status: NorIdDeclarationStatus::tryFrom($data['status']) ?? $data['status'],
             subscriberName: $data['subscriber_name'],
             identityType: $data['identity_type'] ?? null,
             identityValue: $data['identity_value'] ?? null,

@@ -236,16 +236,17 @@ final class TypeResolver
 
         if (self::isEnumSchema($schema)) {
             $fqcn = self::ENUM_NAMESPACE . '\\' . $class;
+            $backing = ($schema['type'] ?? 'string') === 'integer' ? 'int' : 'string';
 
             return new PhpType(
-                $fqcn,
-                $class,
-                ($schema['type'] ?? 'string') === 'integer' ? 'int' : 'string',
+                "{$fqcn}|{$backing}",
+                "{$class}|{$backing}",
+                $backing,
                 PhpType::KIND_ENUM,
-                hydrate: static fn (string $expr): string => "{$class}::from({$expr})",
+                hydrate: static fn (string $expr): string => "{$class}::tryFrom({$expr}) ?? {$expr}",
                 uses: [$fqcn],
                 schemaName: $name,
-                closureReturn: $class,
+                closureReturn: "{$class}|{$backing}",
             );
         }
 
@@ -315,14 +316,31 @@ final class TypeResolver
         }
 
         return new PhpType(
-            implode('|', array_map(static fn (PhpType $t): string => $t->native, $types)),
-            implode('|', array_map(static fn (PhpType $t): string => $t->doc, $types)),
+            self::joinTypes(array_map(static fn (PhpType $t): string => $t->native, $types)),
+            self::joinTypes(array_map(static fn (PhpType $t): string => $t->doc, $types)),
             $allModels ? 'array' : 'mixed',
             PhpType::KIND_UNION,
             $nullable,
             $hydrate,
             array_values(array_unique($uses)),
         );
+    }
+
+    /**
+     * Joins type strings into one union without repeating members; pipes inside generics are left alone.
+     *
+     * @param list<string> $types
+     */
+    private static function joinTypes(array $types): string
+    {
+        $members = [];
+        foreach ($types as $type) {
+            foreach (preg_split('/\|(?![^<>]*>)/', $type) ?: [] as $member) {
+                $members[$member] = true;
+            }
+        }
+
+        return implode('|', array_keys($members));
     }
 
     /**
@@ -386,10 +404,8 @@ final class TypeResolver
             return [static fn (string $e): string => "Union::hydrate({$e}, {$list})", [self::UNION_CLASS]];
         }
 
-        if (count($enums) === 1 && count($models) === 0 && $others !== [] && array_reduce($others, static fn (bool $c, PhpType $t): bool => $c && $t->native === 'string', true)) {
-            $enum = $enums[0]->shortName();
-
-            return [static fn (string $e): string => "{$enum}::tryFrom({$e}) ?? {$e}", []];
+        if (count($enums) === 1 && count($models) === 0 && array_reduce($others, static fn (bool $c, PhpType $t): bool => $c && in_array($t->native, ['string', 'int'], true), true)) {
+            return [$enums[0]->hydrate, []];
         }
 
         if (count($models) === 1 && count($enums) === 0) {

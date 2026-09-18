@@ -19,7 +19,7 @@ final readonly class DnsRrsetWithOneRecordPatch implements ApiModel
         public string $name,
         public string $rdata,
         public int $ttl,
-        public DnsRrsetType $type,
+        public DnsRrsetType|string $type,
     ) {
     }
 
@@ -32,7 +32,7 @@ final readonly class DnsRrsetWithOneRecordPatch implements ApiModel
             name: $data['name'],
             rdata: $data['rdata'],
             ttl: $data['ttl'],
-            type: DnsRrsetType::from($data['type']),
+            type: DnsRrsetType::tryFrom($data['type']) ?? $data['type'],
         );
     }
 

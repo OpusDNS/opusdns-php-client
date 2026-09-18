@@ -48,11 +48,11 @@ final class ArchiveService
     public function getEmailForwardLogsByAlias(
         string $emailForwardAliasId,
         string $emailForwardId,
-        EmailForwardLogSortField $sortBy = EmailForwardLogSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        EmailForwardLogSortField|string $sortBy = EmailForwardLogSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         int $pageSize = 50,
         int $page = 1,
-        ?EmailForwardLogStatus $finalStatus = null,
+        EmailForwardLogStatus|string|null $finalStatus = null,
         ?\DateTimeImmutable $startTime = null,
         ?\DateTimeImmutable $endTime = null,
         ?string $xDatetimeFormat = null,
@@ -65,7 +65,7 @@ final class ArchiveService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseEmailForwardLog::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseEmailForwardLog => PageResponseEmailForwardLog::fromArray($data));
     }
 
     /**
@@ -82,11 +82,11 @@ final class ArchiveService
      */
     public function getEmailForwardLogs(
         string $emailForwardId,
-        EmailForwardLogSortField $sortBy = EmailForwardLogSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        EmailForwardLogSortField|string $sortBy = EmailForwardLogSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         int $pageSize = 50,
         int $page = 1,
-        ?EmailForwardLogStatus $finalStatus = null,
+        EmailForwardLogStatus|string|null $finalStatus = null,
         ?\DateTimeImmutable $startTime = null,
         ?\DateTimeImmutable $endTime = null,
         ?string $xDatetimeFormat = null,
@@ -99,7 +99,7 @@ final class ArchiveService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseEmailForwardLog::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseEmailForwardLog => PageResponseEmailForwardLog::fromArray($data));
     }
 
     /**
@@ -114,15 +114,15 @@ final class ArchiveService
      *     sent.
      */
     public function getObjectLogs(
-        ObjectLogSortField $sortBy = ObjectLogSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        ObjectLogSortField|string $sortBy = ObjectLogSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         int $pageSize = 50,
         int $page = 1,
         ?string $objectLogId = null,
         ?string $objectType = null,
-        ?ObjectEventType $action = null,
+        ObjectEventType|string|null $action = null,
         ?string $serverRequestId = null,
-        ?ExecutingEntity $performedByType = null,
+        ExecutingEntity|string|null $performedByType = null,
         ?string $performedById = null,
         ?\DateTimeImmutable $createdBefore = null,
         ?\DateTimeImmutable $createdAfter = null,
@@ -136,7 +136,7 @@ final class ArchiveService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseObjectLog::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseObjectLog => PageResponseObjectLog::fromArray($data));
     }
 
     /**
@@ -152,15 +152,15 @@ final class ArchiveService
      */
     public function getObjectLogsByObjectId(
         string $objectId,
-        ObjectLogSortField $sortBy = ObjectLogSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        ObjectLogSortField|string $sortBy = ObjectLogSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         int $pageSize = 50,
         int $page = 1,
         ?string $objectLogId = null,
         ?string $objectType = null,
-        ?ObjectEventType $action = null,
+        ObjectEventType|string|null $action = null,
         ?string $serverRequestId = null,
-        ?ExecutingEntity $performedByType = null,
+        ExecutingEntity|string|null $performedByType = null,
         ?string $performedById = null,
         ?\DateTimeImmutable $createdBefore = null,
         ?\DateTimeImmutable $createdAfter = null,
@@ -174,7 +174,7 @@ final class ArchiveService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseObjectLog::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseObjectLog => PageResponseObjectLog::fromArray($data));
     }
 
     /**
@@ -189,11 +189,11 @@ final class ArchiveService
      *     sent.
      */
     public function getRequestHistory(
-        RequestHistorySortField $sortBy = RequestHistorySortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        RequestHistorySortField|string $sortBy = RequestHistorySortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         int $pageSize = 50,
         int $page = 1,
-        ?HTTPMethod $method = null,
+        HTTPMethod|string|null $method = null,
         ?string $path = null,
         ?int $statusCode = null,
         ?int $minStatusCode = null,
@@ -202,7 +202,7 @@ final class ArchiveService
         ?float $maxDuration = null,
         ?string $clientIp = null,
         ?string $serverRequestId = null,
-        ?ExecutingEntity $performedByType = null,
+        ExecutingEntity|string|null $performedByType = null,
         ?string $performedById = null,
         ?\DateTimeImmutable $requestStartedBefore = null,
         ?\DateTimeImmutable $requestStartedAfter = null,
@@ -215,6 +215,6 @@ final class ArchiveService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseRequestHistory::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseRequestHistory => PageResponseRequestHistory::fromArray($data));
     }
 }

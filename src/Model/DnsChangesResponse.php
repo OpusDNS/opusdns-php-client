@@ -23,7 +23,7 @@ final readonly class DnsChangesResponse implements ApiModel
         public int $numChanges,
         public string $zoneName,
         public ?string $changesetId = null,
-        public ?DnssecRegistryPublishOutcome $dnssecRegistryPublish = null,
+        public DnssecRegistryPublishOutcome|string|null $dnssecRegistryPublish = null,
     ) {
     }
 
@@ -37,7 +37,7 @@ final readonly class DnsChangesResponse implements ApiModel
             numChanges: $data['num_changes'],
             zoneName: $data['zone_name'],
             changesetId: $data['changeset_id'] ?? null,
-            dnssecRegistryPublish: isset($data['dnssec_registry_publish']) ? DnssecRegistryPublishOutcome::from($data['dnssec_registry_publish']) : null,
+            dnssecRegistryPublish: isset($data['dnssec_registry_publish']) ? DnssecRegistryPublishOutcome::tryFrom($data['dnssec_registry_publish']) ?? $data['dnssec_registry_publish'] : null,
         );
     }
 

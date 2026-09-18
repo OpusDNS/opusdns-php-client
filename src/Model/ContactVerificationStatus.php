@@ -19,13 +19,13 @@ use OpusDNS\Client\Serializer;
 final readonly class ContactVerificationStatus implements ApiModel
 {
     public function __construct(
-        public ContactVerificationClaim $claim,
-        public ContactVerificationState $state,
+        public ContactVerificationClaim|string $claim,
+        public ContactVerificationState|string $state,
         public ?string $attestationReference = null,
         public ?ContactVerificationEidInformation $eid = null,
         public ?\DateTimeImmutable $expiresOn = null,
-        public ?ContactVerificationMethod $method = null,
-        public ?ContactVerificationProof $proof = null,
+        public ContactVerificationMethod|string|null $method = null,
+        public ContactVerificationProof|string|null $proof = null,
         public ?\DateTimeImmutable $verifiedOn = null,
     ) {
     }
@@ -36,13 +36,13 @@ final readonly class ContactVerificationStatus implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            claim: ContactVerificationClaim::from($data['claim']),
-            state: ContactVerificationState::from($data['state']),
+            claim: ContactVerificationClaim::tryFrom($data['claim']) ?? $data['claim'],
+            state: ContactVerificationState::tryFrom($data['state']) ?? $data['state'],
             attestationReference: $data['attestation_reference'] ?? null,
             eid: isset($data['eid']) ? ContactVerificationEidInformation::fromArray($data['eid']) : null,
             expiresOn: isset($data['expires_on']) ? new \DateTimeImmutable($data['expires_on']) : null,
-            method: isset($data['method']) ? ContactVerificationMethod::from($data['method']) : null,
-            proof: isset($data['proof']) ? ContactVerificationProof::from($data['proof']) : null,
+            method: isset($data['method']) ? ContactVerificationMethod::tryFrom($data['method']) ?? $data['method'] : null,
+            proof: isset($data['proof']) ? ContactVerificationProof::tryFrom($data['proof']) ?? $data['proof'] : null,
             verifiedOn: isset($data['verified_on']) ? new \DateTimeImmutable($data['verified_on']) : null,
         );
     }

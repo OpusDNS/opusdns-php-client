@@ -17,7 +17,7 @@ final readonly class HostIpSchema implements ApiModel
 {
     /**
      * @param string $address IP address of the host object
-     * @param IPAddressType $type IP address type
+     * @param IPAddressType|string $type IP address type
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
      * @param string $hostId TypeID prefix: host.
      * @param string|null $hostIpId TypeID prefix: host_ip.
@@ -25,7 +25,7 @@ final readonly class HostIpSchema implements ApiModel
      */
     public function __construct(
         public string $address,
-        public IPAddressType $type,
+        public IPAddressType|string $type,
         public ?\DateTimeImmutable $createdOn = null,
         public string $hostId = 'None',
         public ?string $hostIpId = null,
@@ -40,7 +40,7 @@ final readonly class HostIpSchema implements ApiModel
     {
         return new self(
             address: $data['address'],
-            type: IPAddressType::from($data['type']),
+            type: IPAddressType::tryFrom($data['type']) ?? $data['type'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
             hostId: $data['host_id'] ?? 'None',
             hostIpId: $data['host_ip_id'] ?? null,

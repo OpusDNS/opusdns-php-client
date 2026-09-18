@@ -66,8 +66,8 @@ final class OrganizationService
     public function listOrganizations(
         int $page = 1,
         int $pageSize = 10,
-        OrganizationSortField $sortBy = OrganizationSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        OrganizationSortField|string $sortBy = OrganizationSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $search = null,
         ?string $countryCode = null,
         ?string $xDatetimeFormat = null,
@@ -79,7 +79,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationOrganization::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationOrganization => PaginationOrganization::fromArray($data));
     }
 
     /**
@@ -101,7 +101,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Organization::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Organization => Organization::fromArray($data));
     }
 
     /**
@@ -126,7 +126,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $data));
     }
 
     /**
@@ -149,7 +149,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $data));
     }
 
     /**
@@ -175,7 +175,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): IpRestrictionResponse => IpRestrictionResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): IpRestrictionResponse => IpRestrictionResponse::fromArray($item), $data));
     }
 
     /**
@@ -202,7 +202,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return IpRestrictionResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): IpRestrictionResponse => IpRestrictionResponse::fromArray($data));
     }
 
     /**
@@ -228,7 +228,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return IpRestrictionResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): IpRestrictionResponse => IpRestrictionResponse::fromArray($data));
     }
 
     /**
@@ -257,7 +257,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return IpRestrictionResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): IpRestrictionResponse => IpRestrictionResponse::fromArray($data));
     }
 
     /**
@@ -300,7 +300,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicPermissionSet::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicPermissionSet => PublicPermissionSet::fromArray($data));
     }
 
     /**
@@ -324,7 +324,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): PublicRoleDefinition => PublicRoleDefinition::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): PublicRoleDefinition => PublicRoleDefinition::fromArray($item), $data));
     }
 
     /**
@@ -347,7 +347,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicRoleDefinition::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicRoleDefinition => PublicRoleDefinition::fromArray($data));
     }
 
     /**
@@ -370,7 +370,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicRoleDefinition::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicRoleDefinition => PublicRoleDefinition::fromArray($data));
     }
 
     /**
@@ -397,7 +397,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicRoleDefinition::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicRoleDefinition => PublicRoleDefinition::fromArray($data));
     }
 
     /**
@@ -434,8 +434,8 @@ final class OrganizationService
     public function listUsers(
         int $page = 1,
         int $pageSize = 10,
-        UserSortField $sortBy = UserSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        UserSortField|string $sortBy = UserSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $search = null,
         ?string $xDatetimeFormat = null,
     ): PaginationUserPublicWithRole {
@@ -446,7 +446,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationUserPublicWithRole::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationUserPublicWithRole => PaginationUserPublicWithRole::fromArray($data));
     }
 
     /**
@@ -471,7 +471,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return OrganizationWithBillingData::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): OrganizationWithBillingData => OrganizationWithBillingData::fromArray($data));
     }
 
     /**
@@ -497,7 +497,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Organization::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Organization => Organization::fromArray($data));
     }
 
     /**
@@ -545,7 +545,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $data));
     }
 
     /**
@@ -572,7 +572,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): OrganizationAttributeResponse => OrganizationAttributeResponse::fromArray($item), $data));
     }
 
     /**
@@ -600,7 +600,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationInvoiceResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationInvoiceResponse => PaginationInvoiceResponse::fromArray($data));
     }
 
     /**
@@ -628,7 +628,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationInvoiceResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationInvoiceResponse => PaginationInvoiceResponse::fromArray($data));
     }
 
     /**
@@ -645,8 +645,8 @@ final class OrganizationService
      */
     public function getPricingPlans(
         string $organizationId,
-        BillingTransactionProductType $productType,
-        ?BillingTransactionAction $productAction = null,
+        BillingTransactionProductType|string $productType,
+        BillingTransactionAction|string|null $productAction = null,
         ?string $productClass = null,
         ?string $xDatetimeFormat = null,
     ): GetPricesResponse {
@@ -658,7 +658,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return GetPricesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): GetPricesResponse => GetPricesResponse::fromArray($data));
     }
 
     /**
@@ -676,12 +676,12 @@ final class OrganizationService
         string $organizationId,
         int $page = 1,
         int $pageSize = 10,
-        BillingTransactionSortField $sortBy = BillingTransactionSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        BillingTransactionSortField|string $sortBy = BillingTransactionSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $productReference = null,
-        ?BillingTransactionProductType $productType = null,
-        ?BillingTransactionAction $action = null,
-        ?BillingTransactionStatus $status = null,
+        BillingTransactionProductType|string|null $productType = null,
+        BillingTransactionAction|string|null $action = null,
+        BillingTransactionStatus|string|null $status = null,
         ?\DateTimeImmutable $createdAfter = null,
         ?\DateTimeImmutable $createdBefore = null,
         ?\DateTimeImmutable $completedAfter = null,
@@ -696,7 +696,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationBillingTransactionResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationBillingTransactionResponse => PaginationBillingTransactionResponse::fromArray($data));
     }
 
     /**
@@ -722,7 +722,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return BillingTransactionResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): BillingTransactionResponse => BillingTransactionResponse::fromArray($data));
     }
 
     /**
@@ -735,17 +735,17 @@ final class OrganizationService
      *
      * @param \DateTimeImmutable $startDate Inclusive start date (YYYY-MM-DD)
      * @param \DateTimeImmutable $endDate Inclusive end date (YYYY-MM-DD)
-     * @param UsageGranularity $granularity Time-bucket size
+     * @param UsageGranularity|string $granularity Time-bucket size
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getUsageSeries(
         string $organizationId,
-        UsageProduct $product,
+        UsageProduct|string $product,
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
-        UsageGranularity $granularity = UsageGranularity::DAY,
+        UsageGranularity|string $granularity = UsageGranularity::DAY,
         ?string $xDatetimeFormat = null,
     ): AiInferenceUsageSeriesResponse {
         $response = $this->client->request(
@@ -756,7 +756,7 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return AiInferenceUsageSeriesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): AiInferenceUsageSeriesResponse => AiInferenceUsageSeriesResponse::fromArray($data));
     }
 
     /**
@@ -775,7 +775,7 @@ final class OrganizationService
      */
     public function getUsageSummary(
         string $organizationId,
-        UsageProduct $product,
+        UsageProduct|string $product,
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
         ?string $xDatetimeFormat = null,
@@ -788,6 +788,6 @@ final class OrganizationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return AiInferenceUsageSummaryResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): AiInferenceUsageSummaryResponse => AiInferenceUsageSummaryResponse::fromArray($data));
     }
 }

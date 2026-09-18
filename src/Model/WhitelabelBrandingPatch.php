@@ -26,13 +26,13 @@ final readonly class WhitelabelBrandingPatch implements ApiModel
      * @param bool|null $enabled Whether this whitelabel should be served
      * @param string|null $label New managed-subdomain label; the base hosts become app.<label>.<suffix> /
      *     auth.<label>.<suffix>. On plus the custom domain keeps serving unchanged.
-     * @param WhitelabelRenewalMode|null $renewalMode Set auto-renew intent: expire cancels at period end (serves out
-     *     the term), renew un-cancels
+     * @param WhitelabelRenewalMode|string|null $renewalMode Set auto-renew intent: expire cancels at period end
+     *     (serves out the term), renew un-cancels
      */
     public function __construct(
         public ?bool $enabled = null,
         public ?string $label = null,
-        public ?WhitelabelRenewalMode $renewalMode = null,
+        public WhitelabelRenewalMode|string|null $renewalMode = null,
     ) {
     }
 
@@ -44,7 +44,7 @@ final readonly class WhitelabelBrandingPatch implements ApiModel
         return new self(
             enabled: $data['enabled'] ?? null,
             label: $data['label'] ?? null,
-            renewalMode: isset($data['renewal_mode']) ? WhitelabelRenewalMode::from($data['renewal_mode']) : null,
+            renewalMode: isset($data['renewal_mode']) ? WhitelabelRenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
         );
     }
 

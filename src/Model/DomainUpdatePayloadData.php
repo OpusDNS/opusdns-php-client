@@ -48,9 +48,9 @@ final readonly class DomainUpdatePayloadData implements ApiModel
      * @param string|null $authCode The new auth code for the domain
      * @param array<string, list<ContactHandle>>|null $contacts The new contacts of the domain
      * @param list<Nameserver>|null $nameservers The new name servers for the domain
-     * @param RenewalMode|null $renewalMode The new renewal mode of the domain
+     * @param RenewalMode|string|null $renewalMode The new renewal mode of the domain
      * @param StatusChanges|null $statusChanges Statuses to add or remove relative to current state
-     * @param list<DomainClientStatus>|null $statuses The new statuses of the domain
+     * @param list<DomainClientStatus|string>|null $statuses The new statuses of the domain
      */
     public function __construct(
         public string $domainId,
@@ -58,7 +58,7 @@ final readonly class DomainUpdatePayloadData implements ApiModel
         public ?string $authCode = null,
         public ?array $contacts = null,
         public ?array $nameservers = null,
-        public ?RenewalMode $renewalMode = null,
+        public RenewalMode|string|null $renewalMode = null,
         public ?StatusChanges $statusChanges = null,
         public ?array $statuses = null,
     ) {
@@ -75,9 +75,9 @@ final readonly class DomainUpdatePayloadData implements ApiModel
             authCode: $data['auth_code'] ?? null,
             contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']) : null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
-            renewalMode: isset($data['renewal_mode']) ? RenewalMode::from($data['renewal_mode']) : null,
+            renewalMode: isset($data['renewal_mode']) ? RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
             statusChanges: isset($data['status_changes']) ? StatusChanges::fromArray($data['status_changes']) : null,
-            statuses: isset($data['statuses']) ? array_map(static fn (string $item): DomainClientStatus => DomainClientStatus::from($item), $data['statuses']) : null,
+            statuses: isset($data['statuses']) ? array_map(static fn (string $item): DomainClientStatus|string => DomainClientStatus::tryFrom($item) ?? $item, $data['statuses']) : null,
         );
     }
 

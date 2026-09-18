@@ -47,8 +47,8 @@ final class EmailForwardService
         int $pageSize = 10,
         ?string $search = null,
         ?bool $enabled = null,
-        EmailForwardSortField $sortBy = EmailForwardSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        EmailForwardSortField|string $sortBy = EmailForwardSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $xDatetimeFormat = null,
     ): PaginationEmailForwardResponse {
         $response = $this->client->request(
@@ -58,7 +58,7 @@ final class EmailForwardService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationEmailForwardResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationEmailForwardResponse => PaginationEmailForwardResponse::fromArray($data));
     }
 
     /**
@@ -85,7 +85,7 @@ final class EmailForwardService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EmailForwardResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EmailForwardResponse => EmailForwardResponse::fromArray($data));
     }
 
     /**
@@ -108,7 +108,7 @@ final class EmailForwardService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EmailForwardResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EmailForwardResponse => EmailForwardResponse::fromArray($data));
     }
 
     /**
@@ -159,7 +159,7 @@ final class EmailForwardService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EmailForwardAlias::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EmailForwardAlias => EmailForwardAlias::fromArray($data));
     }
 
     /**
@@ -189,7 +189,7 @@ final class EmailForwardService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EmailForwardAlias::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EmailForwardAlias => EmailForwardAlias::fromArray($data));
     }
 
     /**
@@ -287,6 +287,6 @@ final class EmailForwardService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EmailForwardMetrics::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EmailForwardMetrics => EmailForwardMetrics::fromArray($data));
     }
 }

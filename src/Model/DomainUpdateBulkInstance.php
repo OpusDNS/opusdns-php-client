@@ -49,9 +49,9 @@ final readonly class DomainUpdateBulkInstance implements ApiModel
      * @param string|null $domainId The domain ID to update
      * @param string|null $name The domain name to update
      * @param list<Nameserver>|null $nameservers Override nameservers for this domain
-     * @param RenewalMode|null $renewalMode Override renewal mode for this domain
+     * @param RenewalMode|string|null $renewalMode Override renewal mode for this domain
      * @param StatusChanges|null $statusChanges Override status changes for this domain
-     * @param list<DomainClientStatus>|null $statuses Override statuses for this domain
+     * @param list<DomainClientStatus|string>|null $statuses Override statuses for this domain
      */
     public function __construct(
         public ?array $attributes = null,
@@ -60,7 +60,7 @@ final readonly class DomainUpdateBulkInstance implements ApiModel
         public ?string $domainId = null,
         public ?string $name = null,
         public ?array $nameservers = null,
-        public ?RenewalMode $renewalMode = null,
+        public RenewalMode|string|null $renewalMode = null,
         public ?StatusChanges $statusChanges = null,
         public ?array $statuses = null,
     ) {
@@ -78,9 +78,9 @@ final readonly class DomainUpdateBulkInstance implements ApiModel
             domainId: $data['domain_id'] ?? null,
             name: $data['name'] ?? null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
-            renewalMode: isset($data['renewal_mode']) ? RenewalMode::from($data['renewal_mode']) : null,
+            renewalMode: isset($data['renewal_mode']) ? RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
             statusChanges: isset($data['status_changes']) ? StatusChanges::fromArray($data['status_changes']) : null,
-            statuses: isset($data['statuses']) ? array_map(static fn (string $item): DomainClientStatus => DomainClientStatus::from($item), $data['statuses']) : null,
+            statuses: isset($data['statuses']) ? array_map(static fn (string $item): DomainClientStatus|string => DomainClientStatus::tryFrom($item) ?? $item, $data['statuses']) : null,
         );
     }
 

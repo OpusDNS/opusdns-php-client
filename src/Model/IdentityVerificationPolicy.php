@@ -24,7 +24,8 @@ use OpusDNS\Client\Serializer;
 final readonly class IdentityVerificationPolicy implements ApiModel
 {
     /**
-     * @param list<DomainContactType> $contactRoles For which type of Contacts this verification needs to be done
+     * @param list<DomainContactType|string> $contactRoles For which type of Contacts this verification needs to be
+     *     done
      * @param bool $enabled Whether this Verification is enabled
      * @param list<RequiredClaim> $requiredClaims The claims that must be verified before a contact can be used on
      *     this TLD
@@ -49,7 +50,7 @@ final readonly class IdentityVerificationPolicy implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            contactRoles: array_map(static fn (string $item): DomainContactType => DomainContactType::from($item), $data['contact_roles']),
+            contactRoles: array_map(static fn (string $item): DomainContactType|string => DomainContactType::tryFrom($item) ?? $item, $data['contact_roles']),
             enabled: $data['enabled'],
             requiredClaims: array_map(static fn (array $item): RequiredClaim => RequiredClaim::fromArray($item), $data['required_claims']),
             suspensionDelay: $data['suspension_delay'],

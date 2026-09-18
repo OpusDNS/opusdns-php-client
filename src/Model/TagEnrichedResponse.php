@@ -16,12 +16,12 @@ use OpusDNS\Client\Serializer;
 final readonly class TagEnrichedResponse implements ApiModel
 {
     /**
-     * @param TagColor $color The color of the tag
+     * @param TagColor|string $color The color of the tag
      * @param string $label The label of the tag
      * @param string $tagId The unique identifier of the tag TypeID prefix: tag.
      */
     public function __construct(
-        public TagColor $color,
+        public TagColor|string $color,
         public string $label,
         public string $tagId,
     ) {
@@ -33,7 +33,7 @@ final readonly class TagEnrichedResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            color: TagColor::from($data['color']),
+            color: TagColor::tryFrom($data['color']) ?? $data['color'],
             label: $data['label'],
             tagId: $data['tag_id'],
         );

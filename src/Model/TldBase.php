@@ -17,12 +17,12 @@ final readonly class TldBase implements ApiModel
 {
     /**
      * @param string $name The TLD being configured
-     * @param TLDType $type The type of the TLD (e.g., gTLD, ccTLD)
+     * @param TLDType|string $type The type of the TLD (e.g., gTLD, ccTLD)
      * @param list<string> $thirdLevelStructure Name of the third levels (name and overrides)
      */
     public function __construct(
         public string $name,
-        public TLDType $type,
+        public TLDType|string $type,
         public array $thirdLevelStructure = [],
     ) {
     }
@@ -34,7 +34,7 @@ final readonly class TldBase implements ApiModel
     {
         return new self(
             name: $data['name'],
-            type: TLDType::from($data['type']),
+            type: TLDType::tryFrom($data['type']) ?? $data['type'],
             thirdLevelStructure: $data['third_level_structure'] ?? [],
         );
     }

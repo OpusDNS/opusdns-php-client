@@ -16,7 +16,7 @@ use OpusDNS\Client\Serializer;
 final readonly class DomainTransferBulkTemplate implements ApiModel
 {
     /**
-     * @param RenewalMode $renewalMode The renewal mode of the domain
+     * @param RenewalMode|string $renewalMode The renewal mode of the domain
      * @param array<string, string>|null $attributes Additional attributes of the domain, keyed by attribute name.
      *     Values are strings. Customer-settable keys: - `auto_renew_period`: `monthly` or `yearly`. All TLDs on
      *     create, transfer-in and update. Selects the period of the next renewal; the current expiry date does not
@@ -51,7 +51,7 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
      * @param DomainPeriod|null $period Additional registration period to add upon transfer completion
      */
     public function __construct(
-        public RenewalMode $renewalMode,
+        public RenewalMode|string $renewalMode,
         public ?array $attributes = null,
         public ?array $contacts = null,
         public bool $createZone = false,
@@ -66,7 +66,7 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            renewalMode: RenewalMode::from($data['renewal_mode']),
+            renewalMode: RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'],
             attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
             contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']) : null,
             createZone: $data['create_zone'] ?? false,

@@ -23,7 +23,7 @@ final readonly class DnsZoneUpdatePayloadData implements ApiModel
      */
     public function __construct(
         public string $name,
-        public ?DnssecStatus $dnssecStatus = null,
+        public DnssecStatus|string|null $dnssecStatus = null,
         public ?array $rrsets = null,
         public ?string $vanityNameserverSetId = null,
     ) {
@@ -36,7 +36,7 @@ final readonly class DnsZoneUpdatePayloadData implements ApiModel
     {
         return new self(
             name: $data['name'],
-            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::from($data['dnssec_status']) : null,
+            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::tryFrom($data['dnssec_status']) ?? $data['dnssec_status'] : null,
             rrsets: isset($data['rrsets']) ? array_map(static fn (array $item): DnsRrsetCreate => DnsRrsetCreate::fromArray($item), $data['rrsets']) : null,
             vanityNameserverSetId: $data['vanity_nameserver_set_id'] ?? null,
         );

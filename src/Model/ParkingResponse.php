@@ -21,7 +21,7 @@ final readonly class ParkingResponse implements ApiModel
      * @param bool $enabled Whether parking is enabled
      * @param string $parkingId Unique identifier for the parking entry TypeID prefix: parking.
      * @param \DateTimeImmutable $updatedOn When the parking entry was last updated
-     * @param ComplianceStatus|null $complianceStatus The compliance status of the parking ad
+     * @param ComplianceStatus|string|null $complianceStatus The compliance status of the parking ad
      * @param string|null $contentLanguage The primary language code for the ad content
      * @param string|null $contentUrl The content URL for approved parking ads
      * @param string|null $note Additional notes about the parking ad
@@ -32,7 +32,7 @@ final readonly class ParkingResponse implements ApiModel
         public bool $enabled,
         public string $parkingId,
         public \DateTimeImmutable $updatedOn,
-        public ?ComplianceStatus $complianceStatus = null,
+        public ComplianceStatus|string|null $complianceStatus = null,
         public ?string $contentLanguage = null,
         public ?string $contentUrl = null,
         public ?string $note = null,
@@ -50,7 +50,7 @@ final readonly class ParkingResponse implements ApiModel
             enabled: $data['enabled'],
             parkingId: $data['parking_id'],
             updatedOn: new \DateTimeImmutable($data['updated_on']),
-            complianceStatus: isset($data['compliance_status']) ? ComplianceStatus::from($data['compliance_status']) : null,
+            complianceStatus: isset($data['compliance_status']) ? ComplianceStatus::tryFrom($data['compliance_status']) ?? $data['compliance_status'] : null,
             contentLanguage: $data['content_language'] ?? null,
             contentUrl: $data['content_url'] ?? null,
             note: $data['note'] ?? null,

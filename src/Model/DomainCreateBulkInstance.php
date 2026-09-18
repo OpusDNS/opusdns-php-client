@@ -51,7 +51,7 @@ final readonly class DomainCreateBulkInstance implements ApiModel
      *     domains; must be set per-instance because each premium domain has its own price.
      * @param list<Nameserver>|null $nameservers Override nameservers for this domain
      * @param DomainPeriod|null $period Override registration period for this domain
-     * @param RenewalMode|null $renewalMode Override renewal mode for this domain
+     * @param RenewalMode|string|null $renewalMode Override renewal mode for this domain
      */
     public function __construct(
         public string $name,
@@ -62,7 +62,7 @@ final readonly class DomainCreateBulkInstance implements ApiModel
         public ?string $expectedPrice = null,
         public ?array $nameservers = null,
         public ?DomainPeriod $period = null,
-        public ?RenewalMode $renewalMode = null,
+        public RenewalMode|string|null $renewalMode = null,
     ) {
     }
 
@@ -80,7 +80,7 @@ final readonly class DomainCreateBulkInstance implements ApiModel
             expectedPrice: $data['expected_price'] ?? null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
             period: isset($data['period']) ? DomainPeriod::fromArray($data['period']) : null,
-            renewalMode: isset($data['renewal_mode']) ? RenewalMode::from($data['renewal_mode']) : null,
+            renewalMode: isset($data['renewal_mode']) ? RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
         );
     }
 

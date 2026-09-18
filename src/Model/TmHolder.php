@@ -20,7 +20,7 @@ final readonly class TmHolder implements ApiModel
 {
     public function __construct(
         public TmAddr $addr,
-        public HolderEntitlement $entitlement,
+        public HolderEntitlement|string $entitlement,
         public ?string $email = null,
         public ?string $fax = null,
         public ?string $name = null,
@@ -36,7 +36,7 @@ final readonly class TmHolder implements ApiModel
     {
         return new self(
             addr: TmAddr::fromArray($data['addr']),
-            entitlement: HolderEntitlement::from($data['entitlement']),
+            entitlement: HolderEntitlement::tryFrom($data['entitlement']) ?? $data['entitlement'],
             email: $data['email'] ?? null,
             fax: $data['fax'] ?? null,
             name: $data['name'] ?? null,

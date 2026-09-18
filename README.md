@@ -157,8 +157,9 @@ is a backed `enum` in `OpusDNS\Client\Enum`.
   own shape.
 - `toArray()` omits properties that are `null`. `new DomainUpdate(authCode: null)` therefore leaves the auth code
   untouched. To send an explicit `null`, pass a plain array: `updateDomain('example.com', ['auth_code' => null])`.
-- Enumerated fields are typed as enums, so `$domain->renewalMode === RenewalMode::EXPIRE` works and `match`
-  expressions are exhaustive. A value the client does not know raises a `ValueError` on hydration.
+- Enumerated fields are typed as the enum or its raw value, for example `RenewalMode|string`. Known values
+  hydrate to the enum case, so `$domain->renewalMode === RenewalMode::EXPIRE` works; a value this version of
+  the client does not know is kept as the raw string, so `match` expressions need a default arm.
 - Timestamps are `\DateTimeImmutable` objects; they are sent as UTC RFC 3339 strings with a `Z` suffix.
   Date-only fields are `\DateTimeImmutable` objects at midnight UTC and are sent as `YYYY-MM-DD`, whatever the
   process timezone.
@@ -206,10 +207,11 @@ All exceptions extend `OpusDNS\Client\Exception\OpusDnsException`, which extends
 | `ValidationException` | 422; `messages()` lists the failing fields as `field.path: message` |
 | `RateLimitException` | 429 |
 | `ServerException` | Any 5xx |
-| `DecodingException` | A successful response could not be decoded |
+| `DecodingException` | A successful response could not be decoded or hydrated into its model |
 
 The status exceptions extend `HttpException`, which exposes `statusCode()`, the problem details the API sends
 (`problemType`, `problemTitle`, `problemDetail`), the decoded `body`, and the PSR-7 `request` and `response`.
+The stored request carries no `X-Api-Key` header.
 
 ```php
 use OpusDNS\Client\Exception\ConflictException;
@@ -311,7 +313,7 @@ composer stan         # PHPStan over src and generator
 Run `composer spec:sync`, then `composer generate`, `composer test` and `composer stan`, and review the diff of
 `src/`. New operations, models and enum values appear automatically; removed or renamed ones are a breaking
 change for consumers. Regenerate whenever the API adds enum values: hydration is strict, so a client built from
-an older specification rejects values it has never seen.
+an older specification keeps values it has never seen as raw strings.
 
 The CI workflow does the same on a weekly schedule and on manual runs: it syncs the specification, regenerates,
 runs the checks and commits the result to `main` when anything changed. On pushes and pull requests it verifies

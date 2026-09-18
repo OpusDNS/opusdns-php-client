@@ -17,14 +17,14 @@ final readonly class DomainContactResponse implements ApiModel
 {
     /**
      * @param string $contactId The contact id of the contact TypeID prefix: contact.
-     * @param DomainContactType $contactType The type of contact
+     * @param DomainContactType|string $contactType The type of contact
      * @param array<string, string>|null $attributes Registry-specific attributes supplied inline for this contact in
      *     this role. Omitted when the contact was submitted without inline attributes; attributes taken from a
      *     linked contact attribute set are not reported here.
      */
     public function __construct(
         public string $contactId,
-        public DomainContactType $contactType,
+        public DomainContactType|string $contactType,
         public ?array $attributes = null,
     ) {
     }
@@ -36,7 +36,7 @@ final readonly class DomainContactResponse implements ApiModel
     {
         return new self(
             contactId: $data['contact_id'],
-            contactType: DomainContactType::from($data['contact_type']),
+            contactType: DomainContactType::tryFrom($data['contact_type']) ?? $data['contact_type'],
             attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
         );
     }

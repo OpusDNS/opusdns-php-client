@@ -145,7 +145,7 @@ final class SpecContractTest extends TestCase
         self::assertNotNull($returnType, 'return type is missing');
         [$expectedReturn, $nullable] = $this->expectedReturn($operation);
         if ($expectedReturn !== null) {
-            self::assertSame($expectedReturn, ltrim((string) $returnType, '?'), 'return type differs');
+            self::assertSame($expectedReturn, (string) preg_replace('/\|null$/', '', ltrim((string) $returnType, '?')), 'return type differs');
             if ($expectedReturn !== 'void' && $expectedReturn !== 'mixed') {
                 self::assertSame($nullable, $returnType->allowsNull(), 'return nullability differs');
             }
@@ -253,9 +253,13 @@ final class SpecContractTest extends TestCase
         if (isset($json['$ref'])) {
             $name = Spec::refName((string) $json['$ref']);
             $target = self::$spec->schema($name);
-            $namespace = TypeResolver::isEnumSchema($target) ? TypeResolver::ENUM_NAMESPACE : TypeResolver::MODEL_NAMESPACE;
-            if (TypeResolver::isEnumSchema($target) || TypeResolver::isModelSchema($target)) {
-                return [$namespace . '\\' . self::$types->className($name), $hasEmpty];
+            if (TypeResolver::isEnumSchema($target)) {
+                $backing = ($target['type'] ?? 'string') === 'integer' ? 'int' : 'string';
+
+                return [TypeResolver::ENUM_NAMESPACE . '\\' . self::$types->className($name) . '|' . $backing, $hasEmpty];
+            }
+            if (TypeResolver::isModelSchema($target)) {
+                return [TypeResolver::MODEL_NAMESPACE . '\\' . self::$types->className($name), $hasEmpty];
             }
 
             return [null, $hasEmpty];

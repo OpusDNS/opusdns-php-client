@@ -16,11 +16,11 @@ use OpusDNS\Client\Serializer;
 final readonly class DnsZoneCreateBulkTemplate implements ApiModel
 {
     /**
-     * @param DnssecStatus $dnssecStatus DNSSEC status for all zones
+     * @param DnssecStatus|string $dnssecStatus DNSSEC status for all zones
      * @param list<DnsRrsetCreate>|null $rrsets DNS record sets to create
      */
     public function __construct(
-        public DnssecStatus $dnssecStatus = DnssecStatus::DISABLED,
+        public DnssecStatus|string $dnssecStatus = DnssecStatus::DISABLED,
         public ?array $rrsets = null,
     ) {
     }
@@ -31,7 +31,7 @@ final readonly class DnsZoneCreateBulkTemplate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::from($data['dnssec_status']) : DnssecStatus::DISABLED,
+            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::tryFrom($data['dnssec_status']) ?? $data['dnssec_status'] : DnssecStatus::DISABLED,
             rrsets: isset($data['rrsets']) ? array_map(static fn (array $item): DnsRrsetCreate => DnsRrsetCreate::fromArray($item), $data['rrsets']) : null,
         );
     }

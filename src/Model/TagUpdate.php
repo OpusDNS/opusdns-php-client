@@ -16,12 +16,12 @@ use OpusDNS\Client\Serializer;
 final readonly class TagUpdate implements ApiModel
 {
     /**
-     * @param TagColor|null $color The color of the tag
+     * @param TagColor|string|null $color The color of the tag
      * @param string|null $description Optional description of the tag
      * @param string|null $label A human-readable label for the tag
      */
     public function __construct(
-        public ?TagColor $color = null,
+        public TagColor|string|null $color = null,
         public ?string $description = null,
         public ?string $label = null,
     ) {
@@ -33,7 +33,7 @@ final readonly class TagUpdate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            color: isset($data['color']) ? TagColor::from($data['color']) : null,
+            color: isset($data['color']) ? TagColor::tryFrom($data['color']) ?? $data['color'] : null,
             description: $data['description'] ?? null,
             label: $data['label'] ?? null,
         );

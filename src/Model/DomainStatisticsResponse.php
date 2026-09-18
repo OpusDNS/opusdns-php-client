@@ -21,7 +21,7 @@ final readonly class DomainStatisticsResponse implements ApiModel
      * @param list<DomainStatisticsBucketResponse> $buckets One entry per bucket the window touches, oldest first,
      *     including empty buckets
      * @param \DateTimeImmutable $endDate Last day of the window, inclusive
-     * @param UsageGranularity $granularity Time-bucket size of the series
+     * @param UsageGranularity|string $granularity Time-bucket size of the series
      * @param string $organizationId The organization the counts are scoped to TypeID prefix: organization.
      * @param \DateTimeImmutable $startDate First day of the window, inclusive
      * @param \DateTimeImmutable|null $dataAvailableFrom Oldest day these statistics can report on. They are read
@@ -32,7 +32,7 @@ final readonly class DomainStatisticsResponse implements ApiModel
         public array $breakdown,
         public array $buckets,
         public \DateTimeImmutable $endDate,
-        public UsageGranularity $granularity,
+        public UsageGranularity|string $granularity,
         public string $organizationId,
         public \DateTimeImmutable $startDate,
         public DomainStatisticsTotalsResponse $totals,
@@ -49,7 +49,7 @@ final readonly class DomainStatisticsResponse implements ApiModel
             breakdown: array_map(static fn (array $item): DomainStatisticsBreakdownRowResponse => DomainStatisticsBreakdownRowResponse::fromArray($item), $data['breakdown']),
             buckets: array_map(static fn (array $item): DomainStatisticsBucketResponse => DomainStatisticsBucketResponse::fromArray($item), $data['buckets']),
             endDate: Serializer::parseDate($data['end_date']),
-            granularity: UsageGranularity::from($data['granularity']),
+            granularity: UsageGranularity::tryFrom($data['granularity']) ?? $data['granularity'],
             organizationId: $data['organization_id'],
             startDate: Serializer::parseDate($data['start_date']),
             totals: DomainStatisticsTotalsResponse::fromArray($data['totals']),

@@ -43,12 +43,12 @@ final class EventService
     public function getEvents(
         int $page = 1,
         int $pageSize = 10,
-        EventSortField $sortBy = EventSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
-        ?EventObjectType $objectType = null,
+        EventSortField|string $sortBy = EventSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
+        EventObjectType|string|null $objectType = null,
         ?string $objectId = null,
-        ?EventType $type = null,
-        ?EventSubtype $subtype = null,
+        EventType|string|null $type = null,
+        EventSubtype|string|null $subtype = null,
         ?bool $acknowledged = false,
         ?string $xDatetimeFormat = null,
     ): PaginationEventResponse {
@@ -59,7 +59,7 @@ final class EventService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationEventResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationEventResponse => PaginationEventResponse::fromArray($data));
     }
 
     /**
@@ -82,7 +82,7 @@ final class EventService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EventResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EventResponse => EventResponse::fromArray($data));
     }
 
     /**

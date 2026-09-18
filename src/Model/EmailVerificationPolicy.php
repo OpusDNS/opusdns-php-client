@@ -16,7 +16,8 @@ use OpusDNS\Client\Serializer;
 final readonly class EmailVerificationPolicy implements ApiModel
 {
     /**
-     * @param list<DomainContactType> $contactRoles For which type of Contacts this verification needs to be done
+     * @param list<DomainContactType|string> $contactRoles For which type of Contacts this verification needs to be
+     *     done
      * @param bool $enabled Whether this Verification is enabled
      * @param string $suspensionDelay After how many Days should the domain be suspended
      * @param bool $suspensionOnFailure Should the Domain be suspended if the verification was not successfull
@@ -41,7 +42,7 @@ final readonly class EmailVerificationPolicy implements ApiModel
     {
         return new self(
             communication: Communication::fromArray($data['communication']),
-            contactRoles: array_map(static fn (string $item): DomainContactType => DomainContactType::from($item), $data['contact_roles']),
+            contactRoles: array_map(static fn (string $item): DomainContactType|string => DomainContactType::tryFrom($item) ?? $item, $data['contact_roles']),
             enabled: $data['enabled'],
             suspensionDelay: $data['suspension_delay'],
             suspensionOnFailure: $data['suspension_on_failure'],

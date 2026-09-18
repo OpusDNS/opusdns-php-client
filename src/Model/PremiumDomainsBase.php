@@ -18,13 +18,13 @@ final readonly class PremiumDomainsBase implements ApiModel
 {
     /**
      * @param bool $supported Whether the registry has premium domains
-     * @param list<PremiumAffectsType>|null $affects What operations are affected by premium status
-     * @param PremiumSourceType|null $source Source of premium domain information
+     * @param list<PremiumAffectsType|string>|null $affects What operations are affected by premium status
+     * @param PremiumSourceType|string|null $source Source of premium domain information
      */
     public function __construct(
         public bool $supported,
         public ?array $affects = null,
-        public ?PremiumSourceType $source = null,
+        public PremiumSourceType|string|null $source = null,
     ) {
     }
 
@@ -35,8 +35,8 @@ final readonly class PremiumDomainsBase implements ApiModel
     {
         return new self(
             supported: $data['supported'],
-            affects: isset($data['affects']) ? array_map(static fn (string $item): PremiumAffectsType => PremiumAffectsType::from($item), $data['affects']) : null,
-            source: isset($data['source']) ? PremiumSourceType::from($data['source']) : null,
+            affects: isset($data['affects']) ? array_map(static fn (string $item): PremiumAffectsType|string => PremiumAffectsType::tryFrom($item) ?? $item, $data['affects']) : null,
+            source: isset($data['source']) ? PremiumSourceType::tryFrom($data['source']) ?? $data['source'] : null,
         );
     }
 

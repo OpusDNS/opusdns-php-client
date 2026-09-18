@@ -17,13 +17,13 @@ use OpusDNS\Client\Serializer;
 final readonly class AttributeCondition implements ApiModel
 {
     /**
-     * @param RegistryHandleAttributeType $field The attribute key to evaluate
-     * @param ConditionOperator $operator The comparison operator
+     * @param RegistryHandleAttributeType|string $field The attribute key to evaluate
+     * @param ConditionOperator|string $operator The comparison operator
      * @param string|list<string> $value The value(s) to compare against
      */
     public function __construct(
-        public RegistryHandleAttributeType $field,
-        public ConditionOperator $operator,
+        public RegistryHandleAttributeType|string $field,
+        public ConditionOperator|string $operator,
         public string|array $value,
     ) {
     }
@@ -34,8 +34,8 @@ final readonly class AttributeCondition implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            field: RegistryHandleAttributeType::from($data['field']),
-            operator: ConditionOperator::from($data['operator']),
+            field: RegistryHandleAttributeType::tryFrom($data['field']) ?? $data['field'],
+            operator: ConditionOperator::tryFrom($data['operator']) ?? $data['operator'],
             value: $data['value'],
         );
     }

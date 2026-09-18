@@ -18,16 +18,16 @@ final readonly class LaunchPhaseBase implements ApiModel
 {
     /**
      * @param bool $supported Whether this phase is supported
-     * @param LaunchPhaseType $type Type of launch phase
-     * @param AllocationMethodType|null $allocation Allocation method
+     * @param LaunchPhaseType|string $type Type of launch phase
+     * @param AllocationMethodType|string|null $allocation Allocation method
      * @param \DateTimeImmutable|null $endDate End date of the phase
      * @param bool|null $smdRequired Whether an SMD file is required for participation
      * @param \DateTimeImmutable|null $startDate Start date of the phase
      */
     public function __construct(
         public bool $supported,
-        public LaunchPhaseType $type,
-        public ?AllocationMethodType $allocation = null,
+        public LaunchPhaseType|string $type,
+        public AllocationMethodType|string|null $allocation = null,
         public ?\DateTimeImmutable $endDate = null,
         public ?bool $smdRequired = null,
         public ?\DateTimeImmutable $startDate = null,
@@ -41,8 +41,8 @@ final readonly class LaunchPhaseBase implements ApiModel
     {
         return new self(
             supported: $data['supported'],
-            type: LaunchPhaseType::from($data['type']),
-            allocation: isset($data['allocation']) ? AllocationMethodType::from($data['allocation']) : null,
+            type: LaunchPhaseType::tryFrom($data['type']) ?? $data['type'],
+            allocation: isset($data['allocation']) ? AllocationMethodType::tryFrom($data['allocation']) ?? $data['allocation'] : null,
             endDate: isset($data['end_date']) ? new \DateTimeImmutable($data['end_date']) : null,
             smdRequired: $data['smd_required'] ?? null,
             startDate: isset($data['start_date']) ? new \DateTimeImmutable($data['start_date']) : null,

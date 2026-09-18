@@ -47,11 +47,11 @@ final class ParkingService
     public function listParking(
         int $page = 1,
         int $pageSize = 10,
-        ParkingSortField $sortBy = ParkingSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        ParkingSortField|string $sortBy = ParkingSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $search = null,
         ?bool $enabled = null,
-        ?ComplianceStatus $complianceStatus = null,
+        ComplianceStatus|string|null $complianceStatus = null,
         ?string $xDatetimeFormat = null,
     ): PageResponseParkingResponse {
         $response = $this->client->request(
@@ -61,7 +61,7 @@ final class ParkingService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseParkingResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseParkingResponse => PageResponseParkingResponse::fromArray($data));
     }
 
     /**
@@ -87,7 +87,7 @@ final class ParkingService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ParkingTotalMetricsResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ParkingTotalMetricsResponse => ParkingTotalMetricsResponse::fromArray($data));
     }
 
     /**
@@ -113,7 +113,7 @@ final class ParkingService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ParkingSignupResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ParkingSignupResponse => ParkingSignupResponse::fromArray($data));
     }
 
     /**
@@ -135,7 +135,7 @@ final class ParkingService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ParkingSignupStatusResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ParkingSignupStatusResponse => ParkingSignupStatusResponse::fromArray($data));
     }
 
     /**
@@ -163,6 +163,6 @@ final class ParkingService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ParkingMetricsResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ParkingMetricsResponse => ParkingMetricsResponse::fromArray($data));
     }
 }

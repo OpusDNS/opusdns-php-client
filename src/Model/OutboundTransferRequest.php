@@ -16,10 +16,10 @@ use OpusDNS\Client\Serializer;
 final readonly class OutboundTransferRequest implements ApiModel
 {
     /**
-     * @param OutboundTransferAction $action Whether to approve or reject the pending outbound transfer
+     * @param OutboundTransferAction|string $action Whether to approve or reject the pending outbound transfer
      */
     public function __construct(
-        public OutboundTransferAction $action,
+        public OutboundTransferAction|string $action,
     ) {
     }
 
@@ -29,7 +29,7 @@ final readonly class OutboundTransferRequest implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            action: OutboundTransferAction::from($data['action']),
+            action: OutboundTransferAction::tryFrom($data['action']) ?? $data['action'],
         );
     }
 

@@ -290,16 +290,21 @@ final class ServiceEmitter
             return new ReturnSpec('mixed', null, static fn (string $call): string => "\$response = {$call};\n\nreturn \$this->client->decode(\$response);");
         }
 
-        $decoder = match ($type->kind) {
-            PhpType::KIND_LIST => 'decodeList',
-            PhpType::KIND_MODEL, PhpType::KIND_MAP, PhpType::KIND_UNION => 'decodeArray',
-            default => 'decode',
-        };
-
-        if ($nullable) {
-            $body = static fn (string $call): string => "\$response = {$call};\n\$data = \$this->client->decodeOptional(\$response);\n\nreturn \$data === null ? null : " . $type->hydrateExpr('$data') . ';';
+        if ($type->needsHydration()) {
+            $inner = $type->withNullable(false);
+            $returnType = (string) preg_replace('/(?:\\\\?[A-Za-z0-9_]+\\\\)+/', '', $inner->declaration());
+            $closure = 'static fn (' . ($type->raw === 'array' ? 'array' : 'mixed') . " \$data): {$returnType} => " . $inner->hydrateExpr('$data');
+            $optional = $nullable ? ', optional: true' : '';
+            $body = static fn (string $call): string => "\$response = {$call};\n\nreturn \$this->client->hydrate(\$response, {$closure}{$optional});";
         } else {
-            $body = static fn (string $call): string => "\$response = {$call};\n\nreturn " . $type->hydrateExpr("\$this->client->{$decoder}(\$response)") . ';';
+            $decoder = match ($type->kind) {
+                PhpType::KIND_LIST => 'decodeList',
+                PhpType::KIND_MAP, PhpType::KIND_UNION => 'decodeArray',
+                default => 'decode',
+            };
+            $body = $nullable
+                ? static fn (string $call): string => "\$response = {$call};\n\nreturn \$this->client->decodeOptional(\$response);"
+                : static fn (string $call): string => "\$response = {$call};\n\nreturn \$this->client->{$decoder}(\$response);";
         }
 
         return new ReturnSpec($type->declaration(), $doc, $body, null, $type->uses);

@@ -121,8 +121,9 @@ final class PhpType
     /** Short class name for a model or enum type. */
     public function shortName(): string
     {
-        $position = strrpos($this->native, '\\');
+        $base = explode('|', $this->native)[0];
+        $position = strrpos($base, '\\');
 
-        return $position === false ? $this->native : substr($this->native, $position + 1);
+        return $position === false ? $base : substr($base, $position + 1);
     }
 }

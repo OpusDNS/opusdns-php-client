@@ -17,15 +17,15 @@ use OpusDNS\Client\Serializer;
 final readonly class StatusTagResponse implements ApiModel
 {
     /**
-     * @param TagColor $color The color of the tag
+     * @param TagColor|string $color The color of the tag
      * @param string $label The label of the tag
-     * @param StatusTagType $tagType The status tag type identifier
+     * @param StatusTagType|string $tagType The status tag type identifier
      * @param string|null $description Additional information about this status tag
      */
     public function __construct(
-        public TagColor $color,
+        public TagColor|string $color,
         public string $label,
-        public StatusTagType $tagType,
+        public StatusTagType|string $tagType,
         public ?string $description = null,
     ) {
     }
@@ -36,9 +36,9 @@ final readonly class StatusTagResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            color: TagColor::from($data['color']),
+            color: TagColor::tryFrom($data['color']) ?? $data['color'],
             label: $data['label'],
-            tagType: StatusTagType::from($data['tag_type']),
+            tagType: StatusTagType::tryFrom($data['tag_type']) ?? $data['tag_type'],
             description: $data['description'] ?? null,
         );
     }

@@ -21,7 +21,7 @@ final readonly class MessageCreateRequest implements ApiModel
      */
     public function __construct(
         public string $content,
-        public MessageRole $role,
+        public MessageRole|string $role,
         public ?array $metadata = null,
         public ?int $n8nHistoryId = null,
     ) {
@@ -34,7 +34,7 @@ final readonly class MessageCreateRequest implements ApiModel
     {
         return new self(
             content: $data['content'],
-            role: MessageRole::from($data['role']),
+            role: MessageRole::tryFrom($data['role']) ?? $data['role'],
             metadata: isset($data['metadata']) ? (array) $data['metadata'] : null,
             n8nHistoryId: $data['n8n_history_id'] ?? null,
         );

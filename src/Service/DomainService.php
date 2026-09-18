@@ -72,7 +72,8 @@ final class DomainService
      *
      * Required permissions: domains:read
      *
-     * @param list<StatusTagType>|null $statusTags Filter by status tag types. Can be specified multiple times.
+     * @param list<StatusTagType|string>|null $statusTags Filter by status tag types. Can be specified multiple
+     *     times.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
      * @param list<string>|null $tld Filter by top-level domain (e.g., 'com', 'org'). Can be specified multiple times
      *     (union of all provided values).
@@ -82,14 +83,14 @@ final class DomainService
      *     registrar credential they were synced from. Can be specified multiple times (union of all provided
      *     values); combined with `registrar`, both must match. Matches exactly the domains whose
      *     `registrar_credential` field carries the id, so domains OpusDNS sponsors never match.
-     * @param list<Registrar>|null $registrar Filter domains held at an external registrar by that registrar. Can be
-     *     specified multiple times (union of all provided values); combined with `registrar_credential_id`, both
-     *     must match. Matches exactly the domains whose `registrar_credential` field carries the registrar, so
+     * @param list<Registrar|string>|null $registrar Filter domains held at an external registrar by that registrar.
+     *     Can be specified multiple times (union of all provided values); combined with `registrar_credential_id`,
+     *     both must match. Matches exactly the domains whose `registrar_credential` field carries the registrar, so
      *     domains OpusDNS sponsors never match.
-     * @param list<DomainListIncludeField>|null $include Extra data to include in each result. `tags` populates the
-     *     `tags` (user tags) and `status_tags` fields, which are otherwise null; filtering by `tag_ids` or
-     *     `status_tags` alone does not populate them. `registrar_credential` populates the `registrar_credential`
-     *     field for domains held at an external registrar.
+     * @param list<DomainListIncludeField|string>|null $include Extra data to include in each result. `tags`
+     *     populates the `tags` (user tags) and `status_tags` fields, which are otherwise null; filtering by
+     *     `tag_ids` or `status_tags` alone does not populate them. `registrar_credential` populates the
+     *     `registrar_credential` field for domains held at an external registrar.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -97,12 +98,12 @@ final class DomainService
     public function getDomains(
         int $page = 1,
         int $pageSize = 10,
-        DomainSortField $sortBy = DomainSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        DomainSortField|string $sortBy = DomainSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?array $statusTags = null,
-        TagFilterMode $statusTagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string $statusTagMode = TagFilterMode::MATCH_ANY,
         ?array $tagIds = null,
-        TagFilterMode $tagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string $tagMode = TagFilterMode::MATCH_ANY,
         ?string $name = null,
         ?string $search = null,
         ?array $tld = null,
@@ -137,7 +138,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationDomainResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationDomainResponse => PaginationDomainResponse::fromArray($data));
     }
 
     /**
@@ -169,7 +170,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainResponse => DomainResponse::fromArray($data));
     }
 
     /**
@@ -207,7 +208,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainCheckResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainCheckResponse => DomainCheckResponse::fromArray($data));
     }
 
     /**
@@ -237,7 +238,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ClaimsNoticesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ClaimsNoticesResponse => ClaimsNoticesResponse::fromArray($data));
     }
 
     /**
@@ -272,9 +273,9 @@ final class DomainService
     public function getDomainStatistics(
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
-        UsageGranularity $granularity = UsageGranularity::DAY,
+        UsageGranularity|string $granularity = UsageGranularity::DAY,
         ?string $tld = null,
-        DomainStatisticsBreakdown $breakdown = DomainStatisticsBreakdown::NONE,
+        DomainStatisticsBreakdown|string $breakdown = DomainStatisticsBreakdown::NONE,
         int $breakdownLimit = 10,
         ?string $xDatetimeFormat = null,
     ): DomainStatisticsResponse {
@@ -285,7 +286,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainStatisticsResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainStatisticsResponse => DomainStatisticsResponse::fromArray($data));
     }
 
     /**
@@ -307,7 +308,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainSummaryResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainSummaryResponse => DomainSummaryResponse::fromArray($data));
     }
 
     /**
@@ -333,7 +334,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainWithdrawResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainWithdrawResponse => DomainWithdrawResponse::fromArray($data));
     }
 
     /**
@@ -356,7 +357,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificBeModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificBeModelsRequestAuthcodeResponse => ApiDomainTldSpecificBeModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -384,7 +385,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificCymruModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificCymruModelsRequestAuthcodeResponse => ApiDomainTldSpecificCymruModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -407,7 +408,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificCzModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificCzModelsRequestAuthcodeResponse => ApiDomainTldSpecificCzModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -433,7 +434,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainTransitResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainTransitResponse => DomainTransitResponse::fromArray($data));
     }
 
     /**
@@ -456,7 +457,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificDkModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificDkModelsRequestAuthcodeResponse => ApiDomainTldSpecificDkModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -479,7 +480,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificEuModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificEuModelsRequestAuthcodeResponse => ApiDomainTldSpecificEuModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -502,7 +503,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificLtModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificLtModelsRequestAuthcodeResponse => ApiDomainTldSpecificLtModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -523,7 +524,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return NorIdDeclarationResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): NorIdDeclarationResponse => NorIdDeclarationResponse::fromArray($data));
     }
 
     /**
@@ -577,7 +578,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return NorIdDeclarationResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): NorIdDeclarationResponse => NorIdDeclarationResponse::fromArray($data));
     }
 
     /**
@@ -623,7 +624,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificNuModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificNuModelsRequestAuthcodeResponse => ApiDomainTldSpecificNuModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -650,7 +651,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificSeModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificSeModelsRequestAuthcodeResponse => ApiDomainTldSpecificSeModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -678,7 +679,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ApiDomainTldSpecificWalesModelsRequestAuthcodeResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ApiDomainTldSpecificWalesModelsRequestAuthcodeResponse => ApiDomainTldSpecificWalesModelsRequestAuthcodeResponse::fromArray($data));
     }
 
     /**
@@ -703,7 +704,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainResponse => DomainResponse::fromArray($data));
     }
 
     /**
@@ -713,10 +714,10 @@ final class DomainService
      *
      * Required permissions: domains:read
      *
-     * @param list<DomainIncludeField>|null $include Extra data to include in the response. `tags` populates the
-     *     `tags` and `status_tags` fields, which are otherwise null. `renewal_price` resolves the domain's renewal
-     *     price. `registrar_credential` populates the `registrar_credential` field for domains held at an external
-     *     registrar.
+     * @param list<DomainIncludeField|string>|null $include Extra data to include in the response. `tags` populates
+     *     the `tags` and `status_tags` fields, which are otherwise null. `renewal_price` resolves the domain's
+     *     renewal price. `registrar_credential` populates the `registrar_credential` field for domains held at an
+     *     external registrar.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -734,7 +735,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainResponse => DomainResponse::fromArray($data));
     }
 
     /**
@@ -764,7 +765,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainResponse => DomainResponse::fromArray($data));
     }
 
     /**
@@ -810,7 +811,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): DomainDnssecDataResponse => DomainDnssecDataResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): DomainDnssecDataResponse => DomainDnssecDataResponse::fromArray($item), $data));
     }
 
     /**
@@ -836,7 +837,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): DomainDnssecDataResponse => DomainDnssecDataResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): DomainDnssecDataResponse => DomainDnssecDataResponse::fromArray($item), $data));
     }
 
     /**
@@ -898,7 +899,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): DomainDnssecDataResponse => DomainDnssecDataResponse::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): DomainDnssecDataResponse => DomainDnssecDataResponse::fromArray($item), $data));
     }
 
     /**
@@ -927,7 +928,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainRenewResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainRenewResponse => DomainRenewResponse::fromArray($data));
     }
 
     /**
@@ -953,7 +954,7 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainRestoreResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainRestoreResponse => DomainRestoreResponse::fromArray($data));
     }
 
     /**
@@ -1000,6 +1001,6 @@ final class DomainService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return OutboundTransferResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): OutboundTransferResponse => OutboundTransferResponse::fromArray($data));
     }
 }

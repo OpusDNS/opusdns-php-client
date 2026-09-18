@@ -18,7 +18,7 @@ final readonly class ParkingStatistics implements ApiModel
     /**
      * @param int $conversions Number of conversions
      * @param string $revenue Total revenue
-     * @param Currency $revenueCurrency Currency code for revenue (e.g., USD, EUR)
+     * @param Currency|string $revenueCurrency Currency code for revenue (e.g., USD, EUR)
      * @param string $rpc Revenue per click
      * @param string $rpm Revenue per mille (thousand views)
      * @param int $views Number of views
@@ -26,7 +26,7 @@ final readonly class ParkingStatistics implements ApiModel
     public function __construct(
         public int $conversions,
         public string $revenue,
-        public Currency $revenueCurrency,
+        public Currency|string $revenueCurrency,
         public string $rpc,
         public string $rpm,
         public int $views,
@@ -41,7 +41,7 @@ final readonly class ParkingStatistics implements ApiModel
         return new self(
             conversions: $data['conversions'],
             revenue: $data['revenue'],
-            revenueCurrency: Currency::from($data['revenue_currency']),
+            revenueCurrency: Currency::tryFrom($data['revenue_currency']) ?? $data['revenue_currency'],
             rpc: $data['rpc'],
             rpm: $data['rpm'],
             views: $data['views'],

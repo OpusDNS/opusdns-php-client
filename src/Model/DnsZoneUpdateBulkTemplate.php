@@ -16,12 +16,12 @@ use OpusDNS\Client\Serializer;
 final readonly class DnsZoneUpdateBulkTemplate implements ApiModel
 {
     /**
-     * @param DnssecStatus|null $dnssecStatus DNSSEC status for all zones
+     * @param DnssecStatus|string|null $dnssecStatus DNSSEC status for all zones
      * @param list<DnsRrsetCreate>|null $rrsets DNS record sets to apply to every zone. Omit to leave each zone's
      *     RRsets unchanged (useful for bulk DNSSEC toggles). Provide an empty list to delete all records.
      */
     public function __construct(
-        public ?DnssecStatus $dnssecStatus = null,
+        public DnssecStatus|string|null $dnssecStatus = null,
         public ?array $rrsets = null,
     ) {
     }
@@ -32,7 +32,7 @@ final readonly class DnsZoneUpdateBulkTemplate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::from($data['dnssec_status']) : null,
+            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::tryFrom($data['dnssec_status']) ?? $data['dnssec_status'] : null,
             rrsets: isset($data['rrsets']) ? array_map(static fn (array $item): DnsRrsetCreate => DnsRrsetCreate::fromArray($item), $data['rrsets']) : null,
         );
     }

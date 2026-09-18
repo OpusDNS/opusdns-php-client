@@ -70,7 +70,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Union::discriminate($this->client->decodeArray($response), 'kind', [
+        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext => Union::discriminate($data, 'kind', [
             'aggregations' => AggregationsContext::class,
             'contacts' => ContactsContext::class,
             'domain_forwards' => DomainForwardsContext::class,
@@ -78,7 +78,7 @@ final class AiConciergeService
             'domains' => DomainsContext::class,
             'email_forwards' => EmailForwardsContext::class,
             'zones' => ZonesContext::class,
-        ]);
+        ]));
     }
 
     /**
@@ -108,7 +108,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ConversationListResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ConversationListResponse => ConversationListResponse::fromArray($data));
     }
 
     /**
@@ -132,7 +132,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Conversation::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Conversation => Conversation::fromArray($data));
     }
 
     /**
@@ -153,7 +153,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Conversation::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Conversation => Conversation::fromArray($data));
     }
 
     /**
@@ -182,7 +182,7 @@ final class AiConciergeService
             headers: ['If-Match' => $ifMatch, 'X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Conversation::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Conversation => Conversation::fromArray($data));
     }
 
     /**
@@ -229,7 +229,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContextListResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContextListResponse => ContextListResponse::fromArray($data));
     }
 
     /**
@@ -256,7 +256,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Union::discriminate($this->client->decodeArray($response), 'kind', [
+        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext => Union::discriminate($data, 'kind', [
             'aggregations' => AggregationsContext::class,
             'contacts' => ContactsContext::class,
             'domain_forwards' => DomainForwardsContext::class,
@@ -264,7 +264,7 @@ final class AiConciergeService
             'domains' => DomainsContext::class,
             'email_forwards' => EmailForwardsContext::class,
             'zones' => ZonesContext::class,
-        ]);
+        ]));
     }
 
     /**
@@ -294,7 +294,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return MessageListResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): MessageListResponse => MessageListResponse::fromArray($data));
     }
 
     /**
@@ -320,7 +320,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Message::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Message => Message::fromArray($data));
     }
 
     /**
@@ -341,7 +341,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Message::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): Message => Message::fromArray($data));
     }
 
     /**
@@ -368,7 +368,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return MemoryFactListResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): MemoryFactListResponse => MemoryFactListResponse::fromArray($data));
     }
 
     /**
@@ -390,7 +390,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return MemoryFact::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): MemoryFact => MemoryFact::fromArray($data));
     }
 
     /**
@@ -416,7 +416,7 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return MemoryFact::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): MemoryFact => MemoryFact::fromArray($data));
     }
 
     /**

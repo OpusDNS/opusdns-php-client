@@ -18,14 +18,14 @@ final readonly class TagCreate implements ApiModel
 {
     /**
      * @param string $label A human-readable label for the tag
-     * @param TagType $type Which category a tag applies to, cannot be changed once created
-     * @param TagColor|null $color The color of the tag
+     * @param TagType|string $type Which category a tag applies to, cannot be changed once created
+     * @param TagColor|string|null $color The color of the tag
      * @param string|null $description Optional description of the tag
      */
     public function __construct(
         public string $label,
-        public TagType $type,
-        public ?TagColor $color = TagColor::COLOR_1,
+        public TagType|string $type,
+        public TagColor|string|null $color = TagColor::COLOR_1,
         public ?string $description = null,
     ) {
     }
@@ -37,8 +37,8 @@ final readonly class TagCreate implements ApiModel
     {
         return new self(
             label: $data['label'],
-            type: TagType::from($data['type']),
-            color: isset($data['color']) ? TagColor::from($data['color']) : TagColor::COLOR_1,
+            type: TagType::tryFrom($data['type']) ?? $data['type'],
+            color: isset($data['color']) ? TagColor::tryFrom($data['color']) ?? $data['color'] : TagColor::COLOR_1,
             description: $data['description'] ?? null,
         );
     }

@@ -52,7 +52,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return JobResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): JobResponse => JobResponse::fromArray($data));
     }
 
     /**
@@ -114,7 +114,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return JobResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): JobResponse => JobResponse::fromArray($data));
     }
 
     /**
@@ -136,7 +136,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return JobResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): JobResponse => JobResponse::fromArray($data));
     }
 
     /**
@@ -144,9 +144,9 @@ final class JobsService
      *
      * Required permissions: jobs:read
      *
-     * @param BatchStatus|null $status Filter by batch status (pending or complete)
-     * @param BatchSortField $sortBy Sort field
-     * @param SortOrder $sortOrder Sort order
+     * @param BatchStatus|string|null $status Filter by batch status (pending or complete)
+     * @param BatchSortField|string $sortBy Sort field
+     * @param SortOrder|string $sortOrder Sort order
      * @param int $page Page number (1-indexed)
      * @param int $pageSize Number of batches per page
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -154,9 +154,9 @@ final class JobsService
      *     sent.
      */
     public function listBatches(
-        ?BatchStatus $status = null,
-        BatchSortField $sortBy = BatchSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        BatchStatus|string|null $status = null,
+        BatchSortField|string $sortBy = BatchSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         int $page = 1,
         int $pageSize = 50,
         ?string $xDatetimeFormat = null,
@@ -168,7 +168,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseJobBatchMetadataResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseJobBatchMetadataResponse => PageResponseJobBatchMetadataResponse::fromArray($data));
     }
 
     /**
@@ -190,7 +190,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return CreateJobBatchResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): CreateJobBatchResponse => CreateJobBatchResponse::fromArray($data));
     }
 
     /**
@@ -212,7 +212,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return JobBatchStatusResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): JobBatchStatusResponse => JobBatchStatusResponse::fromArray($data));
     }
 
     /**
@@ -241,9 +241,9 @@ final class JobsService
      * Required permissions: jobs:read
      *
      * @param string $batchId Batch ID
-     * @param list<JobStatus>|null $status Filter by job status (repeatable)
-     * @param BatchSortField|null $sortBy Sort field
-     * @param SortOrder|null $sortOrder Sort order
+     * @param list<JobStatus|string>|null $status Filter by job status (repeatable)
+     * @param BatchSortField|string|null $sortBy Sort field
+     * @param SortOrder|string|null $sortOrder Sort order
      * @param int $page Page number (1-indexed)
      * @param int $pageSize Number of jobs per page
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -253,8 +253,8 @@ final class JobsService
     public function getBatchJobs(
         string $batchId,
         ?array $status = null,
-        ?BatchSortField $sortBy = null,
-        ?SortOrder $sortOrder = null,
+        BatchSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         int $page = 1,
         int $pageSize = 100,
         ?string $xDatetimeFormat = null,
@@ -267,7 +267,7 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PageResponseJobResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PageResponseJobResponse => PageResponseJobResponse::fromArray($data));
     }
 
     /**
@@ -336,6 +336,6 @@ final class JobsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return JobBatchRetryResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): JobBatchRetryResponse => JobBatchRetryResponse::fromArray($data));
     }
 }

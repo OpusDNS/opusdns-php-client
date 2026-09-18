@@ -49,8 +49,8 @@ final class DnsService
      * Required permissions: dns:read
      *
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
-     * @param list<ZoneIncludeField>|null $include Include additional data in the response. Can be specified multiple
-     *     times.
+     * @param list<ZoneIncludeField|string>|null $include Include additional data in the response. Can be specified
+     *     multiple times.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -58,11 +58,11 @@ final class DnsService
     public function listZones(
         int $page = 1,
         int $pageSize = 10,
-        ZoneSortField $sortBy = ZoneSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        ZoneSortField|string $sortBy = ZoneSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?array $tagIds = null,
-        TagFilterMode $tagMode = TagFilterMode::MATCH_ANY,
-        ?DnssecStatus $dnssecStatus = null,
+        TagFilterMode|string $tagMode = TagFilterMode::MATCH_ANY,
+        DnssecStatus|string|null $dnssecStatus = null,
         ?string $name = null,
         ?string $search = null,
         ?string $suffix = null,
@@ -81,7 +81,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationDnsZoneResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationDnsZoneResponse => PaginationDnsZoneResponse::fromArray($data));
     }
 
     /**
@@ -102,9 +102,8 @@ final class DnsService
             body: $body,
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
-        $data = $this->client->decodeOptional($response);
 
-        return $data === null ? null : DnsChangesResponse::fromArray($data);
+        return $this->client->hydrate($response, static fn (array $data): DnsChangesResponse => DnsChangesResponse::fromArray($data), optional: true);
     }
 
     /**
@@ -122,8 +121,8 @@ final class DnsService
         int $page = 1,
         int $pageSize = 10,
         ?string $search = null,
-        DomainForwardZoneSortField $sortBy = DomainForwardZoneSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        DomainForwardZoneSortField|string $sortBy = DomainForwardZoneSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $xDatetimeFormat = null,
     ): PaginationDomainForwardZone {
         $response = $this->client->request(
@@ -133,7 +132,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationDomainForwardZone::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationDomainForwardZone => PaginationDomainForwardZone::fromArray($data));
     }
 
     /**
@@ -151,8 +150,8 @@ final class DnsService
         int $page = 1,
         int $pageSize = 10,
         ?string $search = null,
-        EmailForwardZoneSortField $sortBy = EmailForwardZoneSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        EmailForwardZoneSortField|string $sortBy = EmailForwardZoneSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $xDatetimeFormat = null,
     ): PaginationEmailForwardZone {
         $response = $this->client->request(
@@ -162,7 +161,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationEmailForwardZone::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationEmailForwardZone => PaginationEmailForwardZone::fromArray($data));
     }
 
     /**
@@ -182,7 +181,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DnsZoneSummary::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DnsZoneSummary => DnsZoneSummary::fromArray($data));
     }
 
     /**
@@ -191,7 +190,7 @@ final class DnsService
      * Required permissions: dns:read
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
-     * @param list<ZoneIncludeField>|null $include
+     * @param list<ZoneIncludeField|string>|null $include
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -209,7 +208,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DnsZoneResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DnsZoneResponse => DnsZoneResponse::fromArray($data));
     }
 
     /**
@@ -251,7 +250,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DnsChangesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DnsChangesResponse => DnsChangesResponse::fromArray($data));
     }
 
     /**
@@ -273,7 +272,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DnsChangesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DnsChangesResponse => DnsChangesResponse::fromArray($data));
     }
 
     /**
@@ -297,7 +296,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DomainForwardZone::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DomainForwardZone => DomainForwardZone::fromArray($data));
     }
 
     /**
@@ -322,7 +321,7 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return EmailForwardZone::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): EmailForwardZone => EmailForwardZone::fromArray($data));
     }
 
     /**
@@ -424,6 +423,6 @@ final class DnsService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return DnsZoneVanitySetUpdateRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): DnsZoneVanitySetUpdateRes => DnsZoneVanitySetUpdateRes::fromArray($data));
     }
 }

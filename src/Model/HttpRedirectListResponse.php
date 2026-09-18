@@ -17,13 +17,13 @@ use OpusDNS\Client\Serializer;
 final readonly class HttpRedirectListResponse implements ApiModel
 {
     public function __construct(
-        public RedirectCode $redirectCode,
+        public RedirectCode|int $redirectCode,
         public string $requestHostname,
         public string $requestPath,
-        public HttpProtocol $requestProtocol,
+        public HttpProtocol|string $requestProtocol,
         public string $targetHostname,
         public string $targetPath,
-        public HttpProtocol $targetProtocol,
+        public HttpProtocol|string $targetProtocol,
         public bool $protected = false,
         public ?string $requestSubdomain = null,
     ) {
@@ -35,13 +35,13 @@ final readonly class HttpRedirectListResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            redirectCode: RedirectCode::from($data['redirect_code']),
+            redirectCode: RedirectCode::tryFrom($data['redirect_code']) ?? $data['redirect_code'],
             requestHostname: $data['request_hostname'],
             requestPath: $data['request_path'],
-            requestProtocol: HttpProtocol::from($data['request_protocol']),
+            requestProtocol: HttpProtocol::tryFrom($data['request_protocol']) ?? $data['request_protocol'],
             targetHostname: $data['target_hostname'],
             targetPath: $data['target_path'],
-            targetProtocol: HttpProtocol::from($data['target_protocol']),
+            targetProtocol: HttpProtocol::tryFrom($data['target_protocol']) ?? $data['target_protocol'],
             protected: $data['protected'] ?? false,
             requestSubdomain: $data['request_subdomain'] ?? null,
         );

@@ -46,7 +46,7 @@ final class HostService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return HostResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): HostResponse => HostResponse::fromArray($data));
     }
 
     /**
@@ -69,7 +69,7 @@ final class HostService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return HostResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): HostResponse => HostResponse::fromArray($data));
     }
 
     /**
@@ -97,7 +97,7 @@ final class HostService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return HostResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): HostResponse => HostResponse::fromArray($data));
     }
 
     /**

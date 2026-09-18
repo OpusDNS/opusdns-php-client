@@ -21,7 +21,7 @@ final readonly class MemoryFactCreateRequest implements ApiModel
      */
     public function __construct(
         public string $key,
-        public MemoryFactKind $kind,
+        public MemoryFactKind|string $kind,
         public ?int $ttlSeconds = null,
         public ?array $value = null,
     ) {
@@ -34,7 +34,7 @@ final readonly class MemoryFactCreateRequest implements ApiModel
     {
         return new self(
             key: $data['key'],
-            kind: MemoryFactKind::from($data['kind']),
+            kind: MemoryFactKind::tryFrom($data['kind']) ?? $data['kind'],
             ttlSeconds: $data['ttl_seconds'] ?? null,
             value: isset($data['value']) ? (array) $data['value'] : null,
         );

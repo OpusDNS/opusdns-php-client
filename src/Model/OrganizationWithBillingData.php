@@ -22,13 +22,13 @@ final readonly class OrganizationWithBillingData implements ApiModel
      * @param string|null $address1 First line of the organization's address.
      * @param string|null $address2 Second line of the organization's address.
      * @param list<OrganizationAttribute>|null $attributes
-     * @param BillingMode $billingMode Whether the organization is billed on its own account (INDEPENDENT) or rolled
-     *     up to its parent (CONSOLIDATED).
+     * @param BillingMode|string $billingMode Whether the organization is billed on its own account (INDEPENDENT) or
+     *     rolled up to its parent (CONSOLIDATED).
      * @param string|null $businessNumber Government issued business identifier for the organization issued.
      * @param string|null $city City of the organization's address.
      * @param string|null $countryCode ISO 3166-1 alpha-2 country code, plus XK (Kosovo).
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
-     * @param Currency|null $currency The currency used by the organization.
+     * @param Currency|string|null $currency The currency used by the organization.
      * @param string|null $defaultLocale Default locale for the organization.
      * @param \DateTimeImmutable|null $deletedOn The date/time the entry was deleted on
      * @param string|null $keycloakOrganizationId Keycloak organization id
@@ -36,7 +36,7 @@ final readonly class OrganizationWithBillingData implements ApiModel
      * @param string|null $parentOrganizationId ID of the parent organization.
      * @param string|null $postalCode Postal code of the organization's address.
      * @param string|null $state State or province of the organization's address.
-     * @param OrganizationStatus $status Status of the organization.
+     * @param OrganizationStatus|string $status Status of the organization.
      * @param string|null $taxId Tax ID of the organization.
      * @param string|null $taxIdType Type of tax ID for the organization.
      * @param string|null $taxRate Tax rate for the organization.
@@ -49,12 +49,12 @@ final readonly class OrganizationWithBillingData implements ApiModel
         public ?string $address2 = null,
         public ?array $attributes = null,
         public ?BillingMetadata $billingMetadata = null,
-        public BillingMode $billingMode = BillingMode::CONSOLIDATED,
+        public BillingMode|string $billingMode = BillingMode::CONSOLIDATED,
         public ?string $businessNumber = null,
         public ?string $city = null,
         public ?string $countryCode = null,
         public ?\DateTimeImmutable $createdOn = null,
-        public ?Currency $currency = null,
+        public Currency|string|null $currency = null,
         public ?string $defaultLocale = null,
         public ?\DateTimeImmutable $deletedOn = null,
         public ?string $keycloakOrganizationId = null,
@@ -62,7 +62,7 @@ final readonly class OrganizationWithBillingData implements ApiModel
         public ?string $parentOrganizationId = null,
         public ?string $postalCode = null,
         public ?string $state = null,
-        public OrganizationStatus $status = OrganizationStatus::ACTIVE,
+        public OrganizationStatus|string $status = OrganizationStatus::ACTIVE,
         public ?string $taxId = null,
         public ?string $taxIdType = null,
         public ?string $taxRate = null,
@@ -82,12 +82,12 @@ final readonly class OrganizationWithBillingData implements ApiModel
             address2: $data['address_2'] ?? null,
             attributes: isset($data['attributes']) ? array_map(static fn (array $item): OrganizationAttribute => OrganizationAttribute::fromArray($item), $data['attributes']) : null,
             billingMetadata: isset($data['billing_metadata']) ? BillingMetadata::fromArray($data['billing_metadata']) : null,
-            billingMode: isset($data['billing_mode']) ? BillingMode::from($data['billing_mode']) : BillingMode::CONSOLIDATED,
+            billingMode: isset($data['billing_mode']) ? BillingMode::tryFrom($data['billing_mode']) ?? $data['billing_mode'] : BillingMode::CONSOLIDATED,
             businessNumber: $data['business_number'] ?? null,
             city: $data['city'] ?? null,
             countryCode: $data['country_code'] ?? null,
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
-            currency: isset($data['currency']) ? Currency::from($data['currency']) : null,
+            currency: isset($data['currency']) ? Currency::tryFrom($data['currency']) ?? $data['currency'] : null,
             defaultLocale: $data['default_locale'] ?? null,
             deletedOn: isset($data['deleted_on']) ? new \DateTimeImmutable($data['deleted_on']) : null,
             keycloakOrganizationId: $data['keycloak_organization_id'] ?? null,
@@ -95,7 +95,7 @@ final readonly class OrganizationWithBillingData implements ApiModel
             parentOrganizationId: $data['parent_organization_id'] ?? null,
             postalCode: $data['postal_code'] ?? null,
             state: $data['state'] ?? null,
-            status: isset($data['status']) ? OrganizationStatus::from($data['status']) : OrganizationStatus::ACTIVE,
+            status: isset($data['status']) ? OrganizationStatus::tryFrom($data['status']) ?? $data['status'] : OrganizationStatus::ACTIVE,
             taxId: $data['tax_id'] ?? null,
             taxIdType: $data['tax_id_type'] ?? null,
             taxRate: $data['tax_rate'] ?? null,

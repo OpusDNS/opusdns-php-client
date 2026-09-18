@@ -21,13 +21,13 @@ final readonly class OrganizationCreate implements ApiModel
      * @param string|null $address1 First line of the organization's address.
      * @param string|null $address2 Second line of the organization's address.
      * @param list<OrganizationAttributeCreate>|null $attributes List of attributes for the organization.
-     * @param BillingMode $billingMode Whether the organization is billed on its own account (INDEPENDENT) or rolled
-     *     up to its parent (CONSOLIDATED). INDEPENDENT is only permitted for eligible sub-organizations. Cannot be
-     *     changed after creation.
+     * @param BillingMode|string $billingMode Whether the organization is billed on its own account (INDEPENDENT) or
+     *     rolled up to its parent (CONSOLIDATED). INDEPENDENT is only permitted for eligible sub-organizations.
+     *     Cannot be changed after creation.
      * @param string|null $businessNumber Government issued business identifier for the organization issued.
      * @param string|null $city City of the organization's address.
      * @param string|null $countryCode ISO 3166-1 alpha-2 country code, plus XK (Kosovo).
-     * @param Currency|null $currency The currency used by the organization.
+     * @param Currency|string|null $currency The currency used by the organization.
      * @param string|null $defaultLocale Default locale for the organization.
      * @param string|null $parentOrganizationId ID of the parent organization.
      * @param string|null $postalCode Postal code of the organization's address.
@@ -42,11 +42,11 @@ final readonly class OrganizationCreate implements ApiModel
         public ?string $address1 = null,
         public ?string $address2 = null,
         public ?array $attributes = null,
-        public BillingMode $billingMode = BillingMode::CONSOLIDATED,
+        public BillingMode|string $billingMode = BillingMode::CONSOLIDATED,
         public ?string $businessNumber = null,
         public ?string $city = null,
         public ?string $countryCode = null,
-        public ?Currency $currency = null,
+        public Currency|string|null $currency = null,
         public ?string $defaultLocale = null,
         public ?string $parentOrganizationId = null,
         public ?string $postalCode = null,
@@ -68,11 +68,11 @@ final readonly class OrganizationCreate implements ApiModel
             address1: $data['address_1'] ?? null,
             address2: $data['address_2'] ?? null,
             attributes: isset($data['attributes']) ? array_map(static fn (array $item): OrganizationAttributeCreate => OrganizationAttributeCreate::fromArray($item), $data['attributes']) : null,
-            billingMode: isset($data['billing_mode']) ? BillingMode::from($data['billing_mode']) : BillingMode::CONSOLIDATED,
+            billingMode: isset($data['billing_mode']) ? BillingMode::tryFrom($data['billing_mode']) ?? $data['billing_mode'] : BillingMode::CONSOLIDATED,
             businessNumber: $data['business_number'] ?? null,
             city: $data['city'] ?? null,
             countryCode: $data['country_code'] ?? null,
-            currency: isset($data['currency']) ? Currency::from($data['currency']) : null,
+            currency: isset($data['currency']) ? Currency::tryFrom($data['currency']) ?? $data['currency'] : null,
             defaultLocale: $data['default_locale'] ?? null,
             parentOrganizationId: $data['parent_organization_id'] ?? null,
             postalCode: $data['postal_code'] ?? null,

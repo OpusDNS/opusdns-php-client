@@ -22,7 +22,7 @@ final readonly class DnsRrsetCreate implements ApiModel
         public string $name,
         public array $records,
         public int $ttl,
-        public DnsRrsetType $type,
+        public DnsRrsetType|string $type,
     ) {
     }
 
@@ -35,7 +35,7 @@ final readonly class DnsRrsetCreate implements ApiModel
             name: $data['name'],
             records: array_map(static fn (array $item): DnsRecordCreate => DnsRecordCreate::fromArray($item), $data['records']),
             ttl: $data['ttl'],
-            type: DnsRrsetType::from($data['type']),
+            type: DnsRrsetType::tryFrom($data['type']) ?? $data['type'],
         );
     }
 

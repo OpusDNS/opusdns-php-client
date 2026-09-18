@@ -46,7 +46,7 @@ final class AvailabilityService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return CommonModelsAvailabilityDatasourceDomainAvailabilityResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): CommonModelsAvailabilityDatasourceDomainAvailabilityResponse => CommonModelsAvailabilityDatasourceDomainAvailabilityResponse::fromArray($data));
     }
 
     /**

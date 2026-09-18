@@ -25,7 +25,7 @@ final readonly class Message implements ApiModel
         public string $conversationId,
         public \DateTimeImmutable $createdAt,
         public string $messageId,
-        public MessageRole $role,
+        public MessageRole|string $role,
         public ?array $metadata = null,
     ) {
     }
@@ -40,7 +40,7 @@ final readonly class Message implements ApiModel
             conversationId: $data['conversation_id'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             messageId: $data['message_id'],
-            role: MessageRole::from($data['role']),
+            role: MessageRole::tryFrom($data['role']) ?? $data['role'],
             metadata: isset($data['metadata']) ? (array) $data['metadata'] : null,
         );
     }

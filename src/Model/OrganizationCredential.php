@@ -18,7 +18,7 @@ final readonly class OrganizationCredential implements ApiModel
 {
     /**
      * @param string $apiKeyId Unique identifier of the organization credential. TypeID prefix: api_key.
-     * @param OrganizationCredentialStatus $status The status of the organization credential.
+     * @param OrganizationCredentialStatus|string $status The status of the organization credential.
      * @param string|null $apiKeyDescription Description of the organization credential.
      * @param string|null $apiKeyName Name of the organization credential. Only a-z, A-Z, 0-9, underscore, and hyphen
      *     are allowed.
@@ -31,7 +31,7 @@ final readonly class OrganizationCredential implements ApiModel
      */
     public function __construct(
         public string $apiKeyId,
-        public OrganizationCredentialStatus $status,
+        public OrganizationCredentialStatus|string $status,
         public ?string $apiKeyDescription = null,
         public ?string $apiKeyName = null,
         public ?\DateTimeImmutable $createdOn = null,
@@ -50,7 +50,7 @@ final readonly class OrganizationCredential implements ApiModel
     {
         return new self(
             apiKeyId: $data['api_key_id'],
-            status: OrganizationCredentialStatus::from($data['status']),
+            status: OrganizationCredentialStatus::tryFrom($data['status']) ?? $data['status'],
             apiKeyDescription: $data['api_key_description'] ?? null,
             apiKeyName: $data['api_key_name'] ?? null,
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,

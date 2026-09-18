@@ -20,7 +20,7 @@ final readonly class DomainForwardPatchOp implements ApiModel
      * @param HttpRedirectUpsert|HttpRedirectRemove $redirect
      */
     public function __construct(
-        public PatchOp $op,
+        public PatchOp|string $op,
         public HttpRedirectUpsert|HttpRedirectRemove $redirect,
     ) {
     }
@@ -31,7 +31,7 @@ final readonly class DomainForwardPatchOp implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            op: PatchOp::from($data['op']),
+            op: PatchOp::tryFrom($data['op']) ?? $data['op'],
             redirect: Union::hydrate($data['redirect'], [HttpRedirectUpsert::class => ['request_path', 'target_protocol', 'target_hostname', 'target_path', 'redirect_code', 'request_protocol', 'request_hostname'], HttpRedirectRemove::class => ['request_protocol', 'request_hostname', 'request_path']]),
         );
     }

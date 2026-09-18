@@ -18,8 +18,8 @@ final readonly class EmailForwardLog implements ApiModel
     /**
      * @param \DateTimeImmutable $createdOn Timestamp when email was received by ImprovMX
      * @param string $domain Domain name
-     * @param EmailForwardLogStatus $finalStatus Final status of the email (QUEUED, DELIVERED, REFUSED, SOFT-BOUNCE,
-     *     HARD-BOUNCE)
+     * @param EmailForwardLogStatus|string $finalStatus Final status of the email (QUEUED, DELIVERED, REFUSED,
+     *     SOFT-BOUNCE, HARD-BOUNCE)
      * @param string $forwardEmail Forward destination email address
      * @param string $hostname Hostname that received the email
      * @param string $logId Unique ID of the log from ImprovMX
@@ -37,7 +37,7 @@ final readonly class EmailForwardLog implements ApiModel
     public function __construct(
         public \DateTimeImmutable $createdOn,
         public string $domain,
-        public EmailForwardLogStatus $finalStatus,
+        public EmailForwardLogStatus|string $finalStatus,
         public string $forwardEmail,
         public string $hostname,
         public string $logId,
@@ -62,7 +62,7 @@ final readonly class EmailForwardLog implements ApiModel
         return new self(
             createdOn: new \DateTimeImmutable($data['created_on']),
             domain: $data['domain'],
-            finalStatus: EmailForwardLogStatus::from($data['final_status']),
+            finalStatus: EmailForwardLogStatus::tryFrom($data['final_status']) ?? $data['final_status'],
             forwardEmail: $data['forward_email'],
             hostname: $data['hostname'],
             logId: $data['log_id'],

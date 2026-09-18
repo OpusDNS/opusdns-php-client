@@ -150,6 +150,8 @@ final class ClientTest extends TestCase
             self::assertSame('Zone example.com does not exist', $exception->problemDetail);
             self::assertSame('HTTP 404 for GET https://sandbox.opusdns.com/v1/dns/example.com: Not Found. Zone example.com does not exist', $exception->getMessage());
             self::assertSame(404, $exception->body['status']);
+            self::assertSame('GET', $exception->request->getMethod());
+            self::assertFalse($exception->request->hasHeader('X-Api-Key'));
         }
     }
 

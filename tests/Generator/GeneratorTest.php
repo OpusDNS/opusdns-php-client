@@ -91,7 +91,8 @@ final class GeneratorTest extends TestCase
         self::assertStringContainsString('final readonly class FixturePet implements ApiModel', $pet);
         self::assertStringContainsString(" * Pet\n *\n * A pet in the shop.", $pet);
         self::assertStringContainsString('public string $id,', $pet);
-        self::assertStringContainsString('public FixturePetStatus $status,', $pet);
+        self::assertStringContainsString('public FixturePetStatus|string $status,', $pet);
+        self::assertStringContainsString("status: FixturePetStatus::tryFrom(\$data['status']) ?? \$data['status'],", $pet);
         self::assertStringContainsString('public \DateTimeImmutable $createdOn,', $pet);
         self::assertStringContainsString('public ?\DateTimeImmutable $bornOn = null,', $pet);
         self::assertStringContainsString("bornOn: isset(\$data['born_on']) ? Serializer::parseDate(\$data['born_on']) : null,", $pet);
@@ -104,7 +105,7 @@ final class GeneratorTest extends TestCase
         self::assertStringContainsString("attributes: isset(\$data['attributes']) ? (array) \$data['attributes'] : null,", $pet);
         self::assertStringContainsString("'attributes' => \$this->attributes === null ? null : (\$this->attributes === [] ? new \\stdClass() : \$this->attributes),", $pet);
         self::assertStringContainsString("public string \$kind = 'pet',", $pet);
-        self::assertStringContainsString('public FixtureRedirectCode $redirectCode = FixtureRedirectCode::_301,', $pet);
+        self::assertStringContainsString('public FixtureRedirectCode|int $redirectCode = FixtureRedirectCode::_301,', $pet);
         self::assertStringContainsString('public FixtureAdoptedEvent|FixtureLostEvent|null $event = null,', $pet);
         self::assertStringContainsString('@param string $id TypeID prefix: pet.', $pet);
         self::assertStringContainsString("@param string \$name The pet's name", $pet);
@@ -221,11 +222,15 @@ final class GeneratorTest extends TestCase
         }
     }
 
-    public function testUnknownEnumValuesAreRejected(): void
+    public function testUnknownEnumValuesAreKeptAsRawValues(): void
     {
         $class = 'OpusDNS\\Client\\Model\\FixturePet';
-        $this->expectException(\ValueError::class);
-        $class::fromArray(['id' => 'x', 'name' => 'x', 'status' => 'unknown', 'created_on' => '2026-01-01T00:00:00Z', 'weight' => 1]);
+        $pet = $class::fromArray(['id' => 'x', 'name' => 'x', 'status' => 'unknown', 'created_on' => '2026-01-01T00:00:00Z', 'weight' => 1, 'redirect_code' => 999]);
+
+        self::assertSame('unknown', $pet->status);
+        self::assertSame(999, $pet->redirectCode);
+        self::assertSame('unknown', $pet->toArray()['status']);
+        self::assertSame(999, $pet->toArray()['redirect_code']);
     }
 
     public function testUnknownDiscriminatorValuesAreRejected(): void
@@ -241,16 +246,17 @@ final class GeneratorTest extends TestCase
         $api = self::source('Service/PetService.php');
         self::assertStringContainsString('final class PetService', $api);
         self::assertStringContainsString(
-            "public function listPets(\n        int \$page = 1,\n        ?FixturePetStatus \$status = null,\n        ?array \$tagIds = null,\n        ?\\DateTimeImmutable \$bornAfter = null,\n    ): array {",
+            "public function listPets(\n        int \$page = 1,\n        FixturePetStatus|string|null \$status = null,\n        ?array \$tagIds = null,\n        ?\\DateTimeImmutable \$bornAfter = null,\n    ): array {",
             $api,
         );
         self::assertStringContainsString('@param list<string>|null $tagIds Filter by tag. Can be repeated.', $api);
-        self::assertStringNotContainsString('@param FixturePetStatus|null $status', $api);
+        self::assertStringNotContainsString('@param FixturePetStatus|string|null $status', $api);
         self::assertStringContainsString('@return list<FixturePet>', $api);
         self::assertStringContainsString("query: ['page' => \$page, 'status' => \$status, 'tag_ids' => \$tagIds, 'born_after' => \$bornAfter === null ? null : \$bornAfter->format('Y-m-d')]", $api);
         self::assertStringNotContainsString('use OpusDNS\Client\Serializer;', $api);
-        self::assertStringContainsString('array_map(static fn (array $item): FixturePet => FixturePet::fromArray($item), $this->client->decodeList($response))', $api);
+        self::assertStringContainsString('return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): FixturePet => FixturePet::fromArray($item), $data));', $api);
         self::assertStringContainsString('public function createPet(FixturePetCreate|array $body): ?FixturePet', $api);
+        self::assertStringContainsString('return $this->client->hydrate($response, static fn (array $data): FixturePet => FixturePet::fromArray($data), optional: true);', $api);
         self::assertStringContainsString('Required permissions: pets:write', $api);
         self::assertStringContainsString('public function deletePet(string $petId, ?string $ifMatch = null): void', $api);
         self::assertStringContainsString("path: ['pet_id' => \$petId],\n            headers: ['If-Match' => \$ifMatch],", $api);

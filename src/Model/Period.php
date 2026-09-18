@@ -16,11 +16,11 @@ use OpusDNS\Client\Serializer;
 final readonly class Period implements ApiModel
 {
     /**
-     * @param PeriodUnit $unit The unit of the period
+     * @param PeriodUnit|string $unit The unit of the period
      * @param int $value Amount of time in the unit
      */
     public function __construct(
-        public PeriodUnit $unit,
+        public PeriodUnit|string $unit,
         public int $value,
     ) {
     }
@@ -31,7 +31,7 @@ final readonly class Period implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            unit: PeriodUnit::from($data['unit']),
+            unit: PeriodUnit::tryFrom($data['unit']) ?? $data['unit'],
             value: $data['value'],
         );
     }

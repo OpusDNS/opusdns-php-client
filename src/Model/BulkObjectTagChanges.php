@@ -17,7 +17,7 @@ final readonly class BulkObjectTagChanges implements ApiModel
 {
     /**
      * @param list<string> $objects Object references to operate on. TypeIDs and resource names may be mixed.
-     * @param TagType $type The object/tag type (e.g. DOMAIN, CONTACT, ZONE)
+     * @param TagType|string $type The object/tag type (e.g. DOMAIN, CONTACT, ZONE)
      * @param list<string>|null $add Tag IDs to add to the objects.
      * @param list<string>|null $remove Tag IDs to remove from the objects.
      * @param list<string>|null $replace Tag IDs to set as the complete tag set for the objects, replacing any
@@ -25,7 +25,7 @@ final readonly class BulkObjectTagChanges implements ApiModel
      */
     public function __construct(
         public array $objects,
-        public TagType $type,
+        public TagType|string $type,
         public ?array $add = null,
         public ?array $remove = null,
         public ?array $replace = null,
@@ -39,7 +39,7 @@ final readonly class BulkObjectTagChanges implements ApiModel
     {
         return new self(
             objects: $data['objects'],
-            type: TagType::from($data['type']),
+            type: TagType::tryFrom($data['type']) ?? $data['type'],
             add: $data['add'] ?? null,
             remove: $data['remove'] ?? null,
             replace: $data['replace'] ?? null,

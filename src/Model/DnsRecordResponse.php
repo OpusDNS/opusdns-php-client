@@ -17,12 +17,12 @@ final readonly class DnsRecordResponse implements ApiModel
 {
     /**
      * @param bool $protected Whether the record is protected
-     * @param DnsProtectedReason|null $protectedReason Reason why the record is protected
+     * @param DnsProtectedReason|string|null $protectedReason Reason why the record is protected
      */
     public function __construct(
         public string $rdata,
         public bool $protected = false,
-        public ?DnsProtectedReason $protectedReason = null,
+        public DnsProtectedReason|string|null $protectedReason = null,
     ) {
     }
 
@@ -34,7 +34,7 @@ final readonly class DnsRecordResponse implements ApiModel
         return new self(
             rdata: $data['rdata'],
             protected: $data['protected'] ?? false,
-            protectedReason: isset($data['protected_reason']) ? DnsProtectedReason::from($data['protected_reason']) : null,
+            protectedReason: isset($data['protected_reason']) ? DnsProtectedReason::tryFrom($data['protected_reason']) ?? $data['protected_reason'] : null,
         );
     }
 

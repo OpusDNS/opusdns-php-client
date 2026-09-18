@@ -21,7 +21,7 @@ final readonly class AiInferenceUsageSeriesResponse implements ApiModel
     public function __construct(
         public array $buckets,
         public \DateTimeImmutable $endDate,
-        public UsageGranularity $granularity,
+        public UsageGranularity|string $granularity,
         public \DateTimeImmutable $startDate,
         public string $product = 'ai_inference',
     ) {
@@ -35,7 +35,7 @@ final readonly class AiInferenceUsageSeriesResponse implements ApiModel
         return new self(
             buckets: array_map(static fn (array $item): AiInferenceUsageBucket => AiInferenceUsageBucket::fromArray($item), $data['buckets']),
             endDate: Serializer::parseDate($data['end_date']),
-            granularity: UsageGranularity::from($data['granularity']),
+            granularity: UsageGranularity::tryFrom($data['granularity']) ?? $data['granularity'],
             startDate: Serializer::parseDate($data['start_date']),
             product: $data['product'] ?? 'ai_inference',
         );

@@ -18,15 +18,15 @@ final readonly class DnsRrsetResponse implements ApiModel
 {
     /**
      * @param bool $protected Whether the RRset is protected
-     * @param DnsProtectedReason|null $protectedReason Reason why the RRset is protected
+     * @param DnsProtectedReason|string|null $protectedReason Reason why the RRset is protected
      * @param list<DnsRecordResponse>|null $records
      */
     public function __construct(
         public string $name,
         public int $ttl,
-        public DnsRrsetType $type,
+        public DnsRrsetType|string $type,
         public bool $protected = false,
-        public ?DnsProtectedReason $protectedReason = null,
+        public DnsProtectedReason|string|null $protectedReason = null,
         public ?array $records = null,
     ) {
     }
@@ -39,9 +39,9 @@ final readonly class DnsRrsetResponse implements ApiModel
         return new self(
             name: $data['name'],
             ttl: $data['ttl'],
-            type: DnsRrsetType::from($data['type']),
+            type: DnsRrsetType::tryFrom($data['type']) ?? $data['type'],
             protected: $data['protected'] ?? false,
-            protectedReason: isset($data['protected_reason']) ? DnsProtectedReason::from($data['protected_reason']) : null,
+            protectedReason: isset($data['protected_reason']) ? DnsProtectedReason::tryFrom($data['protected_reason']) ?? $data['protected_reason'] : null,
             records: isset($data['records']) ? array_map(static fn (array $item): DnsRecordResponse => DnsRecordResponse::fromArray($item), $data['records']) : null,
         );
     }

@@ -18,13 +18,13 @@ final readonly class DnsRrsetDTO implements ApiModel
     /**
      * @param string $name The RRset name (e.g., '@', 'www')
      * @param int $ttl Time to live in seconds
-     * @param DnsRrsetType $type The RRset type
+     * @param DnsRrsetType|string $type The RRset type
      * @param list<DnsRecordDTO>|null $records List of records in this RRset
      */
     public function __construct(
         public string $name,
         public int $ttl,
-        public DnsRrsetType $type,
+        public DnsRrsetType|string $type,
         public ?array $records = null,
     ) {
     }
@@ -37,7 +37,7 @@ final readonly class DnsRrsetDTO implements ApiModel
         return new self(
             name: $data['name'],
             ttl: $data['ttl'],
-            type: DnsRrsetType::from($data['type']),
+            type: DnsRrsetType::tryFrom($data['type']) ?? $data['type'],
             records: isset($data['records']) ? array_map(static fn (array $item): DnsRecordDTO => DnsRecordDTO::fromArray($item), $data['records']) : null,
         );
     }

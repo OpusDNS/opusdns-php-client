@@ -25,7 +25,7 @@ final readonly class DomainLifecycleBase implements ApiModel
      *     specified
      * @param string|null $deleteBeforeExpiration Time before expiration to delete a domain in ISO 8601 format (e.g.,
      *     5D, -7D)
-     * @param list<DeletePolicyType>|null $deletePolicy How a domain can be deleted
+     * @param list<DeletePolicyType|string>|null $deletePolicy How a domain can be deleted
      * @param bool|null $explicitRenew Whether an explicit renewal is possible
      * @param string|null $gracePeriod Grace period after expiration in ISO 8601 format (e.g., 5D, -7D)
      * @param string|null $pendingDelete Pending delete period in ISO 8601 format (e.g., 5D, 10D) after
@@ -41,7 +41,8 @@ final readonly class DomainLifecycleBase implements ApiModel
      *     already leaves a valid term - e.g. NASK/.pl, where restore removes clientRenewProhibited or
      *     renews+reactivates, and a redundant renew is rejected (one renewal per billing period).
      * @param RgpOperations|null $rgpOperations RGP operations supported by the registry
-     * @param list<SyncOperationType>|null $syncAfterOperations Operations that trigger a sync with the registry
+     * @param list<SyncOperationType|string>|null $syncAfterOperations Operations that trigger a sync with the
+     *     registry
      * @param string|null $transferGracePeriod Transfer grace period after a transfer in ISO 8601 format (e.g., 5D,
      *     3D)
      * @param list<Period>|null $transferRenewalPeriods List of allowed transfer renewal periods (eg. '1y')
@@ -77,7 +78,7 @@ final readonly class DomainLifecycleBase implements ApiModel
             autoRenewBeforeExpiration: $data['auto_renew_before_expiration'] ?? null,
             defaultTransferRenewalPeriod: isset($data['default_transfer_renewal_period']) ? Period::fromArray($data['default_transfer_renewal_period']) : null,
             deleteBeforeExpiration: $data['delete_before_expiration'] ?? null,
-            deletePolicy: isset($data['delete_policy']) ? array_map(static fn (string $item): DeletePolicyType => DeletePolicyType::from($item), $data['delete_policy']) : null,
+            deletePolicy: isset($data['delete_policy']) ? array_map(static fn (string $item): DeletePolicyType|string => DeletePolicyType::tryFrom($item) ?? $item, $data['delete_policy']) : null,
             explicitRenew: $data['explicit_renew'] ?? null,
             gracePeriod: $data['grace_period'] ?? null,
             pendingDelete: $data['pending_delete'] ?? null,
@@ -87,7 +88,7 @@ final readonly class DomainLifecycleBase implements ApiModel
             renewalPeriods: isset($data['renewal_periods']) ? array_map(static fn (array $item): Period => Period::fromArray($item), $data['renewal_periods']) : null,
             restoreTriggersRenewal: $data['restore_triggers_renewal'] ?? true,
             rgpOperations: isset($data['rgp_operations']) ? RgpOperations::fromArray($data['rgp_operations']) : null,
-            syncAfterOperations: isset($data['sync_after_operations']) ? array_map(static fn (string $item): SyncOperationType => SyncOperationType::from($item), $data['sync_after_operations']) : null,
+            syncAfterOperations: isset($data['sync_after_operations']) ? array_map(static fn (string $item): SyncOperationType|string => SyncOperationType::tryFrom($item) ?? $item, $data['sync_after_operations']) : null,
             transferGracePeriod: $data['transfer_grace_period'] ?? null,
             transferRenewalPeriods: isset($data['transfer_renewal_periods']) ? array_map(static fn (array $item): Period => Period::fromArray($item), $data['transfer_renewal_periods']) : null,
         );

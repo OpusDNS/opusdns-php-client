@@ -39,7 +39,7 @@ final class TagService
      *
      * Required permissions: tags:read
      *
-     * @param list<TagType>|null $tagTypes Filter by tag types (OR semantics)
+     * @param list<TagType|string>|null $tagTypes Filter by tag types (OR semantics)
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -47,8 +47,8 @@ final class TagService
     public function listTags(
         int $page = 1,
         int $pageSize = 10,
-        TagSortField $sortBy = TagSortField::LABEL,
-        SortOrder $sortOrder = SortOrder::ASC,
+        TagSortField|string $sortBy = TagSortField::LABEL,
+        SortOrder|string $sortOrder = SortOrder::ASC,
         ?array $tagTypes = null,
         ?string $search = null,
         ?string $xDatetimeFormat = null,
@@ -60,7 +60,7 @@ final class TagService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationTagResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationTagResponse => PaginationTagResponse::fromArray($data));
     }
 
     /**
@@ -84,7 +84,7 @@ final class TagService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return TagResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): TagResponse => TagResponse::fromArray($data));
     }
 
     /**
@@ -111,7 +111,7 @@ final class TagService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ObjectTagChangesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ObjectTagChangesResponse => ObjectTagChangesResponse::fromArray($data));
     }
 
     /**
@@ -134,7 +134,7 @@ final class TagService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return TagResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): TagResponse => TagResponse::fromArray($data));
     }
 
     /**
@@ -159,7 +159,7 @@ final class TagService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return TagResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): TagResponse => TagResponse::fromArray($data));
     }
 
     /**
@@ -207,6 +207,6 @@ final class TagService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ObjectTagChangesResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ObjectTagChangesResponse => ObjectTagChangesResponse::fromArray($data));
     }
 }

@@ -18,11 +18,11 @@ use OpusDNS\Client\Serializer;
 final readonly class DomainDnssecDataResponse implements ApiModel
 {
     /**
-     * @param DnssecAlgorithm $algorithm DNSSEC algorithm used
-     * @param DnssecRecordType $recordType Type of DNSSEC record (DS or Key)
+     * @param DnssecAlgorithm|int $algorithm DNSSEC algorithm used
+     * @param DnssecRecordType|string $recordType Type of DNSSEC record (DS or Key)
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
      * @param string|null $digest Digest value for DS records
-     * @param DnssecDigestType|null $digestType Digest type for DS records
+     * @param DnssecDigestType|int|null $digestType Digest type for DS records
      * @param string|null $domainDnssecDataId TypeID prefix: domain_dnssec.
      * @param string $domainId The domain this DNSSEC record belongs to TypeID prefix: domain.
      * @param int|null $flags DNSKEY flags for key records
@@ -32,11 +32,11 @@ final readonly class DomainDnssecDataResponse implements ApiModel
      * @param \DateTimeImmutable|null $updatedOn The date/time the entry was last updated on
      */
     public function __construct(
-        public DnssecAlgorithm $algorithm,
-        public DnssecRecordType $recordType,
+        public DnssecAlgorithm|int $algorithm,
+        public DnssecRecordType|string $recordType,
         public ?\DateTimeImmutable $createdOn = null,
         public ?string $digest = null,
-        public ?DnssecDigestType $digestType = null,
+        public DnssecDigestType|int|null $digestType = null,
         public ?string $domainDnssecDataId = null,
         public string $domainId = 'None',
         public ?int $flags = null,
@@ -53,11 +53,11 @@ final readonly class DomainDnssecDataResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            algorithm: DnssecAlgorithm::from($data['algorithm']),
-            recordType: DnssecRecordType::from($data['record_type']),
+            algorithm: DnssecAlgorithm::tryFrom($data['algorithm']) ?? $data['algorithm'],
+            recordType: DnssecRecordType::tryFrom($data['record_type']) ?? $data['record_type'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
             digest: $data['digest'] ?? null,
-            digestType: isset($data['digest_type']) ? DnssecDigestType::from($data['digest_type']) : null,
+            digestType: isset($data['digest_type']) ? DnssecDigestType::tryFrom($data['digest_type']) ?? $data['digest_type'] : null,
             domainDnssecDataId: $data['domain_dnssec_data_id'] ?? null,
             domainId: $data['domain_id'] ?? 'None',
             flags: $data['flags'] ?? null,

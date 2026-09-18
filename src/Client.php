@@ -107,10 +107,30 @@ final class Client
         }
 
         if ($response->getStatusCode() >= 400) {
-            throw HttpException::fromResponse($request, $response);
+            throw HttpException::fromResponse($request->withoutHeader('X-Api-Key'), $response);
         }
 
         return $response;
+    }
+
+    /**
+     * Decodes the JSON body and passes it to $hydrator; any failure while hydrating becomes a DecodingException.
+     *
+     * @template T
+     * @param \Closure(array<mixed>): T $hydrator
+     * @return ($optional is true ? T|null : T)
+     */
+    public function hydrate(ResponseInterface $response, \Closure $hydrator, bool $optional = false): mixed
+    {
+        $data = $this->decode($response);
+        if ($data === null && $optional) {
+            return null;
+        }
+        try {
+            return $hydrator($data);
+        } catch (\Throwable $exception) {
+            throw new DecodingException('Failed to hydrate the response: ' . $exception->getMessage(), $response, $exception);
+        }
     }
 
     /** Decodes a JSON body. Returns null when the body is empty. */

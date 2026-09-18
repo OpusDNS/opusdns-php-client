@@ -48,7 +48,7 @@ final class AuthenticationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return OrganizationCredential::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): OrganizationCredential => OrganizationCredential::fromArray($data));
     }
 
     /**
@@ -68,7 +68,7 @@ final class AuthenticationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return SignupResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): SignupResponse => SignupResponse::fromArray($data));
     }
 
     /**
@@ -91,6 +91,6 @@ final class AuthenticationService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Union::hydrate($this->client->decodeArray($response), [UserTokenResponse::class => ['access_token', 'expires_in', 'refresh_token', 'refresh_expires_in'], OrganizationTokenResponse::class => ['access_token', 'expires_in']]);
+        return $this->client->hydrate($response, static fn (array $data): OrganizationTokenResponse|UserTokenResponse => Union::hydrate($data, [UserTokenResponse::class => ['access_token', 'expires_in', 'refresh_token', 'refresh_expires_in'], OrganizationTokenResponse::class => ['access_token', 'expires_in']]));
     }
 }

@@ -18,20 +18,20 @@ use OpusDNS\Client\Serializer;
 final readonly class DomainDnssecDataCreate implements ApiModel
 {
     /**
-     * @param DnssecAlgorithm $algorithm DNSSEC algorithm used
-     * @param DnssecRecordType $recordType Type of DNSSEC record (DS or Key)
+     * @param DnssecAlgorithm|int $algorithm DNSSEC algorithm used
+     * @param DnssecRecordType|string $recordType Type of DNSSEC record (DS or Key)
      * @param string|null $digest Digest value for DS records
-     * @param DnssecDigestType|null $digestType Digest type for DS records
+     * @param DnssecDigestType|int|null $digestType Digest type for DS records
      * @param int|null $flags DNSKEY flags for key records
      * @param int|null $keyTag Key tag for DS records
      * @param int|null $protocol Protocol field for key records (typically 3)
      * @param string|null $publicKey Base64-encoded public key for key records
      */
     public function __construct(
-        public DnssecAlgorithm $algorithm,
-        public DnssecRecordType $recordType,
+        public DnssecAlgorithm|int $algorithm,
+        public DnssecRecordType|string $recordType,
         public ?string $digest = null,
-        public ?DnssecDigestType $digestType = null,
+        public DnssecDigestType|int|null $digestType = null,
         public ?int $flags = null,
         public ?int $keyTag = null,
         public ?int $protocol = null,
@@ -45,10 +45,10 @@ final readonly class DomainDnssecDataCreate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            algorithm: DnssecAlgorithm::from($data['algorithm']),
-            recordType: DnssecRecordType::from($data['record_type']),
+            algorithm: DnssecAlgorithm::tryFrom($data['algorithm']) ?? $data['algorithm'],
+            recordType: DnssecRecordType::tryFrom($data['record_type']) ?? $data['record_type'],
             digest: $data['digest'] ?? null,
-            digestType: isset($data['digest_type']) ? DnssecDigestType::from($data['digest_type']) : null,
+            digestType: isset($data['digest_type']) ? DnssecDigestType::tryFrom($data['digest_type']) ?? $data['digest_type'] : null,
             flags: $data['flags'] ?? null,
             keyTag: $data['key_tag'] ?? null,
             protocol: $data['protocol'] ?? null,

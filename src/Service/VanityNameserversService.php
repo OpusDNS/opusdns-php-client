@@ -52,7 +52,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ListVanityNameserverSetsRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ListVanityNameserverSetsRes => ListVanityNameserverSetsRes::fromArray($data));
     }
 
     /**
@@ -76,7 +76,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return VanityNameserverSetSummaryDTO::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): VanityNameserverSetSummaryDTO => VanityNameserverSetSummaryDTO::fromArray($data));
     }
 
     /**
@@ -100,7 +100,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return VanityNsCheckRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): VanityNsCheckRes => VanityNsCheckRes::fromArray($data));
     }
 
     /**
@@ -121,7 +121,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ClearVanityNameserverSetDefaultRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ClearVanityNameserverSetDefaultRes => ClearVanityNameserverSetDefaultRes::fromArray($data));
     }
 
     /**
@@ -144,7 +144,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return VanityNameserverSetSummaryDTO::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): VanityNameserverSetSummaryDTO => VanityNameserverSetSummaryDTO::fromArray($data));
     }
 
     /**
@@ -170,7 +170,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return VanityNameserverSetSummaryDTO::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): VanityNameserverSetSummaryDTO => VanityNameserverSetSummaryDTO::fromArray($data));
     }
 
     /**
@@ -214,7 +214,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return SetVanityNameserverSetDefaultRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): SetVanityNameserverSetDefaultRes => SetVanityNameserverSetDefaultRes::fromArray($data));
     }
 
     /**
@@ -237,7 +237,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return VanityNameserverSetSummaryDTO::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): VanityNameserverSetSummaryDTO => VanityNameserverSetSummaryDTO::fromArray($data));
     }
 
     /**
@@ -260,7 +260,7 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return VanityNameserverSetSummaryDTO::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): VanityNameserverSetSummaryDTO => VanityNameserverSetSummaryDTO::fromArray($data));
     }
 
     /**
@@ -286,6 +286,6 @@ final class VanityNameserversService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ListZonesReferencingSetRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ListZonesReferencingSetRes => ListZonesReferencingSetRes::fromArray($data));
     }
 }

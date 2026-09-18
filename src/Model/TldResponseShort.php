@@ -17,7 +17,7 @@ final readonly class TldResponseShort implements ApiModel
 {
     public function __construct(
         public string $tld,
-        public TLDType $type,
+        public TLDType|string $type,
     ) {
     }
 
@@ -28,7 +28,7 @@ final readonly class TldResponseShort implements ApiModel
     {
         return new self(
             tld: $data['tld'],
-            type: TLDType::from($data['type']),
+            type: TLDType::tryFrom($data['type']) ?? $data['type'],
         );
     }
 

@@ -18,13 +18,13 @@ final readonly class ParkingMetricsResponse implements ApiModel
     /**
      * @param ParkingStatistics $metrics Metrics for the parking entry
      * @param string $renewalCost Yearly renewal cost for the parked domain
-     * @param Currency $renewalCostCurrency Currency code for renewal cost (e.g., USD, EUR)
+     * @param Currency|string $renewalCostCurrency Currency code for renewal cost (e.g., USD, EUR)
      * @param string $revenueProgress Revenue progress percentage towards covering renewal cost
      */
     public function __construct(
         public ParkingStatistics $metrics,
         public string $renewalCost,
-        public Currency $renewalCostCurrency,
+        public Currency|string $renewalCostCurrency,
         public string $revenueProgress,
     ) {
     }
@@ -37,7 +37,7 @@ final readonly class ParkingMetricsResponse implements ApiModel
         return new self(
             metrics: ParkingStatistics::fromArray($data['metrics']),
             renewalCost: $data['renewal_cost'],
-            renewalCostCurrency: Currency::from($data['renewal_cost_currency']),
+            renewalCostCurrency: Currency::tryFrom($data['renewal_cost_currency']) ?? $data['renewal_cost_currency'],
             revenueProgress: $data['revenue_progress'],
         );
     }

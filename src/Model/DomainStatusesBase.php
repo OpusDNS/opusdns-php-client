@@ -18,8 +18,8 @@ final readonly class DomainStatusesBase implements ApiModel
     /**
      * @param list<string> $default The default status for an active domain with no restrictions
      * @param list<string> $supportedStatuses Supported domain statuses
-     * @param array<string, list<DomainStatus>>|null $statusMapping Mapping of registry-specific statuses to their
-     *     equivalent default ones, if any
+     * @param array<string, list<DomainStatus|string>>|null $statusMapping Mapping of registry-specific statuses to
+     *     their equivalent default ones, if any
      */
     public function __construct(
         public array $default,
@@ -36,7 +36,7 @@ final readonly class DomainStatusesBase implements ApiModel
         return new self(
             default: $data['default'],
             supportedStatuses: $data['supported_statuses'],
-            statusMapping: isset($data['status_mapping']) ? array_map(static fn (array $value): array => array_map(static fn (string $item): DomainStatus => DomainStatus::from($item), $value), (array) $data['status_mapping']) : null,
+            statusMapping: isset($data['status_mapping']) ? array_map(static fn (array $value): array => array_map(static fn (string $item): DomainStatus|string => DomainStatus::tryFrom($item) ?? $item, $value), (array) $data['status_mapping']) : null,
         );
     }
 

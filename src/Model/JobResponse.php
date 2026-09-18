@@ -20,8 +20,8 @@ final readonly class JobResponse implements ApiModel
      * @param int $attempts Number of execution attempts made for this job
      * @param \DateTimeImmutable $createdOn Timestamp when the job was created (UTC)
      * @param string $jobId Unique identifier for this individual job TypeID prefix: job.
-     * @param JobStatus $status Current job status: blocked, queued, paused, running, succeeded, failed, canceled, or
-     *     dead_letter
+     * @param JobStatus|string $status Current job status: blocked, queued, paused, running, succeeded, failed,
+     *     canceled, or dead_letter
      * @param string|null $command Command name (e.g., 'domain_create', 'dns_zone_update')
      * @param string|null $display Human-readable description of this job
      * @param string|null $domainName Domain name associated with this job
@@ -48,7 +48,7 @@ final readonly class JobResponse implements ApiModel
         public int $attempts,
         public \DateTimeImmutable $createdOn,
         public string $jobId,
-        public JobStatus $status,
+        public JobStatus|string $status,
         public ?string $command = null,
         public ?string $display = null,
         public ?string $domainName = null,
@@ -75,7 +75,7 @@ final readonly class JobResponse implements ApiModel
             attempts: $data['attempts'],
             createdOn: new \DateTimeImmutable($data['created_on']),
             jobId: $data['job_id'],
-            status: JobStatus::from($data['status']),
+            status: JobStatus::tryFrom($data['status']) ?? $data['status'],
             command: $data['command'] ?? null,
             display: $data['display'] ?? null,
             domainName: $data['domain_name'] ?? null,

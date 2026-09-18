@@ -17,12 +17,12 @@ final readonly class DnsZoneCreateBulkInstance implements ApiModel
 {
     /**
      * @param string $name The DNS zone name (e.g., example.com)
-     * @param DnssecStatus|null $dnssecStatus Override DNSSEC status for this zone
+     * @param DnssecStatus|string|null $dnssecStatus Override DNSSEC status for this zone
      * @param list<DnsRrsetCreate>|null $rrsets Override RRsets for this zone
      */
     public function __construct(
         public string $name,
-        public ?DnssecStatus $dnssecStatus = null,
+        public DnssecStatus|string|null $dnssecStatus = null,
         public ?array $rrsets = null,
     ) {
     }
@@ -34,7 +34,7 @@ final readonly class DnsZoneCreateBulkInstance implements ApiModel
     {
         return new self(
             name: $data['name'],
-            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::from($data['dnssec_status']) : null,
+            dnssecStatus: isset($data['dnssec_status']) ? DnssecStatus::tryFrom($data['dnssec_status']) ?? $data['dnssec_status'] : null,
             rrsets: isset($data['rrsets']) ? array_map(static fn (array $item): DnsRrsetCreate => DnsRrsetCreate::fromArray($item), $data['rrsets']) : null,
         );
     }

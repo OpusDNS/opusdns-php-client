@@ -16,11 +16,11 @@ use OpusDNS\Client\Serializer;
 final readonly class SetRenewalModeReq implements ApiModel
 {
     /**
-     * @param RenewalModeDTO $renewalMode expire cancels the set at period end (serves out the term), renew
+     * @param RenewalModeDTO|string $renewalMode expire cancels the set at period end (serves out the term), renew
      *     un-cancels (resumes auto-renew)
      */
     public function __construct(
-        public RenewalModeDTO $renewalMode,
+        public RenewalModeDTO|string $renewalMode,
     ) {
     }
 
@@ -30,7 +30,7 @@ final readonly class SetRenewalModeReq implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            renewalMode: RenewalModeDTO::from($data['renewal_mode']),
+            renewalMode: RenewalModeDTO::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'],
         );
     }
 

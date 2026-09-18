@@ -22,7 +22,7 @@ final readonly class DnsConfigurationBase implements ApiModel
      * @param int $registryRootNameserverUpdate Number of hours until the root zone is updated, 0 = real-time
      * @param bool|null $czdsAvailable Whether the zone is available in CZDS
      * @param bool|null $dnssecMandatory Whether DNSSEC is mandatory for a domain name
-     * @param DnssecModeType|null $dnssecMode DNSSEC mode
+     * @param DnssecModeType|string|null $dnssecMode DNSSEC mode
      * @param list<int>|null $dnssecSubmitDigestTypes Which DS digest types we submit to the registry for zones we
      *     host, in order of preference: the first listed type the zone has a DS record for is submitted, later
      *     entries are fallbacks. Absent means submit every digest type the zone publishes. This is our submission
@@ -38,7 +38,7 @@ final readonly class DnsConfigurationBase implements ApiModel
         public int $registryRootNameserverUpdate,
         public ?bool $czdsAvailable = null,
         public ?bool $dnssecMandatory = null,
-        public ?DnssecModeType $dnssecMode = null,
+        public DnssecModeType|string|null $dnssecMode = null,
         public ?array $dnssecSubmitDigestTypes = null,
         public ?array $hostParentCheckTlds = null,
     ) {
@@ -57,7 +57,7 @@ final readonly class DnsConfigurationBase implements ApiModel
             registryRootNameserverUpdate: $data['registry_root_nameserver_update'],
             czdsAvailable: $data['czds_available'] ?? null,
             dnssecMandatory: $data['dnssec_mandatory'] ?? null,
-            dnssecMode: isset($data['dnssec_mode']) ? DnssecModeType::from($data['dnssec_mode']) : null,
+            dnssecMode: isset($data['dnssec_mode']) ? DnssecModeType::tryFrom($data['dnssec_mode']) ?? $data['dnssec_mode'] : null,
             dnssecSubmitDigestTypes: $data['dnssec_submit_digest_types'] ?? null,
             hostParentCheckTlds: $data['host_parent_check_tlds'] ?? null,
         );

@@ -17,21 +17,21 @@ use OpusDNS\Client\Serializer;
 final readonly class TagResponse implements ApiModel
 {
     /**
-     * @param TagColor $color The color of the tag
+     * @param TagColor|string $color The color of the tag
      * @param \DateTimeImmutable $createdOn The date/time the tag was created on
      * @param string $label The label of the tag
      * @param string $tagId The unique identifier of the tag TypeID prefix: tag.
-     * @param TagType $type Which category a tag applies to, cannot be changed once created
+     * @param TagType|string $type Which category a tag applies to, cannot be changed once created
      * @param \DateTimeImmutable $updatedOn The date/time the tag was last updated on
      * @param string|null $description Optional description of the tag
      * @param int $objectCount Number of objects tagged with this tag
      */
     public function __construct(
-        public TagColor $color,
+        public TagColor|string $color,
         public \DateTimeImmutable $createdOn,
         public string $label,
         public string $tagId,
-        public TagType $type,
+        public TagType|string $type,
         public \DateTimeImmutable $updatedOn,
         public ?string $description = null,
         public int $objectCount = 0,
@@ -44,11 +44,11 @@ final readonly class TagResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            color: TagColor::from($data['color']),
+            color: TagColor::tryFrom($data['color']) ?? $data['color'],
             createdOn: new \DateTimeImmutable($data['created_on']),
             label: $data['label'],
             tagId: $data['tag_id'],
-            type: TagType::from($data['type']),
+            type: TagType::tryFrom($data['type']) ?? $data['type'],
             updatedOn: new \DateTimeImmutable($data['updated_on']),
             description: $data['description'] ?? null,
             objectCount: $data['object_count'] ?? 0,

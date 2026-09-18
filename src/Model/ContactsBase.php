@@ -23,11 +23,12 @@ final readonly class ContactsBase implements ApiModel
      * @param list<ContactAttributeDefinition>|null $possibleAttributes List of possible attributes that can be set
      *     for this TLD
      * @param bool|null $privacyProxy Whether a privacy service is allowed
-     * @param RegistrantChangeType|null $registrantChange Whether the registrant can change through update or trade
+     * @param RegistrantChangeType|string|null $registrantChange Whether the registrant can change through update or
+     *     trade
      * @param bool|null $supportCheck Whether the registry supports contact checks
      * @param bool|null $supportClientContactId Whether the registry supports client defined contact ID
      * @param bool|null $supportTransfer Whether the registry supports contact transfer
-     * @param list<PostalAddressType>|null $supportedPostalTypes Supported postal address types
+     * @param list<PostalAddressType|string>|null $supportedPostalTypes Supported postal address types
      * @param list<ContactConfigBase>|null $supportedRoles Supported contact roles
      * @param list<ContactConfigBase>|null $transferSupportedRoles Supported contact roles for transfer operations.
      *     Falls back to supported_roles if not specified.
@@ -40,7 +41,7 @@ final readonly class ContactsBase implements ApiModel
         public ?bool $isThick = null,
         public ?array $possibleAttributes = null,
         public ?bool $privacyProxy = null,
-        public ?RegistrantChangeType $registrantChange = null,
+        public RegistrantChangeType|string|null $registrantChange = null,
         public ?bool $supportCheck = null,
         public ?bool $supportClientContactId = null,
         public ?bool $supportTransfer = null,
@@ -62,11 +63,11 @@ final readonly class ContactsBase implements ApiModel
             isThick: $data['is_thick'] ?? null,
             possibleAttributes: isset($data['possible_attributes']) ? array_map(static fn (array $item): ContactAttributeDefinition => ContactAttributeDefinition::fromArray($item), $data['possible_attributes']) : null,
             privacyProxy: $data['privacy_proxy'] ?? null,
-            registrantChange: isset($data['registrant_change']) ? RegistrantChangeType::from($data['registrant_change']) : null,
+            registrantChange: isset($data['registrant_change']) ? RegistrantChangeType::tryFrom($data['registrant_change']) ?? $data['registrant_change'] : null,
             supportCheck: $data['support_check'] ?? null,
             supportClientContactId: $data['support_client_contact_id'] ?? null,
             supportTransfer: $data['support_transfer'] ?? null,
-            supportedPostalTypes: isset($data['supported_postal_types']) ? array_map(static fn (string $item): PostalAddressType => PostalAddressType::from($item), $data['supported_postal_types']) : null,
+            supportedPostalTypes: isset($data['supported_postal_types']) ? array_map(static fn (string $item): PostalAddressType|string => PostalAddressType::tryFrom($item) ?? $item, $data['supported_postal_types']) : null,
             supportedRoles: isset($data['supported_roles']) ? array_map(static fn (array $item): ContactConfigBase => ContactConfigBase::fromArray($item), $data['supported_roles']) : null,
             transferSupportedRoles: isset($data['transfer_supported_roles']) ? array_map(static fn (array $item): ContactConfigBase => ContactConfigBase::fromArray($item), $data['transfer_supported_roles']) : null,
             updateSupportedRoles: isset($data['update_supported_roles']) ? array_map(static fn (array $item): ContactConfigBase => ContactConfigBase::fromArray($item), $data['update_supported_roles']) : null,

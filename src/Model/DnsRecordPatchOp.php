@@ -16,7 +16,7 @@ use OpusDNS\Client\Serializer;
 final readonly class DnsRecordPatchOp implements ApiModel
 {
     public function __construct(
-        public PatchOp $op,
+        public PatchOp|string $op,
         public DnsRrsetWithOneRecordPatch $record,
     ) {
     }
@@ -27,7 +27,7 @@ final readonly class DnsRecordPatchOp implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            op: PatchOp::from($data['op']),
+            op: PatchOp::tryFrom($data['op']) ?? $data['op'],
             record: DnsRrsetWithOneRecordPatch::fromArray($data['record']),
         );
     }

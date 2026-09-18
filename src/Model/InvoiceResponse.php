@@ -21,33 +21,33 @@ final readonly class InvoiceResponse implements ApiModel
 {
     /**
      * @param string $amount Total invoice amount
-     * @param Currency $currency Invoice currency
-     * @param InvoiceDocumentType $documentType Customer-facing document class
+     * @param Currency|string $currency Invoice currency
+     * @param InvoiceDocumentType|string $documentType Customer-facing document class
      * @param string $externalId Lago ID (external) for this invoice
      * @param string $feesAmount Fees amount
-     * @param InvoiceResponseType $invoiceType Invoice type
+     * @param InvoiceResponseType|string $invoiceType Invoice type
      * @param \DateTimeImmutable $issuingDate Invoice issuing date
      * @param string $number Invoice number
      * @param \DateTimeImmutable $paymentDueDate Payment due date
      * @param bool $paymentOverdue Whether payment is overdue
-     * @param InvoiceResponsePaymentStatus $paymentStatus Payment status
-     * @param InvoiceResponseStatus $status Invoice status
+     * @param InvoiceResponsePaymentStatus|string $paymentStatus Payment status
+     * @param InvoiceResponseStatus|string $status Invoice status
      * @param string $taxesAmount Taxes amount
      * @param string|null $fileUrl URL to invoice PDF file
      */
     public function __construct(
         public string $amount,
-        public Currency $currency,
-        public InvoiceDocumentType $documentType,
+        public Currency|string $currency,
+        public InvoiceDocumentType|string $documentType,
         public string $externalId,
         public string $feesAmount,
-        public InvoiceResponseType $invoiceType,
+        public InvoiceResponseType|string $invoiceType,
         public \DateTimeImmutable $issuingDate,
         public string $number,
         public \DateTimeImmutable $paymentDueDate,
         public bool $paymentOverdue,
-        public InvoiceResponsePaymentStatus $paymentStatus,
-        public InvoiceResponseStatus $status,
+        public InvoiceResponsePaymentStatus|string $paymentStatus,
+        public InvoiceResponseStatus|string $status,
         public string $taxesAmount,
         public ?string $fileUrl = null,
     ) {
@@ -60,17 +60,17 @@ final readonly class InvoiceResponse implements ApiModel
     {
         return new self(
             amount: $data['amount'],
-            currency: Currency::from($data['currency']),
-            documentType: InvoiceDocumentType::from($data['document_type']),
+            currency: Currency::tryFrom($data['currency']) ?? $data['currency'],
+            documentType: InvoiceDocumentType::tryFrom($data['document_type']) ?? $data['document_type'],
             externalId: $data['external_id'],
             feesAmount: $data['fees_amount'],
-            invoiceType: InvoiceResponseType::from($data['invoice_type']),
+            invoiceType: InvoiceResponseType::tryFrom($data['invoice_type']) ?? $data['invoice_type'],
             issuingDate: new \DateTimeImmutable($data['issuing_date']),
             number: $data['number'],
             paymentDueDate: new \DateTimeImmutable($data['payment_due_date']),
             paymentOverdue: $data['payment_overdue'],
-            paymentStatus: InvoiceResponsePaymentStatus::from($data['payment_status']),
-            status: InvoiceResponseStatus::from($data['status']),
+            paymentStatus: InvoiceResponsePaymentStatus::tryFrom($data['payment_status']) ?? $data['payment_status'],
+            status: InvoiceResponseStatus::tryFrom($data['status']) ?? $data['status'],
             taxesAmount: $data['taxes_amount'],
             fileUrl: $data['file_url'] ?? null,
         );

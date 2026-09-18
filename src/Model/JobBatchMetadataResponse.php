@@ -19,7 +19,7 @@ final readonly class JobBatchMetadataResponse implements ApiModel
      * @param string $batchId TypeID identifying this batch TypeID prefix: batch.
      * @param \DateTimeImmutable $createdOn Timestamp when the batch was created (UTC)
      * @param JobCountsByStatus $jobCounts Number of jobs in each status
-     * @param BatchStatus $status Batch status: pending (jobs still processing) or complete (all done)
+     * @param BatchStatus|string $status Batch status: pending (jobs still processing) or complete (all done)
      * @param int $totalJobs Total number of jobs in this batch
      * @param \DateTimeImmutable|null $finishedAt Timestamp when the last job finished (UTC)
      * @param string|null $label Human-readable label for this batch
@@ -29,7 +29,7 @@ final readonly class JobBatchMetadataResponse implements ApiModel
         public string $batchId,
         public \DateTimeImmutable $createdOn,
         public JobCountsByStatus $jobCounts,
-        public BatchStatus $status,
+        public BatchStatus|string $status,
         public int $totalJobs,
         public ?\DateTimeImmutable $finishedAt = null,
         public ?string $label = null,
@@ -46,7 +46,7 @@ final readonly class JobBatchMetadataResponse implements ApiModel
             batchId: $data['batch_id'],
             createdOn: new \DateTimeImmutable($data['created_on']),
             jobCounts: JobCountsByStatus::fromArray($data['job_counts']),
-            status: BatchStatus::from($data['status']),
+            status: BatchStatus::tryFrom($data['status']) ?? $data['status'],
             totalJobs: $data['total_jobs'],
             finishedAt: isset($data['finished_at']) ? new \DateTimeImmutable($data['finished_at']) : null,
             label: $data['label'] ?? null,

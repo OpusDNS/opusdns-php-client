@@ -54,7 +54,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return WhitelabelBrandingResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): WhitelabelBrandingResponse => WhitelabelBrandingResponse::fromArray($data));
     }
 
     /**
@@ -78,7 +78,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ProductCreateRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ProductCreateRes => ProductCreateRes::fromArray($data));
     }
 
     /**
@@ -102,7 +102,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return WhitelabelBrandingResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): WhitelabelBrandingResponse => WhitelabelBrandingResponse::fromArray($data));
     }
 
     /**
@@ -122,7 +122,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ListBrandingAssetsResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ListBrandingAssetsResponse => ListBrandingAssetsResponse::fromArray($data));
     }
 
     /**
@@ -147,7 +147,7 @@ final class WhitelabelService
             contentType: 'multipart/form-data',
         );
 
-        return BrandingAsset::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): BrandingAsset => BrandingAsset::fromArray($data));
     }
 
     /**
@@ -186,7 +186,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return BrandingDocument::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): BrandingDocument => BrandingDocument::fromArray($data));
     }
 
     /**
@@ -210,7 +210,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return BrandingDocument::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): BrandingDocument => BrandingDocument::fromArray($data));
     }
 
     /**
@@ -234,7 +234,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return BrandingDocument::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): BrandingDocument => BrandingDocument::fromArray($data));
     }
 
     /**
@@ -258,7 +258,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PreviewMailRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PreviewMailRes => PreviewMailRes::fromArray($data));
     }
 
     /**
@@ -279,7 +279,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $value): MailTemplate => MailTemplate::fromArray($value), $this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $value): MailTemplate => MailTemplate::fromArray($value), $data));
     }
 
     /**
@@ -303,7 +303,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return WhitelabelBrandingResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): WhitelabelBrandingResponse => WhitelabelBrandingResponse::fromArray($data));
     }
 
     /**
@@ -323,7 +323,7 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return WhitelabelBrandingResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): WhitelabelBrandingResponse => WhitelabelBrandingResponse::fromArray($data));
     }
 
     /**
@@ -347,6 +347,6 @@ final class WhitelabelService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ProductCreateRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ProductCreateRes => ProductCreateRes::fromArray($data));
     }
 }

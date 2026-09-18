@@ -16,8 +16,8 @@ use OpusDNS\Client\Serializer;
 final readonly class StatusChanges implements ApiModel
 {
     /**
-     * @param list<DomainClientStatus>|null $add Statuses to add to the domain
-     * @param list<DomainClientStatus>|null $remove Statuses to remove from the domain
+     * @param list<DomainClientStatus|string>|null $add Statuses to add to the domain
+     * @param list<DomainClientStatus|string>|null $remove Statuses to remove from the domain
      */
     public function __construct(
         public ?array $add = null,
@@ -31,8 +31,8 @@ final readonly class StatusChanges implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            add: isset($data['add']) ? array_map(static fn (string $item): DomainClientStatus => DomainClientStatus::from($item), $data['add']) : null,
-            remove: isset($data['remove']) ? array_map(static fn (string $item): DomainClientStatus => DomainClientStatus::from($item), $data['remove']) : null,
+            add: isset($data['add']) ? array_map(static fn (string $item): DomainClientStatus|string => DomainClientStatus::tryFrom($item) ?? $item, $data['add']) : null,
+            remove: isset($data['remove']) ? array_map(static fn (string $item): DomainClientStatus|string => DomainClientStatus::tryFrom($item) ?? $item, $data['remove']) : null,
         );
     }
 

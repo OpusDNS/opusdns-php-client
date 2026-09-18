@@ -17,11 +17,11 @@ final readonly class VanityNsCheckSummaryDTO implements ApiModel
 {
     /**
      * @param string $detail Customer-facing summary of the overall verdict
-     * @param VanityNsCheckSummaryState $state Overall verdict synthesized from the checks
+     * @param VanityNsCheckSummaryState|string $state Overall verdict synthesized from the checks
      */
     public function __construct(
         public string $detail,
-        public VanityNsCheckSummaryState $state,
+        public VanityNsCheckSummaryState|string $state,
     ) {
     }
 
@@ -32,7 +32,7 @@ final readonly class VanityNsCheckSummaryDTO implements ApiModel
     {
         return new self(
             detail: $data['detail'],
-            state: VanityNsCheckSummaryState::from($data['state']),
+            state: VanityNsCheckSummaryState::tryFrom($data['state']) ?? $data['state'],
         );
     }
 

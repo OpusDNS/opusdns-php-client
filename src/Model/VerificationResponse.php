@@ -16,7 +16,7 @@ use OpusDNS\Client\Serializer;
 final readonly class VerificationResponse implements ApiModel
 {
     /**
-     * @param list<VerificationClaimType> $claims Verification claims
+     * @param list<VerificationClaimType|string> $claims Verification claims
      * @param list<VerificationDeadline>|null $deadlines Verification deadlines
      */
     public function __construct(
@@ -31,7 +31,7 @@ final readonly class VerificationResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            claims: array_map(static fn (string $item): VerificationClaimType => VerificationClaimType::from($item), $data['claims']),
+            claims: array_map(static fn (string $item): VerificationClaimType|string => VerificationClaimType::tryFrom($item) ?? $item, $data['claims']),
             deadlines: isset($data['deadlines']) ? array_map(static fn (array $item): VerificationDeadline => VerificationDeadline::fromArray($item), $data['deadlines']) : null,
         );
     }

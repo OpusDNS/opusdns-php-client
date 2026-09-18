@@ -17,7 +17,7 @@ final readonly class DomainVerificationDetails implements ApiModel
 {
     /**
      * @param list<VerificationRegistrantDetails>|null $registrants
-     * @param list<VerificationClaimType>|null $verificationClaims
+     * @param list<VerificationClaimType|string>|null $verificationClaims
      * @param list<VerificationDeadline>|null $verificationDeadlines
      */
     public function __construct(
@@ -38,7 +38,7 @@ final readonly class DomainVerificationDetails implements ApiModel
             domainId: $data['domain_id'],
             detailType: $data['detail_type'] ?? 'domain_verification',
             registrants: isset($data['registrants']) ? array_map(static fn (array $item): VerificationRegistrantDetails => VerificationRegistrantDetails::fromArray($item), $data['registrants']) : null,
-            verificationClaims: isset($data['verification_claims']) ? array_map(static fn (string $item): VerificationClaimType => VerificationClaimType::from($item), $data['verification_claims']) : null,
+            verificationClaims: isset($data['verification_claims']) ? array_map(static fn (string $item): VerificationClaimType|string => VerificationClaimType::tryFrom($item) ?? $item, $data['verification_claims']) : null,
             verificationDeadlines: isset($data['verification_deadlines']) ? array_map(static fn (array $item): VerificationDeadline => VerificationDeadline::fromArray($item), $data['verification_deadlines']) : null,
         );
     }

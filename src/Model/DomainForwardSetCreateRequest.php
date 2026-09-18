@@ -19,7 +19,7 @@ final readonly class DomainForwardSetCreateRequest implements ApiModel
      * @param list<HttpRedirectRequest> $redirects
      */
     public function __construct(
-        public HttpProtocol $protocol,
+        public HttpProtocol|string $protocol,
         public array $redirects,
     ) {
     }
@@ -30,7 +30,7 @@ final readonly class DomainForwardSetCreateRequest implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            protocol: HttpProtocol::from($data['protocol']),
+            protocol: HttpProtocol::tryFrom($data['protocol']) ?? $data['protocol'],
             redirects: array_map(static fn (array $item): HttpRedirectRequest => HttpRedirectRequest::fromArray($item), $data['redirects']),
         );
     }

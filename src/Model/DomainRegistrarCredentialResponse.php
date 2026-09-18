@@ -17,13 +17,13 @@ final readonly class DomainRegistrarCredentialResponse implements ApiModel
 {
     /**
      * @param string $name Human-readable name for this credential
-     * @param Registrar $registrar The registrar this credential is for
+     * @param Registrar|string $registrar The registrar this credential is for
      * @param string $registrarCredentialId Unique identifier for this credential TypeID prefix:
      *     registrar_credential.
      */
     public function __construct(
         public string $name,
-        public Registrar $registrar,
+        public Registrar|string $registrar,
         public string $registrarCredentialId,
     ) {
     }
@@ -35,7 +35,7 @@ final readonly class DomainRegistrarCredentialResponse implements ApiModel
     {
         return new self(
             name: $data['name'],
-            registrar: Registrar::from($data['registrar']),
+            registrar: Registrar::tryFrom($data['registrar']) ?? $data['registrar'],
             registrarCredentialId: $data['registrar_credential_id'],
         );
     }

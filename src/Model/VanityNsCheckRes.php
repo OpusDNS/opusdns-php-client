@@ -18,14 +18,14 @@ final readonly class VanityNsCheckRes implements ApiModel
     /**
      * @param string $parentDomainName Parent domain of the set's vanity NS hostnames
      * @param string $setId The diagnosed set TypeID prefix: vns.
-     * @param VanityNameserverSetStatusDTO $status Lifecycle status of the set at check time
+     * @param VanityNameserverSetStatusDTO|string $status Lifecycle status of the set at check time
      * @param VanityNsCheckSummaryDTO $summary Synthesized overall verdict
      * @param list<VanityNsCheckResultDTO>|null $checks Individual diagnostic checks
      */
     public function __construct(
         public string $parentDomainName,
         public string $setId,
-        public VanityNameserverSetStatusDTO $status,
+        public VanityNameserverSetStatusDTO|string $status,
         public VanityNsCheckSummaryDTO $summary,
         public ?array $checks = null,
     ) {
@@ -39,7 +39,7 @@ final readonly class VanityNsCheckRes implements ApiModel
         return new self(
             parentDomainName: $data['parent_domain_name'],
             setId: $data['set_id'],
-            status: VanityNameserverSetStatusDTO::from($data['status']),
+            status: VanityNameserverSetStatusDTO::tryFrom($data['status']) ?? $data['status'],
             summary: VanityNsCheckSummaryDTO::fromArray($data['summary']),
             checks: isset($data['checks']) ? array_map(static fn (array $item): VanityNsCheckResultDTO => VanityNsCheckResultDTO::fromArray($item), $data['checks']) : null,
         );

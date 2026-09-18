@@ -17,7 +17,7 @@ final readonly class CreateReportReq implements ApiModel
 {
     public function __construct(
         public ?string $registrarCredentialId = null,
-        public ReportType $reportType = ReportType::DOMAIN_INVENTORY,
+        public ReportType|string $reportType = ReportType::DOMAIN_INVENTORY,
     ) {
     }
 
@@ -28,7 +28,7 @@ final readonly class CreateReportReq implements ApiModel
     {
         return new self(
             registrarCredentialId: $data['registrar_credential_id'] ?? null,
-            reportType: isset($data['report_type']) ? ReportType::from($data['report_type']) : ReportType::DOMAIN_INVENTORY,
+            reportType: isset($data['report_type']) ? ReportType::tryFrom($data['report_type']) ?? $data['report_type'] : ReportType::DOMAIN_INVENTORY,
         );
     }
 

@@ -17,12 +17,12 @@ final readonly class ReservedDomainsBase implements ApiModel
 {
     /**
      * @param bool $supported Registry provides a reserved list
-     * @param ReservedSourceType|null $source Source of reserved domain information
+     * @param ReservedSourceType|string|null $source Source of reserved domain information
      * @param string|null $url Link to reserved list
      */
     public function __construct(
         public bool $supported,
-        public ?ReservedSourceType $source = null,
+        public ReservedSourceType|string|null $source = null,
         public ?string $url = null,
     ) {
     }
@@ -34,7 +34,7 @@ final readonly class ReservedDomainsBase implements ApiModel
     {
         return new self(
             supported: $data['supported'],
-            source: isset($data['source']) ? ReservedSourceType::from($data['source']) : null,
+            source: isset($data['source']) ? ReservedSourceType::tryFrom($data['source']) ?? $data['source'] : null,
             url: $data['url'] ?? null,
         );
     }

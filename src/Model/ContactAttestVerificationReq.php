@@ -19,9 +19,9 @@ final readonly class ContactAttestVerificationReq implements ApiModel
 {
     public function __construct(
         public string $attestationReference,
-        public ContactVerificationClaim $claim,
-        public ContactVerificationMethod $method,
-        public ContactVerificationProof $proof,
+        public ContactVerificationClaim|string $claim,
+        public ContactVerificationMethod|string $method,
+        public ContactVerificationProof|string $proof,
         public ?ContactVerificationEidInformation $eid = null,
     ) {
     }
@@ -33,9 +33,9 @@ final readonly class ContactAttestVerificationReq implements ApiModel
     {
         return new self(
             attestationReference: $data['attestation_reference'],
-            claim: ContactVerificationClaim::from($data['claim']),
-            method: ContactVerificationMethod::from($data['method']),
-            proof: ContactVerificationProof::from($data['proof']),
+            claim: ContactVerificationClaim::tryFrom($data['claim']) ?? $data['claim'],
+            method: ContactVerificationMethod::tryFrom($data['method']) ?? $data['method'],
+            proof: ContactVerificationProof::tryFrom($data['proof']) ?? $data['proof'],
             eid: isset($data['eid']) ? ContactVerificationEidInformation::fromArray($data['eid']) : null,
         );
     }

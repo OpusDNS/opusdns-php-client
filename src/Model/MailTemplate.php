@@ -20,7 +20,7 @@ final readonly class MailTemplate implements ApiModel
 {
     /**
      * @param array<string, MailTemplateBlock>|null $blocks Org-editable content blocks
-     * @param MailTemplateCategory $category Template category for grouping in the editor
+     * @param MailTemplateCategory|string $category Template category for grouping in the editor
      * @param string $label Human-readable template name for display
      * @param list<string>|null $locales Supported locales, first is the fallback
      * @param array<string, string>|null $subject Subject line per locale
@@ -29,7 +29,7 @@ final readonly class MailTemplate implements ApiModel
      */
     public function __construct(
         public ?array $blocks = null,
-        public MailTemplateCategory $category = MailTemplateCategory::UNKNOWN,
+        public MailTemplateCategory|string $category = MailTemplateCategory::UNKNOWN,
         public string $label = '',
         public ?array $locales = null,
         public ?array $subject = null,
@@ -45,7 +45,7 @@ final readonly class MailTemplate implements ApiModel
     {
         return new self(
             blocks: isset($data['blocks']) ? array_map(static fn (array $value): MailTemplateBlock => MailTemplateBlock::fromArray($value), (array) $data['blocks']) : null,
-            category: isset($data['category']) ? MailTemplateCategory::from($data['category']) : MailTemplateCategory::UNKNOWN,
+            category: isset($data['category']) ? MailTemplateCategory::tryFrom($data['category']) ?? $data['category'] : MailTemplateCategory::UNKNOWN,
             label: $data['label'] ?? '',
             locales: $data['locales'] ?? null,
             subject: isset($data['subject']) ? (array) $data['subject'] : null,

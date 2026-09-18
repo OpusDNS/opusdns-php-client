@@ -17,12 +17,12 @@ use OpusDNS\Client\Serializer;
 final readonly class RequiredClaim implements ApiModel
 {
     /**
-     * @param NizzaClaim $claim Which contact claim the registry requires to have been verified
-     * @param list<NizzaVerificationProof>|null $acceptedProofs The evidence the registry accepts for this claim; any
-     *     proof is accepted when omitted
+     * @param NizzaClaim|string $claim Which contact claim the registry requires to have been verified
+     * @param list<NizzaVerificationProof|string>|null $acceptedProofs The evidence the registry accepts for this
+     *     claim; any proof is accepted when omitted
      */
     public function __construct(
-        public NizzaClaim $claim,
+        public NizzaClaim|string $claim,
         public ?array $acceptedProofs = null,
     ) {
     }
@@ -33,8 +33,8 @@ final readonly class RequiredClaim implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            claim: NizzaClaim::from($data['claim']),
-            acceptedProofs: isset($data['accepted_proofs']) ? array_map(static fn (string $item): NizzaVerificationProof => NizzaVerificationProof::from($item), $data['accepted_proofs']) : null,
+            claim: NizzaClaim::tryFrom($data['claim']) ?? $data['claim'],
+            acceptedProofs: isset($data['accepted_proofs']) ? array_map(static fn (string $item): NizzaVerificationProof|string => NizzaVerificationProof::tryFrom($item) ?? $item, $data['accepted_proofs']) : null,
         );
     }
 

@@ -23,7 +23,7 @@ final readonly class EventData implements ApiModel
         public string $message,
         public DomainRenewalDetails|DomainVerificationDetails|null $details = null,
         public ?EventError $error = null,
-        public EventVersion $version = EventVersion::_1_0,
+        public EventVersion|string $version = EventVersion::_1_0,
     ) {
     }
 
@@ -36,7 +36,7 @@ final readonly class EventData implements ApiModel
             message: $data['message'],
             details: isset($data['details']) ? Union::discriminate($data['details'], 'detail_type', ['domain_renewal' => DomainRenewalDetails::class, 'domain_verification' => DomainVerificationDetails::class]) : null,
             error: isset($data['error']) ? EventError::fromArray($data['error']) : null,
-            version: isset($data['version']) ? EventVersion::from($data['version']) : EventVersion::_1_0,
+            version: isset($data['version']) ? EventVersion::tryFrom($data['version']) ?? $data['version'] : EventVersion::_1_0,
         );
     }
 

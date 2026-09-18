@@ -16,12 +16,12 @@ use OpusDNS\Client\Serializer;
 final readonly class OutboundTransferResponse implements ApiModel
 {
     /**
-     * @param OutboundTransferAction $action The action that was applied to the outbound transfer
+     * @param OutboundTransferAction|string $action The action that was applied to the outbound transfer
      * @param string $domainId The ID of the domain whose outbound transfer was resolved TypeID prefix: domain.
      * @param string $domainName The name of the domain whose outbound transfer was resolved
      */
     public function __construct(
-        public OutboundTransferAction $action,
+        public OutboundTransferAction|string $action,
         public string $domainId,
         public string $domainName,
     ) {
@@ -33,7 +33,7 @@ final readonly class OutboundTransferResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            action: OutboundTransferAction::from($data['action']),
+            action: OutboundTransferAction::tryFrom($data['action']) ?? $data['action'],
             domainId: $data['domain_id'],
             domainName: $data['domain_name'],
         );

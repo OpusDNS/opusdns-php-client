@@ -50,10 +50,11 @@ final class ContactService
      *
      * Required permissions: contacts:read
      *
-     * @param list<StatusTagType>|null $statusTags Filter by status tag types. Can be specified multiple times.
+     * @param list<StatusTagType|string>|null $statusTags Filter by status tag types. Can be specified multiple
+     *     times.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
-     * @param list<ContactIncludeField>|null $include Include additional data in the response. Can be specified
-     *     multiple times.
+     * @param list<ContactIncludeField|string>|null $include Include additional data in the response. Can be
+     *     specified multiple times.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -61,12 +62,12 @@ final class ContactService
     public function getContacts(
         int $page = 1,
         int $pageSize = 10,
-        ContactSortField $sortBy = ContactSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        ContactSortField|string $sortBy = ContactSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?array $statusTags = null,
-        TagFilterMode $statusTagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string $statusTagMode = TagFilterMode::MATCH_ANY,
         ?array $tagIds = null,
-        TagFilterMode $tagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string $tagMode = TagFilterMode::MATCH_ANY,
         ?string $firstName = null,
         ?string $lastName = null,
         ?string $email = null,
@@ -85,7 +86,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationContactResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationContactResponse => PaginationContactResponse::fromArray($data));
     }
 
     /**
@@ -109,7 +110,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactResponse => ContactResponse::fromArray($data));
     }
 
     /**
@@ -124,8 +125,8 @@ final class ContactService
     public function listAttributeSets(
         int $page = 1,
         int $pageSize = 10,
-        ContactAttributeSetSortField $sortBy = ContactAttributeSetSortField::CREATED_ON,
-        SortOrder $sortOrder = SortOrder::DESC,
+        ContactAttributeSetSortField|string $sortBy = ContactAttributeSetSortField::CREATED_ON,
+        SortOrder|string $sortOrder = SortOrder::DESC,
         ?string $tld = null,
         ?string $label = null,
         ?string $xDatetimeFormat = null,
@@ -137,7 +138,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PaginationContactAttributeSetResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PaginationContactAttributeSetResponse => PaginationContactAttributeSetResponse::fromArray($data));
     }
 
     /**
@@ -161,7 +162,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactAttributeSetResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactAttributeSetResponse => ContactAttributeSetResponse::fromArray($data));
     }
 
     /**
@@ -184,7 +185,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactAttributeSetResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactAttributeSetResponse => ContactAttributeSetResponse::fromArray($data));
     }
 
     /**
@@ -210,7 +211,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactAttributeSetResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactAttributeSetResponse => ContactAttributeSetResponse::fromArray($data));
     }
 
     /**
@@ -248,7 +249,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactResponse => ContactResponse::fromArray($data));
     }
 
     /**
@@ -292,7 +293,7 @@ final class ContactService
      *
      * Required permissions: contacts:read
      *
-     * @param list<ContactIncludeField>|null $include
+     * @param list<ContactIncludeField|string>|null $include
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -310,7 +311,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactResponse => ContactResponse::fromArray($data));
     }
 
     /**
@@ -355,7 +356,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactAttributeLinkResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactAttributeLinkResponse => ContactAttributeLinkResponse::fromArray($data));
     }
 
     /**
@@ -378,7 +379,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactVerificationResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactVerificationResponse => ContactVerificationResponse::fromArray($data));
     }
 
     /**
@@ -393,7 +394,7 @@ final class ContactService
      */
     public function startContactVerification(
         string $contactId,
-        VerificationType $type,
+        VerificationType|string $type,
         ?string $xDatetimeFormat = null,
     ): ContactVerificationEmailResponse|ContactVerificationApiResponse {
         $response = $this->client->request(
@@ -404,7 +405,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return Union::hydrate($this->client->decodeArray($response), [ContactVerificationApiResponse::class => ['token', 'type'], ContactVerificationEmailResponse::class => ['type']]);
+        return $this->client->hydrate($response, static fn (array $data): ContactVerificationEmailResponse|ContactVerificationApiResponse => Union::hydrate($data, [ContactVerificationApiResponse::class => ['token', 'type'], ContactVerificationEmailResponse::class => ['type']]));
     }
 
     /**
@@ -466,7 +467,7 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactAttestRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactAttestRes => ContactAttestRes::fromArray($data));
     }
 
     /**
@@ -494,6 +495,6 @@ final class ContactService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return ContactAttestRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): ContactAttestRes => ContactAttestRes::fromArray($data));
     }
 }

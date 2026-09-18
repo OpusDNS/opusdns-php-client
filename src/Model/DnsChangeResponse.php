@@ -17,10 +17,10 @@ use OpusDNS\Client\Serializer;
 final readonly class DnsChangeResponse implements ApiModel
 {
     public function __construct(
-        public DnsChangeAction $action,
+        public DnsChangeAction|string $action,
         public ?string $recordData = null,
         public ?string $rrsetName = null,
-        public ?DnsRrsetType $rrsetType = null,
+        public DnsRrsetType|string|null $rrsetType = null,
         public ?int $ttl = null,
     ) {
     }
@@ -31,10 +31,10 @@ final readonly class DnsChangeResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            action: DnsChangeAction::from($data['action']),
+            action: DnsChangeAction::tryFrom($data['action']) ?? $data['action'],
             recordData: $data['record_data'] ?? null,
             rrsetName: $data['rrset_name'] ?? null,
-            rrsetType: isset($data['rrset_type']) ? DnsRrsetType::from($data['rrset_type']) : null,
+            rrsetType: isset($data['rrset_type']) ? DnsRrsetType::tryFrom($data['rrset_type']) ?? $data['rrset_type'] : null,
             ttl: $data['ttl'] ?? null,
         );
     }

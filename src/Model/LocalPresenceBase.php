@@ -20,8 +20,8 @@ final readonly class LocalPresenceBase implements ApiModel
      * @param bool $required Whether a local presence is required to register and maintain a domain name
      * @param list<string>|null $eligibleCountries ISO 3166-1 Alpha-2 country code
      * @param list<AttributeCondition>|null $exemptions
-     * @param list<LocalPresenceRequirementType>|null $requirement Type of local presence requirement
-     * @param list<DomainContactType>|null $type Who must meet the requirement
+     * @param list<LocalPresenceRequirementType|string>|null $requirement Type of local presence requirement
+     * @param list<DomainContactType|string>|null $type Who must meet the requirement
      */
     public function __construct(
         public bool $required,
@@ -41,8 +41,8 @@ final readonly class LocalPresenceBase implements ApiModel
             required: $data['required'],
             eligibleCountries: $data['eligible_countries'] ?? null,
             exemptions: isset($data['exemptions']) ? array_map(static fn (array $item): AttributeCondition => AttributeCondition::fromArray($item), $data['exemptions']) : null,
-            requirement: isset($data['requirement']) ? array_map(static fn (string $item): LocalPresenceRequirementType => LocalPresenceRequirementType::from($item), $data['requirement']) : null,
-            type: isset($data['type']) ? array_map(static fn (string $item): DomainContactType => DomainContactType::from($item), $data['type']) : null,
+            requirement: isset($data['requirement']) ? array_map(static fn (string $item): LocalPresenceRequirementType|string => LocalPresenceRequirementType::tryFrom($item) ?? $item, $data['requirement']) : null,
+            type: isset($data['type']) ? array_map(static fn (string $item): DomainContactType|string => DomainContactType::tryFrom($item) ?? $item, $data['type']) : null,
         );
     }
 

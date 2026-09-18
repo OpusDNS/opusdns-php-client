@@ -21,7 +21,7 @@ final readonly class DomainForwardSetResponse implements ApiModel
     public function __construct(
         public \DateTimeImmutable $createdOn,
         public string $hostname,
-        public HttpProtocol $protocol,
+        public HttpProtocol|string $protocol,
         public array $redirects,
         public \DateTimeImmutable $updatedOn,
     ) {
@@ -35,7 +35,7 @@ final readonly class DomainForwardSetResponse implements ApiModel
         return new self(
             createdOn: new \DateTimeImmutable($data['created_on']),
             hostname: $data['hostname'],
-            protocol: HttpProtocol::from($data['protocol']),
+            protocol: HttpProtocol::tryFrom($data['protocol']) ?? $data['protocol'],
             redirects: array_map(static fn (array $item): HttpRedirectListResponse => HttpRedirectListResponse::fromArray($item), $data['redirects']),
             updatedOn: new \DateTimeImmutable($data['updated_on']),
         );

@@ -72,7 +72,7 @@ final class TldService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return array_map(static fn (array $item): TldResponseShort => TldResponseShort::fromArray($item), $this->client->decodeList($response));
+        return $this->client->hydrate($response, static fn (array $data): array => array_map(static fn (array $item): TldResponseShort => TldResponseShort::fromArray($item), $data));
     }
 
     /**
@@ -82,7 +82,7 @@ final class TldService
      *
      * Required permissions: organization:read
      *
-     * @param RegistryServiceBackend|null $backend Override the resolved account backend.
+     * @param RegistryServiceBackend|string|null $backend Override the resolved account backend.
      * @param string|null $customerSpecRef Override the customer spec ref.
      * @param string|null $version Override the spec version pin (or LATEST).
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -91,7 +91,7 @@ final class TldService
      */
     public function getTldSpec(
         string $tld,
-        ?RegistryServiceBackend $backend = null,
+        RegistryServiceBackend|string|null $backend = null,
         ?string $customerSpecRef = null,
         ?string $version = null,
         ?string $xDatetimeFormat = null,
@@ -104,6 +104,6 @@ final class TldService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return TldSpecificationResponse::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): TldSpecificationResponse => TldSpecificationResponse::fromArray($data));
     }
 }

@@ -18,7 +18,7 @@ final readonly class DomainCreateBulkTemplate implements ApiModel
     /**
      * @param array<string, list<ContactHandle>> $contacts
      * @param DomainPeriod $period The registration period of the domain
-     * @param RenewalMode $renewalMode The renewal mode of the domain
+     * @param RenewalMode|string $renewalMode The renewal mode of the domain
      * @param array<string, string>|null $attributes Additional attributes of the domain, keyed by attribute name.
      *     Values are strings. Customer-settable keys: - `auto_renew_period`: `monthly` or `yearly`. All TLDs on
      *     create, transfer-in and update. Selects the period of the next renewal; the current expiry date does not
@@ -53,7 +53,7 @@ final readonly class DomainCreateBulkTemplate implements ApiModel
     public function __construct(
         public array $contacts,
         public DomainPeriod $period,
-        public RenewalMode $renewalMode,
+        public RenewalMode|string $renewalMode,
         public ?array $attributes = null,
         public ?string $authCode = null,
         public bool $createZone = false,
@@ -69,7 +69,7 @@ final readonly class DomainCreateBulkTemplate implements ApiModel
         return new self(
             contacts: array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']),
             period: DomainPeriod::fromArray($data['period']),
-            renewalMode: RenewalMode::from($data['renewal_mode']),
+            renewalMode: RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'],
             attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
             authCode: $data['auth_code'] ?? null,
             createZone: $data['create_zone'] ?? false,

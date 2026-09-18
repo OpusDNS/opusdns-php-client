@@ -33,8 +33,8 @@ final class ReportService
      *
      * Required permissions: organization:read
      *
-     * @param list<ReportType>|null $reportType
-     * @param list<ReportStatus>|null $status
+     * @param list<ReportType|string>|null $reportType
+     * @param list<ReportStatus|string>|null $status
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -44,7 +44,7 @@ final class ReportService
         int $pageSize = 50,
         ?array $reportType = null,
         ?array $status = null,
-        ?ReportTriggerType $triggerType = null,
+        ReportTriggerType|string|null $triggerType = null,
         ?\DateTimeImmutable $createdAfter = null,
         ?\DateTimeImmutable $createdBefore = null,
         ?string $xDatetimeFormat = null,
@@ -56,7 +56,7 @@ final class ReportService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicReportListRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicReportListRes => PublicReportListRes::fromArray($data));
     }
 
     /**
@@ -99,7 +99,7 @@ final class ReportService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return PublicReportRes::fromArray($this->client->decodeArray($response));
+        return $this->client->hydrate($response, static fn (array $data): PublicReportRes => PublicReportRes::fromArray($data));
     }
 
     /**

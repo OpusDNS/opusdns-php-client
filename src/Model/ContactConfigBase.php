@@ -18,12 +18,12 @@ final readonly class ContactConfigBase implements ApiModel
     /**
      * @param int $max Maximum contacts per domain name
      * @param int $min Minimum contacts per domain name
-     * @param DomainContactType $type The type of contact
+     * @param DomainContactType|string $type The type of contact
      */
     public function __construct(
         public int $max,
         public int $min,
-        public DomainContactType $type,
+        public DomainContactType|string $type,
     ) {
     }
 
@@ -35,7 +35,7 @@ final readonly class ContactConfigBase implements ApiModel
         return new self(
             max: $data['max'],
             min: $data['min'],
-            type: DomainContactType::from($data['type']),
+            type: DomainContactType::tryFrom($data['type']) ?? $data['type'],
         );
     }
 

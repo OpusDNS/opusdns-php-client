@@ -18,7 +18,7 @@ final readonly class HttpRedirectRemove implements ApiModel
     public function __construct(
         public string $requestHostname,
         public string $requestPath,
-        public HttpProtocol $requestProtocol,
+        public HttpProtocol|string $requestProtocol,
         public ?string $requestSubdomain = null,
     ) {
     }
@@ -31,7 +31,7 @@ final readonly class HttpRedirectRemove implements ApiModel
         return new self(
             requestHostname: $data['request_hostname'],
             requestPath: $data['request_path'],
-            requestProtocol: HttpProtocol::from($data['request_protocol']),
+            requestProtocol: HttpProtocol::tryFrom($data['request_protocol']) ?? $data['request_protocol'],
             requestSubdomain: $data['request_subdomain'] ?? null,
         );
     }

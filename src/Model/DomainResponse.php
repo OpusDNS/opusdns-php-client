@@ -46,7 +46,7 @@ final readonly class DomainResponse implements ApiModel
      *     was deleted.
      * @param string $registryAccountId TypeID prefix: registry_account.
      * @param list<string>|null $registryStatuses All the domain statuses
-     * @param RenewalMode|null $renewalMode The renewal mode of the domain
+     * @param RenewalMode|string|null $renewalMode The renewal mode of the domain
      * @param string|null $renewalPeriod Renewal period of the domain as an ISO 8601 duration (e.g. 'P1M', 'P1Y').
      *     Null when the domain is not set to renew (renewal mode 'expire') or has no active subscription.
      * @param DomainRenewalPriceResponse|null $renewalPrice Price this organization pays to renew this domain for one
@@ -83,7 +83,7 @@ final readonly class DomainResponse implements ApiModel
         public ?DomainRegistrarCredentialResponse $registrarCredential = null,
         public string $registryAccountId = 'None',
         public ?array $registryStatuses = null,
-        public ?RenewalMode $renewalMode = null,
+        public RenewalMode|string|null $renewalMode = null,
         public ?string $renewalPeriod = null,
         public ?DomainRenewalPriceResponse $renewalPrice = null,
         public ?array $statusTags = null,
@@ -122,7 +122,7 @@ final readonly class DomainResponse implements ApiModel
             registrarCredential: isset($data['registrar_credential']) ? DomainRegistrarCredentialResponse::fromArray($data['registrar_credential']) : null,
             registryAccountId: $data['registry_account_id'] ?? 'None',
             registryStatuses: $data['registry_statuses'] ?? null,
-            renewalMode: isset($data['renewal_mode']) ? RenewalMode::from($data['renewal_mode']) : null,
+            renewalMode: isset($data['renewal_mode']) ? RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
             renewalPeriod: $data['renewal_period'] ?? null,
             renewalPrice: isset($data['renewal_price']) ? DomainRenewalPriceResponse::fromArray($data['renewal_price']) : null,
             statusTags: isset($data['status_tags']) ? array_map(static fn (array $item): StatusTagResponse => StatusTagResponse::fromArray($item), $data['status_tags']) : null,

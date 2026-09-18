@@ -19,28 +19,28 @@ final readonly class RequestHistory implements ApiModel
     /**
      * @param string $clientIp Client IP address
      * @param float $duration Request duration in milliseconds
-     * @param HTTPMethod $method HTTP method
+     * @param HTTPMethod|string $method HTTP method
      * @param string $path Request path
      * @param \DateTimeImmutable $requestCompletedAt Timestamp when the request completed
      * @param \DateTimeImmutable $requestStartedAt Timestamp when the request started
      * @param string $serverRequestId Unique ID of the request
      * @param int $statusCode HTTP status code
      * @param string|null $performedById ID of the actor who performed the request
-     * @param ExecutingEntity|null $performedByType Type of the actor who performed the request
+     * @param ExecutingEntity|string|null $performedByType Type of the actor who performed the request
      * @param array<string, mixed>|null $requestBody Request body
      * @param array<string, mixed>|null $responseBody Response body
      */
     public function __construct(
         public string $clientIp,
         public float $duration,
-        public HTTPMethod $method,
+        public HTTPMethod|string $method,
         public string $path,
         public \DateTimeImmutable $requestCompletedAt,
         public \DateTimeImmutable $requestStartedAt,
         public string $serverRequestId,
         public int $statusCode,
         public ?string $performedById = null,
-        public ?ExecutingEntity $performedByType = null,
+        public ExecutingEntity|string|null $performedByType = null,
         public ?array $requestBody = null,
         public ?array $responseBody = null,
     ) {
@@ -54,14 +54,14 @@ final readonly class RequestHistory implements ApiModel
         return new self(
             clientIp: $data['client_ip'],
             duration: $data['duration'],
-            method: HTTPMethod::from($data['method']),
+            method: HTTPMethod::tryFrom($data['method']) ?? $data['method'],
             path: $data['path'],
             requestCompletedAt: new \DateTimeImmutable($data['request_completed_at']),
             requestStartedAt: new \DateTimeImmutable($data['request_started_at']),
             serverRequestId: $data['server_request_id'],
             statusCode: $data['status_code'],
             performedById: $data['performed_by_id'] ?? null,
-            performedByType: isset($data['performed_by_type']) ? ExecutingEntity::from($data['performed_by_type']) : null,
+            performedByType: isset($data['performed_by_type']) ? ExecutingEntity::tryFrom($data['performed_by_type']) ?? $data['performed_by_type'] : null,
             requestBody: isset($data['request_body']) ? (array) $data['request_body'] : null,
             responseBody: isset($data['response_body']) ? (array) $data['response_body'] : null,
         );

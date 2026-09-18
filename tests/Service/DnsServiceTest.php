@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use OpusDNS\Client\Enum\DnsRrsetType;
 use OpusDNS\Client\Enum\DnssecStatus;
 use OpusDNS\Client\Enum\PatchOp;
+use OpusDNS\Client\Exception\DecodingException;
 use OpusDNS\Client\Exception\NotFoundException;
 use OpusDNS\Client\Model\DnsChangesResponse;
 use OpusDNS\Client\Model\DnsRrsetPatch;
@@ -137,12 +138,29 @@ final class DnsServiceTest extends TestCase
         $client->dns()->getZone('missing.example');
     }
 
-    public function testUnknownEnumValuesAreRejected(): void
+    public function testUnknownEnumValuesAreKeptAsRawValues(): void
     {
         [$client, $http] = ClientFactory::create();
         $http->queueJson(200, ['dns_zone_id' => 'z', 'name' => 'example.com', 'dnssec_status' => 'brand-new']);
 
-        $this->expectException(\ValueError::class);
-        $client->dns()->getZone('example.com');
+        $zone = $client->dns()->getZone('example.com');
+
+        self::assertSame('brand-new', $zone->dnssecStatus);
+        self::assertSame('brand-new', $zone->toArray()['dnssec_status']);
+    }
+
+    public function testHydrationFailuresAreDecodingExceptions(): void
+    {
+        [$client, $http] = ClientFactory::create();
+        $http->queueJson(200, ['dns_zone_id' => 'z', 'name' => 123]);
+
+        try {
+            $client->dns()->getZone('example.com');
+            self::fail('Expected a DecodingException');
+        } catch (DecodingException $exception) {
+            self::assertStringStartsWith('Failed to hydrate the response', $exception->getMessage());
+            self::assertInstanceOf(\TypeError::class, $exception->getPrevious());
+            self::assertSame(200, $exception->response->getStatusCode());
+        }
     }
 }

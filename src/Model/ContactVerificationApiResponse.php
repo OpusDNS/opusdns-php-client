@@ -18,24 +18,24 @@ final readonly class ContactVerificationApiResponse implements ApiModel
 {
     /**
      * @param string $token The token to verify the email address
-     * @param VerificationType $type The type of verification: 'api' for retrieving token via API, 'email' for
+     * @param VerificationType|string $type The type of verification: 'api' for retrieving token via API, 'email' for
      *     retrieving via email
      * @param \DateTimeImmutable|null $canceledOn The date the verification was cancelled
      * @param string $contactId The contact that is being verified TypeID prefix: contact.
      * @param string|null $contactVerificationId TypeID prefix: contact_verification.
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
-     * @param EmailVerificationStatus $status Current status of the email verification
+     * @param EmailVerificationStatus|string $status Current status of the email verification
      * @param \DateTimeImmutable|null $updatedOn The date/time the entry was last updated on
      * @param \DateTimeImmutable|null $verifiedOn The date the verification was verified
      */
     public function __construct(
         public string $token,
-        public VerificationType $type,
+        public VerificationType|string $type,
         public ?\DateTimeImmutable $canceledOn = null,
         public string $contactId = 'None',
         public ?string $contactVerificationId = null,
         public ?\DateTimeImmutable $createdOn = null,
-        public EmailVerificationStatus $status = EmailVerificationStatus::PENDING,
+        public EmailVerificationStatus|string $status = EmailVerificationStatus::PENDING,
         public ?\DateTimeImmutable $updatedOn = null,
         public ?\DateTimeImmutable $verifiedOn = null,
     ) {
@@ -48,12 +48,12 @@ final readonly class ContactVerificationApiResponse implements ApiModel
     {
         return new self(
             token: $data['token'],
-            type: VerificationType::from($data['type']),
+            type: VerificationType::tryFrom($data['type']) ?? $data['type'],
             canceledOn: isset($data['canceled_on']) ? new \DateTimeImmutable($data['canceled_on']) : null,
             contactId: $data['contact_id'] ?? 'None',
             contactVerificationId: $data['contact_verification_id'] ?? null,
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
-            status: isset($data['status']) ? EmailVerificationStatus::from($data['status']) : EmailVerificationStatus::PENDING,
+            status: isset($data['status']) ? EmailVerificationStatus::tryFrom($data['status']) ?? $data['status'] : EmailVerificationStatus::PENDING,
             updatedOn: isset($data['updated_on']) ? new \DateTimeImmutable($data['updated_on']) : null,
             verifiedOn: isset($data['verified_on']) ? new \DateTimeImmutable($data['verified_on']) : null,
         );
