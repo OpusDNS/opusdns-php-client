@@ -21,7 +21,7 @@ final readonly class User implements ApiModel
      * @param string $username The user's unique username
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
      * @param string|null $keycloakUserId Keycloak user id
-     * @param string $organizationId The user's organization id TypeID prefix: organization.
+     * @param string|null $organizationId The user's organization id TypeID prefix: organization.
      * @param string|null $phone The user's phone number
      * @param \DateTimeImmutable|null $updatedOn The date/time the entry was last updated on
      * @param string|null $userId TypeID prefix: user.
@@ -34,7 +34,7 @@ final readonly class User implements ApiModel
         public string $username,
         public ?\DateTimeImmutable $createdOn = null,
         public ?string $keycloakUserId = null,
-        public string $organizationId = 'None',
+        public ?string $organizationId = null,
         public ?string $phone = null,
         public ?\DateTimeImmutable $updatedOn = null,
         public ?string $userId = null,
@@ -54,7 +54,7 @@ final readonly class User implements ApiModel
             username: $data['username'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
             keycloakUserId: $data['keycloak_user_id'] ?? null,
-            organizationId: $data['organization_id'] ?? 'None',
+            organizationId: $data['organization_id'] ?? null,
             phone: $data['phone'] ?? null,
             updatedOn: isset($data['updated_on']) ? new \DateTimeImmutable($data['updated_on']) : null,
             userId: $data['user_id'] ?? null,

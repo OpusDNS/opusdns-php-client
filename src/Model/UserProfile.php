@@ -21,7 +21,7 @@ final readonly class UserProfile implements ApiModel
      * @param string $lastName The user's last name
      * @param string $username The user's unique username
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
-     * @param string $organizationId The user's organization id TypeID prefix: organization.
+     * @param string|null $organizationId The user's organization id TypeID prefix: organization.
      * @param list<string>|null $permissions
      * @param string|null $phone The user's phone number
      * @param PublicRole|string|null $role
@@ -37,7 +37,7 @@ final readonly class UserProfile implements ApiModel
         public string $username,
         public ?\DateTimeImmutable $createdOn = null,
         public ?UserOrganizationMeta $organization = null,
-        public string $organizationId = 'None',
+        public ?string $organizationId = null,
         public ?array $permissions = null,
         public ?string $phone = null,
         public PublicRole|string|null $role = null,
@@ -60,7 +60,7 @@ final readonly class UserProfile implements ApiModel
             username: $data['username'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
             organization: isset($data['organization']) ? UserOrganizationMeta::fromArray($data['organization']) : null,
-            organizationId: $data['organization_id'] ?? 'None',
+            organizationId: $data['organization_id'] ?? null,
             permissions: $data['permissions'] ?? null,
             phone: $data['phone'] ?? null,
             role: isset($data['role']) ? PublicRole::tryFrom($data['role']) ?? $data['role'] : null,

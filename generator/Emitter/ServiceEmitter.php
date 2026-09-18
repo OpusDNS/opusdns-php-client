@@ -176,7 +176,7 @@ final class ServiceEmitter
 
             $mandatory = (bool) ($raw['required'] ?? false) && !$type->nullable;
             $default = $schema['default'] ?? null;
-            if (is_scalar($default)) {
+            if (is_scalar($default) && $default !== 'None') {
                 $description = trim($description . ' Server default: ' . (is_bool($default) ? var_export($default, true) : (string) $default) . '.');
             }
             $params[] = new MethodParam($phpName, $key, $in, $type->withNullable(!$mandatory), $mandatory, !$mandatory, null, $description);

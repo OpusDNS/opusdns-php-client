@@ -111,6 +111,7 @@ components:
         status: {$ref: '#/components/schemas/FixturePetStatus'}
         created_on: {type: string, format: date-time}
         born_on: {type: string, format: date}
+        owner_id: {type: string, default: None}
         nickname:
           anyOf: [{type: string}, {type: 'null'}]
         weight: {type: number}
