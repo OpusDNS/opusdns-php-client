@@ -65,15 +65,25 @@ jobs:
           esac
           echo "bump=$bump" >> "$GITHUB_OUTPUT"
 
-      - name: Calculate the version and push the tag
+      - name: Calculate the next version and push the tag
         id: version
-        uses: bitshifted/git-auto-semver@v2
-        with:
-          create_tag: true
-          manual_bump: ${{ steps.bump.outputs.bump }}
+        env:
+          BUMP: ${{ steps.bump.outputs.bump }}
+        run: |
+          latest=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -n 1)
+          IFS=. read -r major minor patch <<< "${latest#v}"
+          case "$BUMP" in
+            major) major=$((major + 1)); minor=0; patch=0 ;;
+            minor) minor=$((minor + 1)); patch=0 ;;
+            *) patch=$((patch + 1)) ;;
+          esac
+          version="v${major}.${minor}.${patch}"
+          git tag "$version"
+          git push origin "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version-string }}
+          tag_name: ${{ steps.version.outputs.version }}
           generate_release_notes: true
