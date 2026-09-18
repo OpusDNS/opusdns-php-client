@@ -29,4 +29,5 @@ enum DomainAttributeKey: string
     case PROMOTION = 'promotion';
     case PROMOTION_ELIGIBILITY = 'promotion_eligibility';
     case DOMAIN_CONTACT_ATTRIBUTES = 'domain_contact_attributes';
+    case REGISTRY_RESELLER_ID = 'registry_reseller_id';
 }
