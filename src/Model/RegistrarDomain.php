@@ -39,7 +39,7 @@ final readonly class RegistrarDomain implements ApiModel
     {
         return new self(
             name: $data['name'],
-            contacts: isset($data['contacts']) ? array_map(static fn (array $value): RegistrarContact => RegistrarContact::fromArray($value), $data['contacts']) : [],
+            contacts: isset($data['contacts']) ? array_map(static fn (array $value): RegistrarContact => RegistrarContact::fromArray($value), (array) $data['contacts']) : [],
             contactsDedup: isset($data['contacts_dedup']) ? array_map(static fn (array $item): RegistrarContact => RegistrarContact::fromArray($item), $data['contacts_dedup']) : [],
             expiryDate: $data['expiry_date'] ?? null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): RegistrarNameserver => RegistrarNameserver::fromArray($item), $data['nameservers']) : [],
@@ -56,7 +56,7 @@ final readonly class RegistrarDomain implements ApiModel
     {
         return Serializer::normalize([
             'name' => $this->name,
-            'contacts' => $this->contacts,
+            'contacts' => ($this->contacts === [] ? new \stdClass() : $this->contacts),
             'contacts_dedup' => $this->contactsDedup,
             'expiry_date' => $this->expiryDate,
             'nameservers' => $this->nameservers,

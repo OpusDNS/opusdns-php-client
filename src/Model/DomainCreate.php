@@ -74,11 +74,11 @@ final readonly class DomainCreate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            contacts: array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), $data['contacts']),
+            contacts: array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']),
             name: $data['name'],
             period: DomainPeriod::fromArray($data['period']),
             renewalMode: RenewalMode::from($data['renewal_mode']),
-            attributes: $data['attributes'] ?? null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
             authCode: $data['auth_code'] ?? null,
             claimsNoticeAcceptanceHash: $data['claims_notice_acceptance_hash'] ?? null,
             createZone: $data['create_zone'] ?? false,
@@ -93,11 +93,11 @@ final readonly class DomainCreate implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'contacts' => $this->contacts,
+            'contacts' => ($this->contacts === [] ? new \stdClass() : $this->contacts),
             'name' => $this->name,
             'period' => $this->period,
             'renewal_mode' => $this->renewalMode,
-            'attributes' => $this->attributes,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
             'auth_code' => $this->authCode,
             'claims_notice_acceptance_hash' => $this->claimsNoticeAcceptanceHash,
             'create_zone' => $this->createZone,

@@ -39,10 +39,10 @@ final readonly class DomainSummaryData implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            byOrganization: $data['by_organization'],
-            byStatus: $data['by_status'],
-            byStatusTag: $data['by_status_tag'],
-            byTld: $data['by_tld'],
+            byOrganization: (array) $data['by_organization'],
+            byStatus: (array) $data['by_status'],
+            byStatusTag: (array) $data['by_status_tag'],
+            byTld: (array) $data['by_tld'],
             expiringSoon: DomainsExpiringSoon::fromArray($data['expiring_soon']),
             totalCount: $data['total_count'],
         );
@@ -54,10 +54,10 @@ final readonly class DomainSummaryData implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'by_organization' => $this->byOrganization,
-            'by_status' => $this->byStatus,
-            'by_status_tag' => $this->byStatusTag,
-            'by_tld' => $this->byTld,
+            'by_organization' => ($this->byOrganization === [] ? new \stdClass() : $this->byOrganization),
+            'by_status' => ($this->byStatus === [] ? new \stdClass() : $this->byStatus),
+            'by_status_tag' => ($this->byStatusTag === [] ? new \stdClass() : $this->byStatusTag),
+            'by_tld' => ($this->byTld === [] ? new \stdClass() : $this->byTld),
             'expiring_soon' => $this->expiringSoon,
             'total_count' => $this->totalCount,
         ]);

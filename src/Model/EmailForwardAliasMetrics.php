@@ -33,7 +33,7 @@ final readonly class EmailForwardAliasMetrics implements ApiModel
     {
         return new self(
             alias: $data['alias'],
-            byStatus: $data['by_status'],
+            byStatus: (array) $data['by_status'],
             totalLogs: $data['total_logs'],
         );
     }
@@ -45,7 +45,7 @@ final readonly class EmailForwardAliasMetrics implements ApiModel
     {
         return Serializer::normalize([
             'alias' => $this->alias,
-            'by_status' => $this->byStatus,
+            'by_status' => ($this->byStatus === [] ? new \stdClass() : $this->byStatus),
             'total_logs' => $this->totalLogs,
         ]);
     }

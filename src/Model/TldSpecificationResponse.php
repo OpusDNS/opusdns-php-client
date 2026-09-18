@@ -79,7 +79,7 @@ final readonly class TldSpecificationResponse implements ApiModel
             rdap: isset($data['rdap']) ? RdapBase::fromArray($data['rdap']) : null,
             registryLock: isset($data['registry_lock']) ? RegistryLockBase::fromArray($data['registry_lock']) : null,
             reservedDomains: isset($data['reserved_domains']) ? ReservedDomainsBase::fromArray($data['reserved_domains']) : null,
-            verificationPolicies: isset($data['verification_policies']) ? array_map(static fn (array $value) => Union::hydrate($value, [EmailVerificationPolicy::class => ['enabled', 'contact_roles', 'trigger', 'validity_period', 'suspension_on_failure', 'suspension_delay', 'verification_method', 'communication'], IdentityVerificationPolicy::class => ['enabled', 'contact_roles', 'trigger', 'validity_period', 'suspension_on_failure', 'suspension_delay', 'required_claims']]), $data['verification_policies']) : null,
+            verificationPolicies: isset($data['verification_policies']) ? array_map(static fn (array $value) => Union::hydrate($value, [EmailVerificationPolicy::class => ['enabled', 'contact_roles', 'trigger', 'validity_period', 'suspension_on_failure', 'suspension_delay', 'verification_method', 'communication'], IdentityVerificationPolicy::class => ['enabled', 'contact_roles', 'trigger', 'validity_period', 'suspension_on_failure', 'suspension_delay', 'required_claims']]), (array) $data['verification_policies']) : null,
             whois: isset($data['whois']) ? WhoisBase::fromArray($data['whois']) : null,
         );
     }
@@ -106,7 +106,7 @@ final readonly class TldSpecificationResponse implements ApiModel
             'rdap' => $this->rdap,
             'registry_lock' => $this->registryLock,
             'reserved_domains' => $this->reservedDomains,
-            'verification_policies' => $this->verificationPolicies,
+            'verification_policies' => $this->verificationPolicies === null ? null : ($this->verificationPolicies === [] ? new \stdClass() : $this->verificationPolicies),
             'whois' => $this->whois,
         ]);
     }

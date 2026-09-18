@@ -37,7 +37,7 @@ final readonly class DomainContactResponse implements ApiModel
         return new self(
             contactId: $data['contact_id'],
             contactType: DomainContactType::from($data['contact_type']),
-            attributes: $data['attributes'] ?? null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
         );
     }
 
@@ -49,7 +49,7 @@ final readonly class DomainContactResponse implements ApiModel
         return Serializer::normalize([
             'contact_id' => $this->contactId,
             'contact_type' => $this->contactType,
-            'attributes' => $this->attributes,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
         ]);
     }
 

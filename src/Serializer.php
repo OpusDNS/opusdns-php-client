@@ -13,6 +13,7 @@ final class Serializer
 {
     /**
      * Recursively converts models, enums and dates to JSON-ready values. Null entries of objects are dropped.
+     * An empty stdClass passes through and encodes as an empty JSON object.
      */
     public static function normalize(mixed $value): mixed
     {
@@ -25,7 +26,7 @@ final class Serializer
         if ($value instanceof \DateTimeInterface) {
             return self::dateTime($value);
         }
-        if ($value instanceof StreamInterface || is_resource($value)) {
+        if ($value instanceof StreamInterface || $value instanceof \stdClass || is_resource($value)) {
             return $value;
         }
         if (is_array($value)) {

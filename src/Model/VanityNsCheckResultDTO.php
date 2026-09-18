@@ -56,7 +56,7 @@ final readonly class VanityNsCheckResultDTO implements ApiModel
             severity: VanityNsCheckSeverity::from($data['severity']),
             source: VanityNsCheckSource::from($data['source']),
             status: VanityNsCheckStatus::from($data['status']),
-            observed: $data['observed'] ?? null,
+            observed: isset($data['observed']) ? (array) $data['observed'] : null,
             remediation: $data['remediation'] ?? null,
         );
     }
@@ -74,7 +74,7 @@ final readonly class VanityNsCheckResultDTO implements ApiModel
             'severity' => $this->severity,
             'source' => $this->source,
             'status' => $this->status,
-            'observed' => $this->observed,
+            'observed' => $this->observed === null ? null : ($this->observed === [] ? new \stdClass() : $this->observed),
             'remediation' => $this->remediation,
         ]);
     }

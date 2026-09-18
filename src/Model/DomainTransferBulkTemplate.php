@@ -67,8 +67,8 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
     {
         return new self(
             renewalMode: RenewalMode::from($data['renewal_mode']),
-            attributes: $data['attributes'] ?? null,
-            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), $data['contacts']) : null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
+            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']) : null,
             createZone: $data['create_zone'] ?? false,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
             period: isset($data['period']) ? DomainPeriod::fromArray($data['period']) : null,
@@ -82,8 +82,8 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
     {
         return Serializer::normalize([
             'renewal_mode' => $this->renewalMode,
-            'attributes' => $this->attributes,
-            'contacts' => $this->contacts,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
+            'contacts' => $this->contacts === null ? null : ($this->contacts === [] ? new \stdClass() : $this->contacts),
             'create_zone' => $this->createZone,
             'nameservers' => $this->nameservers,
             'period' => $this->period,

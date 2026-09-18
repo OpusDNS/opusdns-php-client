@@ -41,7 +41,7 @@ final readonly class Message implements ApiModel
             createdAt: new \DateTimeImmutable($data['created_at']),
             messageId: $data['message_id'],
             role: MessageRole::from($data['role']),
-            metadata: $data['metadata'] ?? null,
+            metadata: isset($data['metadata']) ? (array) $data['metadata'] : null,
         );
     }
 
@@ -56,7 +56,7 @@ final readonly class Message implements ApiModel
             'created_at' => $this->createdAt,
             'message_id' => $this->messageId,
             'role' => $this->role,
-            'metadata' => $this->metadata,
+            'metadata' => $this->metadata === null ? null : ($this->metadata === [] ? new \stdClass() : $this->metadata),
         ]);
     }
 

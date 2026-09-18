@@ -35,7 +35,7 @@ final readonly class MessageCreateRequest implements ApiModel
         return new self(
             content: $data['content'],
             role: MessageRole::from($data['role']),
-            metadata: $data['metadata'] ?? null,
+            metadata: isset($data['metadata']) ? (array) $data['metadata'] : null,
             n8nHistoryId: $data['n8n_history_id'] ?? null,
         );
     }
@@ -48,7 +48,7 @@ final readonly class MessageCreateRequest implements ApiModel
         return Serializer::normalize([
             'content' => $this->content,
             'role' => $this->role,
-            'metadata' => $this->metadata,
+            'metadata' => $this->metadata === null ? null : ($this->metadata === [] ? new \stdClass() : $this->metadata),
             'n8n_history_id' => $this->n8nHistoryId,
         ]);
     }

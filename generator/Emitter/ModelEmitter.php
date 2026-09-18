@@ -186,25 +186,26 @@ final class ModelEmitter
         return "return new self(\n" . implode("\n", $lines) . "\n);";
     }
 
+    /**
+     * Maps are cast with (array) so that decoded objects, including the empty object toArray() emits for an
+     * empty map, hydrate back into arrays.
+     */
     private function hydration(ModelProperty $property): string
     {
         $access = "\$data['{$property->key}']";
         $type = $property->type;
         $fallback = $property->hasDefault && $property->default !== null ? Defaults::code($property->default) : null;
+        $isMap = $type->kind === PhpType::KIND_MAP;
+        $value = $type->hydrateExpr($isMap ? "(array) {$access}" : $access);
 
-        if (!$type->needsHydration()) {
-            if ($property->required && !$type->nullable && $fallback === null) {
-                return $access;
-            }
-
+        if ($property->required && !$type->nullable && $fallback === null) {
+            return $value;
+        }
+        if (!$type->needsHydration() && !$isMap) {
             return $access . ' ?? ' . ($fallback ?? 'null');
         }
 
-        if ($property->required && !$type->nullable && $fallback === null) {
-            return $type->hydrateExpr($access);
-        }
-
-        return "isset({$access}) ? " . $type->hydrateExpr($access) . ' : ' . ($fallback ?? 'null');
+        return "isset({$access}) ? {$value} : " . ($fallback ?? 'null');
     }
 
     /** @param list<ModelProperty> $properties */

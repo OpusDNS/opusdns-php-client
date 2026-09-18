@@ -48,7 +48,7 @@ final readonly class Conversation implements ApiModel
             userId: $data['user_id'],
             lastMessageAt: isset($data['last_message_at']) ? new \DateTimeImmutable($data['last_message_at']) : null,
             messageCount: $data['message_count'] ?? 0,
-            metadata: $data['metadata'] ?? null,
+            metadata: isset($data['metadata']) ? (array) $data['metadata'] : null,
             summary: $data['summary'] ?? null,
             title: $data['title'] ?? null,
         );
@@ -67,7 +67,7 @@ final readonly class Conversation implements ApiModel
             'user_id' => $this->userId,
             'last_message_at' => $this->lastMessageAt,
             'message_count' => $this->messageCount,
-            'metadata' => $this->metadata,
+            'metadata' => $this->metadata === null ? null : ($this->metadata === [] ? new \stdClass() : $this->metadata),
             'summary' => $this->summary,
             'title' => $this->title,
         ]);

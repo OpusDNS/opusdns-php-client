@@ -175,15 +175,16 @@ final class TypeResolver
         );
     }
 
-    /** @param array<string, mixed> $schema */
+    /**
+     * An empty map serializes as an empty object, since an empty PHP array would encode as a JSON list.
+     *
+     * @param array<string, mixed> $schema
+     */
     private function resolveObject(array $schema): PhpType
     {
-        if (!empty($schema['properties'])) {
-            return new PhpType('array', 'array<string, mixed>', 'array', PhpType::KIND_MAP, closureReturn: 'array');
-        }
-
         $additional = $schema['additionalProperties'] ?? true;
-        $values = is_array($additional) && $additional !== [] ? $this->resolve($additional) : PhpType::mixed();
+        $values = empty($schema['properties']) && is_array($additional) && $additional !== [] ? $this->resolve($additional) : PhpType::mixed();
+        $dehydrateValues = $this->collectionDehydrator($values, 'value');
 
         return new PhpType(
             'array',
@@ -193,7 +194,7 @@ final class TypeResolver
             hydrate: $this->collectionHydrator($values, 'value'),
             uses: $values->uses,
             closureReturn: 'array',
-            dehydrate: $this->collectionDehydrator($values, 'value'),
+            dehydrate: static fn (string $expr): string => "({$expr} === [] ? new \\stdClass() : " . ($dehydrateValues === null ? $expr : $dehydrateValues($expr)) . ')',
         );
     }
 

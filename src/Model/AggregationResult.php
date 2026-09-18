@@ -41,7 +41,7 @@ final readonly class AggregationResult implements ApiModel
             otherCount: $data['other_count'] ?? null,
             rows: isset($data['rows']) ? array_map(static fn (array $item): AggregationRow => AggregationRow::fromArray($item), $data['rows']) : null,
             value: $data['value'] ?? null,
-            values: $data['values'] ?? null,
+            values: isset($data['values']) ? (array) $data['values'] : null,
         );
     }
 
@@ -57,7 +57,7 @@ final readonly class AggregationResult implements ApiModel
             'other_count' => $this->otherCount,
             'rows' => $this->rows,
             'value' => $this->value,
-            'values' => $this->values,
+            'values' => $this->values === null ? null : ($this->values === [] ? new \stdClass() : $this->values),
         ]);
     }
 

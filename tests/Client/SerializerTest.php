@@ -34,7 +34,14 @@ final class SerializerTest extends TestCase
     public function testNormalizeRejectsUnknownObjects(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        Serializer::normalize(new \stdClass());
+        Serializer::normalize(new \DateTimeZone('UTC'));
+    }
+
+    public function testNormalizePassesEmptyObjectsThrough(): void
+    {
+        $normalized = Serializer::normalize(['map' => new \stdClass(), 'list' => []]);
+
+        self::assertSame('{"map":{},"list":[]}', json_encode($normalized, JSON_THROW_ON_ERROR));
     }
 
     public function testQueryAndPath(): void

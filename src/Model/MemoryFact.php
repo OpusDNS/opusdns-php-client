@@ -45,7 +45,7 @@ final readonly class MemoryFact implements ApiModel
             organizationId: $data['organization_id'],
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
-            value: $data['value'] ?? null,
+            value: isset($data['value']) ? (array) $data['value'] : null,
         );
     }
 
@@ -62,7 +62,7 @@ final readonly class MemoryFact implements ApiModel
             'organization_id' => $this->organizationId,
             'updated_at' => $this->updatedAt,
             'expires_at' => $this->expiresAt,
-            'value' => $this->value,
+            'value' => $this->value === null ? null : ($this->value === [] ? new \stdClass() : $this->value),
         ]);
     }
 

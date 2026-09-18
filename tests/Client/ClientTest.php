@@ -22,6 +22,7 @@ use OpusDNS\Client\Exception\ServerException;
 use OpusDNS\Client\Exception\UnauthorizedException;
 use OpusDNS\Client\Exception\ValidationException;
 use OpusDNS\Client\Model\DnsZoneCreate;
+use OpusDNS\Client\Model\DomainUpdate;
 use OpusDNS\Client\Tests\Support\ClientFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -111,6 +112,9 @@ final class ClientTest extends TestCase
 
         $client->request('POST', Endpoint::DNS, body: []);
         self::assertSame('[]', (string) $http->lastRequest()->getBody());
+
+        $client->request('PATCH', Endpoint::DOMAINS_BY_DOMAIN_REFERENCE, path: ['domain_reference' => 'example.com'], body: new DomainUpdate(attributes: []));
+        self::assertSame('{"attributes":{}}', (string) $http->lastRequest()->getBody());
     }
 
     public function testEncodesFormAndMultipartBodies(): void

@@ -71,9 +71,9 @@ final readonly class DomainUpdatePayloadData implements ApiModel
     {
         return new self(
             domainId: $data['domain_id'],
-            attributes: $data['attributes'] ?? null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
             authCode: $data['auth_code'] ?? null,
-            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), $data['contacts']) : null,
+            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']) : null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
             renewalMode: isset($data['renewal_mode']) ? RenewalMode::from($data['renewal_mode']) : null,
             statusChanges: isset($data['status_changes']) ? StatusChanges::fromArray($data['status_changes']) : null,
@@ -88,9 +88,9 @@ final readonly class DomainUpdatePayloadData implements ApiModel
     {
         return Serializer::normalize([
             'domain_id' => $this->domainId,
-            'attributes' => $this->attributes,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
             'auth_code' => $this->authCode,
-            'contacts' => $this->contacts,
+            'contacts' => $this->contacts === null ? null : ($this->contacts === [] ? new \stdClass() : $this->contacts),
             'nameservers' => $this->nameservers,
             'renewal_mode' => $this->renewalMode,
             'status_changes' => $this->statusChanges,

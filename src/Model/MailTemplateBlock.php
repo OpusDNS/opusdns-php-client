@@ -34,7 +34,7 @@ final readonly class MailTemplateBlock implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            default: $data['default'] ?? null,
+            default: isset($data['default']) ? (array) $data['default'] : null,
             label: $data['label'] ?? '',
             maxLen: $data['max_len'] ?? 0,
             multiline: $data['multiline'] ?? false,
@@ -47,7 +47,7 @@ final readonly class MailTemplateBlock implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'default' => $this->default,
+            'default' => $this->default === null ? null : ($this->default === [] ? new \stdClass() : $this->default),
             'label' => $this->label,
             'max_len' => $this->maxLen,
             'multiline' => $this->multiline,

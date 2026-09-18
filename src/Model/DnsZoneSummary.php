@@ -31,7 +31,7 @@ final readonly class DnsZoneSummary implements ApiModel
     {
         return new self(
             totalZones: $data['total_zones'],
-            zonesByDnssec: $data['zones_by_dnssec'] ?? null,
+            zonesByDnssec: isset($data['zones_by_dnssec']) ? (array) $data['zones_by_dnssec'] : null,
         );
     }
 
@@ -42,7 +42,7 @@ final readonly class DnsZoneSummary implements ApiModel
     {
         return Serializer::normalize([
             'total_zones' => $this->totalZones,
-            'zones_by_dnssec' => $this->zonesByDnssec,
+            'zones_by_dnssec' => $this->zonesByDnssec === null ? null : ($this->zonesByDnssec === [] ? new \stdClass() : $this->zonesByDnssec),
         ]);
     }
 

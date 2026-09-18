@@ -36,7 +36,7 @@ final readonly class ValidationError implements ApiModel
             loc: $data['loc'],
             msg: $data['msg'],
             type: $data['type'],
-            ctx: $data['ctx'] ?? null,
+            ctx: isset($data['ctx']) ? (array) $data['ctx'] : null,
             input: $data['input'] ?? null,
         );
     }
@@ -50,7 +50,7 @@ final readonly class ValidationError implements ApiModel
             'loc' => $this->loc,
             'msg' => $this->msg,
             'type' => $this->type,
-            'ctx' => $this->ctx,
+            'ctx' => $this->ctx === null ? null : ($this->ctx === [] ? new \stdClass() : $this->ctx),
             'input' => $this->input,
         ]);
     }

@@ -36,7 +36,7 @@ final readonly class MemoryFactCreateRequest implements ApiModel
             key: $data['key'],
             kind: MemoryFactKind::from($data['kind']),
             ttlSeconds: $data['ttl_seconds'] ?? null,
-            value: $data['value'] ?? null,
+            value: isset($data['value']) ? (array) $data['value'] : null,
         );
     }
 
@@ -49,7 +49,7 @@ final readonly class MemoryFactCreateRequest implements ApiModel
             'key' => $this->key,
             'kind' => $this->kind,
             'ttl_seconds' => $this->ttlSeconds,
-            'value' => $this->value,
+            'value' => $this->value === null ? null : ($this->value === [] ? new \stdClass() : $this->value),
         ]);
     }
 

@@ -75,9 +75,9 @@ final readonly class DomainTransferIn implements ApiModel
         return new self(
             name: $data['name'],
             renewalMode: RenewalMode::from($data['renewal_mode']),
-            attributes: $data['attributes'] ?? null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
             authCode: $data['auth_code'] ?? null,
-            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), $data['contacts']) : null,
+            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']) : null,
             createZone: $data['create_zone'] ?? false,
             expectedPrice: $data['expected_price'] ?? null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
@@ -93,9 +93,9 @@ final readonly class DomainTransferIn implements ApiModel
         return Serializer::normalize([
             'name' => $this->name,
             'renewal_mode' => $this->renewalMode,
-            'attributes' => $this->attributes,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
             'auth_code' => $this->authCode,
-            'contacts' => $this->contacts,
+            'contacts' => $this->contacts === null ? null : ($this->contacts === [] ? new \stdClass() : $this->contacts),
             'create_zone' => $this->createZone,
             'expected_price' => $this->expectedPrice,
             'nameservers' => $this->nameservers,

@@ -29,7 +29,7 @@ final readonly class ConversationCreateRequest implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            metadata: $data['metadata'] ?? null,
+            metadata: isset($data['metadata']) ? (array) $data['metadata'] : null,
             title: $data['title'] ?? null,
         );
     }
@@ -40,7 +40,7 @@ final readonly class ConversationCreateRequest implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'metadata' => $this->metadata,
+            'metadata' => $this->metadata === null ? null : ($this->metadata === [] ? new \stdClass() : $this->metadata),
             'title' => $this->title,
         ]);
     }

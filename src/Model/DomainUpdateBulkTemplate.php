@@ -66,8 +66,8 @@ final readonly class DomainUpdateBulkTemplate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            attributes: $data['attributes'] ?? null,
-            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), $data['contacts']) : null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
+            contacts: isset($data['contacts']) ? array_map(static fn (array $value): array => array_map(static fn (array $item): ContactHandle => ContactHandle::fromArray($item), $value), (array) $data['contacts']) : null,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
             renewalMode: isset($data['renewal_mode']) ? RenewalMode::from($data['renewal_mode']) : null,
             statusChanges: isset($data['status_changes']) ? StatusChanges::fromArray($data['status_changes']) : null,
@@ -81,8 +81,8 @@ final readonly class DomainUpdateBulkTemplate implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'attributes' => $this->attributes,
-            'contacts' => $this->contacts,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
+            'contacts' => $this->contacts === null ? null : ($this->contacts === [] ? new \stdClass() : $this->contacts),
             'nameservers' => $this->nameservers,
             'renewal_mode' => $this->renewalMode,
             'status_changes' => $this->statusChanges,

@@ -39,7 +39,7 @@ final readonly class EmailForwardMetrics implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            byStatus: $data['by_status'],
+            byStatus: (array) $data['by_status'],
             filters: EmailForwardMetricsFilters::fromArray($data['filters']),
             rates: EmailForwardMetricsRates::fromArray($data['rates']),
             totalLogs: $data['total_logs'],
@@ -54,7 +54,7 @@ final readonly class EmailForwardMetrics implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'by_status' => $this->byStatus,
+            'by_status' => ($this->byStatus === [] ? new \stdClass() : $this->byStatus),
             'filters' => $this->filters,
             'rates' => $this->rates,
             'total_logs' => $this->totalLogs,

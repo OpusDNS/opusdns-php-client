@@ -163,7 +163,7 @@ is a backed `enum` in `OpusDNS\Client\Enum`.
   Date-only fields are `\DateTimeImmutable` objects at midnight UTC and are sent as `YYYY-MM-DD`, whatever the
   process timezone.
 - Nested objects are models, lists are PHP lists and maps are string-keyed arrays, all documented with generic
-  types in the constructor docblock.
+  types in the constructor docblock. An empty map is sent as `{}`.
 - Schemas that are a union of objects become PHP union types. The client resolves them with the discriminator the
   specification declares, or by matching required keys when there is none.
 

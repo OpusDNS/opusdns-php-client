@@ -101,6 +101,8 @@ final class GeneratorTest extends TestCase
         self::assertStringContainsString('public array $tags = [],', $pet);
         self::assertStringContainsString('public ?FixtureOwner $owner = null,', $pet);
         self::assertStringContainsString('public ?array $attributes = null,', $pet);
+        self::assertStringContainsString("attributes: isset(\$data['attributes']) ? (array) \$data['attributes'] : null,", $pet);
+        self::assertStringContainsString("'attributes' => \$this->attributes === null ? null : (\$this->attributes === [] ? new \\stdClass() : \$this->attributes),", $pet);
         self::assertStringContainsString("public string \$kind = 'pet',", $pet);
         self::assertStringContainsString('public FixtureRedirectCode $redirectCode = FixtureRedirectCode::_301,', $pet);
         self::assertStringContainsString('public FixtureAdoptedEvent|FixtureLostEvent|null $event = null,', $pet);
@@ -182,6 +184,24 @@ final class GeneratorTest extends TestCase
         self::assertSame('Rex', $page->results()[0]->name);
         self::assertSame(1, $page->pagination()->totalItems);
         self::assertFalse($page->pagination()->hasNextPage);
+    }
+
+    public function testEmptyMapsSerializeAsJsonObjects(): void
+    {
+        $class = 'OpusDNS\\Client\\Model\\FixturePet';
+        $base = ['id' => 'x', 'name' => 'x', 'status' => 'available', 'created_on' => '2026-01-01T00:00:00Z', 'weight' => 1];
+
+        $pet = $class::fromArray($base + ['attributes' => []]);
+        self::assertSame([], $pet->attributes);
+        self::assertInstanceOf(\stdClass::class, $pet->toArray()['attributes']);
+        self::assertStringContainsString('"attributes":{}', json_encode($pet, JSON_THROW_ON_ERROR));
+        self::assertSame([], $class::fromArray($pet->toArray())->attributes);
+
+        $pet = $class::fromArray($base + ['attributes' => (object) ['colour' => 'brown']]);
+        self::assertSame(['colour' => 'brown'], $pet->attributes);
+        self::assertSame(['colour' => 'brown'], $pet->toArray()['attributes']);
+
+        self::assertArrayNotHasKey('attributes', $class::fromArray($base)->toArray());
     }
 
     public function testDateOnlyFieldsKeepTheirDayInAnyTimezone(): void

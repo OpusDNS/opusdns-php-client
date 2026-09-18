@@ -32,7 +32,7 @@ final readonly class ContactAttributeSetCreate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            attributes: $data['attributes'],
+            attributes: (array) $data['attributes'],
             label: $data['label'],
             tld: $data['tld'],
         );
@@ -44,7 +44,7 @@ final readonly class ContactAttributeSetCreate implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'attributes' => $this->attributes,
+            'attributes' => ($this->attributes === [] ? new \stdClass() : $this->attributes),
             'label' => $this->label,
             'tld' => $this->tld,
         ]);

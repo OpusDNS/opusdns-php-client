@@ -62,8 +62,8 @@ final readonly class RequestHistory implements ApiModel
             statusCode: $data['status_code'],
             performedById: $data['performed_by_id'] ?? null,
             performedByType: isset($data['performed_by_type']) ? ExecutingEntity::from($data['performed_by_type']) : null,
-            requestBody: $data['request_body'] ?? null,
-            responseBody: $data['response_body'] ?? null,
+            requestBody: isset($data['request_body']) ? (array) $data['request_body'] : null,
+            responseBody: isset($data['response_body']) ? (array) $data['response_body'] : null,
         );
     }
 
@@ -83,8 +83,8 @@ final readonly class RequestHistory implements ApiModel
             'status_code' => $this->statusCode,
             'performed_by_id' => $this->performedById,
             'performed_by_type' => $this->performedByType,
-            'request_body' => $this->requestBody,
-            'response_body' => $this->responseBody,
+            'request_body' => $this->requestBody === null ? null : ($this->requestBody === [] ? new \stdClass() : $this->requestBody),
+            'response_body' => $this->responseBody === null ? null : ($this->responseBody === [] ? new \stdClass() : $this->responseBody),
         ]);
     }
 

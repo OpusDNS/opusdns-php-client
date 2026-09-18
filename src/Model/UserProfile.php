@@ -65,7 +65,7 @@ final readonly class UserProfile implements ApiModel
             phone: $data['phone'] ?? null,
             role: isset($data['role']) ? PublicRole::tryFrom($data['role']) ?? $data['role'] : null,
             updatedOn: isset($data['updated_on']) ? new \DateTimeImmutable($data['updated_on']) : null,
-            userAttributes: $data['user_attributes'] ?? null,
+            userAttributes: isset($data['user_attributes']) ? (array) $data['user_attributes'] : null,
             userId: $data['user_id'] ?? null,
         );
     }
@@ -88,7 +88,7 @@ final readonly class UserProfile implements ApiModel
             'phone' => $this->phone,
             'role' => $this->role,
             'updated_on' => $this->updatedOn,
-            'user_attributes' => $this->userAttributes,
+            'user_attributes' => $this->userAttributes === null ? null : ($this->userAttributes === [] ? new \stdClass() : $this->userAttributes),
             'user_id' => $this->userId,
         ]);
     }

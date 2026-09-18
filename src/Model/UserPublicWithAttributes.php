@@ -56,7 +56,7 @@ final readonly class UserPublicWithAttributes implements ApiModel
             organizationId: $data['organization_id'] ?? 'None',
             phone: $data['phone'] ?? null,
             updatedOn: isset($data['updated_on']) ? new \DateTimeImmutable($data['updated_on']) : null,
-            userAttributes: $data['user_attributes'] ?? null,
+            userAttributes: isset($data['user_attributes']) ? (array) $data['user_attributes'] : null,
             userId: $data['user_id'] ?? null,
         );
     }
@@ -76,7 +76,7 @@ final readonly class UserPublicWithAttributes implements ApiModel
             'organization_id' => $this->organizationId,
             'phone' => $this->phone,
             'updated_on' => $this->updatedOn,
-            'user_attributes' => $this->userAttributes,
+            'user_attributes' => $this->userAttributes === null ? null : ($this->userAttributes === [] ? new \stdClass() : $this->userAttributes),
             'user_id' => $this->userId,
         ]);
     }

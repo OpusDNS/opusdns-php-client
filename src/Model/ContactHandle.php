@@ -31,7 +31,7 @@ final readonly class ContactHandle implements ApiModel
     {
         return new self(
             contactId: $data['contact_id'],
-            attributes: $data['attributes'] ?? null,
+            attributes: isset($data['attributes']) ? (array) $data['attributes'] : null,
         );
     }
 
@@ -42,7 +42,7 @@ final readonly class ContactHandle implements ApiModel
     {
         return Serializer::normalize([
             'contact_id' => $this->contactId,
-            'attributes' => $this->attributes,
+            'attributes' => $this->attributes === null ? null : ($this->attributes === [] ? new \stdClass() : $this->attributes),
         ]);
     }
 

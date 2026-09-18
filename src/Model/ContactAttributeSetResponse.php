@@ -43,7 +43,7 @@ final readonly class ContactAttributeSetResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            attributes: $data['attributes'],
+            attributes: (array) $data['attributes'],
             contactAttributeSetId: $data['contact_attribute_set_id'],
             createdOn: new \DateTimeImmutable($data['created_on']),
             label: $data['label'],
@@ -60,7 +60,7 @@ final readonly class ContactAttributeSetResponse implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'attributes' => $this->attributes,
+            'attributes' => ($this->attributes === [] ? new \stdClass() : $this->attributes),
             'contact_attribute_set_id' => $this->contactAttributeSetId,
             'created_on' => $this->createdOn,
             'label' => $this->label,

@@ -32,7 +32,7 @@ final readonly class Content implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            emailBlocks: $data['email_blocks'] ?? null,
+            emailBlocks: isset($data['email_blocks']) ? (array) $data['email_blocks'] : null,
             footer: isset($data['footer']) ? Footer::fromArray($data['footer']) : null,
             legal: isset($data['legal']) ? Legal::fromArray($data['legal']) : null,
             signature: $data['signature'] ?? null,
@@ -46,7 +46,7 @@ final readonly class Content implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'email_blocks' => $this->emailBlocks,
+            'email_blocks' => $this->emailBlocks === null ? null : ($this->emailBlocks === [] ? new \stdClass() : $this->emailBlocks),
             'footer' => $this->footer,
             'legal' => $this->legal,
             'signature' => $this->signature,

@@ -36,7 +36,7 @@ final readonly class DomainStatusesBase implements ApiModel
         return new self(
             default: $data['default'],
             supportedStatuses: $data['supported_statuses'],
-            statusMapping: isset($data['status_mapping']) ? array_map(static fn (array $value): array => array_map(static fn (string $item): DomainStatus => DomainStatus::from($item), $value), $data['status_mapping']) : null,
+            statusMapping: isset($data['status_mapping']) ? array_map(static fn (array $value): array => array_map(static fn (string $item): DomainStatus => DomainStatus::from($item), $value), (array) $data['status_mapping']) : null,
         );
     }
 
@@ -48,7 +48,7 @@ final readonly class DomainStatusesBase implements ApiModel
         return Serializer::normalize([
             'default' => $this->default,
             'supported_statuses' => $this->supportedStatuses,
-            'status_mapping' => $this->statusMapping,
+            'status_mapping' => $this->statusMapping === null ? null : ($this->statusMapping === [] ? new \stdClass() : $this->statusMapping),
         ]);
     }
 

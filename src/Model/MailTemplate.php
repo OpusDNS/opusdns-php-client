@@ -44,12 +44,12 @@ final readonly class MailTemplate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            blocks: isset($data['blocks']) ? array_map(static fn (array $value): MailTemplateBlock => MailTemplateBlock::fromArray($value), $data['blocks']) : null,
+            blocks: isset($data['blocks']) ? array_map(static fn (array $value): MailTemplateBlock => MailTemplateBlock::fromArray($value), (array) $data['blocks']) : null,
             category: isset($data['category']) ? MailTemplateCategory::from($data['category']) : MailTemplateCategory::UNKNOWN,
             label: $data['label'] ?? '',
             locales: $data['locales'] ?? null,
-            subject: $data['subject'] ?? null,
-            variables: isset($data['variables']) ? array_map(static fn (array $value): MailTemplateVariable => MailTemplateVariable::fromArray($value), $data['variables']) : null,
+            subject: isset($data['subject']) ? (array) $data['subject'] : null,
+            variables: isset($data['variables']) ? array_map(static fn (array $value): MailTemplateVariable => MailTemplateVariable::fromArray($value), (array) $data['variables']) : null,
             version: $data['version'] ?? '',
         );
     }
@@ -60,12 +60,12 @@ final readonly class MailTemplate implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'blocks' => $this->blocks,
+            'blocks' => $this->blocks === null ? null : ($this->blocks === [] ? new \stdClass() : $this->blocks),
             'category' => $this->category,
             'label' => $this->label,
             'locales' => $this->locales,
-            'subject' => $this->subject,
-            'variables' => $this->variables,
+            'subject' => $this->subject === null ? null : ($this->subject === [] ? new \stdClass() : $this->subject),
+            'variables' => $this->variables === null ? null : ($this->variables === [] ? new \stdClass() : $this->variables),
             'version' => $this->version,
         ]);
     }
