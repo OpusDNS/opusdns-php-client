@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OpusDNS\Client\Tests\Client;
 
+use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\Psr7\Utils;
 use OpusDNS\Client\Enum\DnssecStatus;
 use OpusDNS\Client\Model\DnsZoneCreate;
 use OpusDNS\Client\Serializer;
@@ -65,6 +67,18 @@ final class SerializerTest extends TestCase
 
         $this->expectException(\UnexpectedValueException::class);
         Serializer::parseDate('2026-09-01T00:00:00Z');
+    }
+
+    public function testMultipartEncodesQuotesAndLineBreaksInNames(): void
+    {
+        $stream = new Stream(Utils::tryFopen('php://memory', 'r+'), ['metadata' => ['uri' => "logo \"final\"\r\n.svg"]]);
+        $stream->write('SVGDATA');
+
+        [$body] = Serializer::multipart(['attachment "one"' => $stream, "note\nline" => 'x']);
+
+        self::assertStringContainsString('Content-Disposition: form-data; name="attachment %22one%22"; filename="logo %22final%22%0D%0A.svg"', $body);
+        self::assertStringContainsString('Content-Disposition: form-data; name="note%0Aline"', $body);
+        self::assertStringContainsString("SVGDATA\r\n", $body);
     }
 
     public function testQueryRejectsNestedArrays(): void

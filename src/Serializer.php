@@ -118,6 +118,7 @@ final class Serializer
         $body = '';
         foreach ($fields as $name => $value) {
             $body .= "--{$boundary}\r\n";
+            $fieldName = self::multipartQuoted((string) $name);
             if ($value instanceof StreamInterface || is_resource($value)) {
                 if ($value instanceof StreamInterface) {
                     $content = (string) $value;
@@ -126,16 +127,22 @@ final class Serializer
                     $content = (string) stream_get_contents($value);
                     $uri = stream_get_meta_data($value)['uri'] ?? null;
                 }
-                $filename = basename(is_string($uri) && $uri !== '' ? $uri : (string) $name);
-                $body .= "Content-Disposition: form-data; name=\"{$name}\"; filename=\"{$filename}\"\r\n";
+                $filename = self::multipartQuoted(basename(is_string($uri) && $uri !== '' ? $uri : (string) $name));
+                $body .= "Content-Disposition: form-data; name=\"{$fieldName}\"; filename=\"{$filename}\"\r\n";
                 $body .= "Content-Type: application/octet-stream\r\n\r\n{$content}\r\n";
             } else {
-                $body .= "Content-Disposition: form-data; name=\"{$name}\"\r\n\r\n" . self::scalar($value) . "\r\n";
+                $body .= "Content-Disposition: form-data; name=\"{$fieldName}\"\r\n\r\n" . self::scalar($value) . "\r\n";
             }
         }
         $body .= "--{$boundary}--\r\n";
 
         return [$body, "multipart/form-data; boundary={$boundary}"];
+    }
+
+    /** Percent-encodes the characters that cannot appear inside a quoted Content-Disposition parameter. */
+    private static function multipartQuoted(string $value): string
+    {
+        return strtr($value, ['"' => '%22', "\r" => '%0D', "\n" => '%0A']);
     }
 
     private static function scalar(mixed $value): string
