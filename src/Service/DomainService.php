@@ -281,7 +281,7 @@ final class DomainService
         $response = $this->client->request(
             'GET',
             Endpoint::DOMAINS_STATISTICS,
-            query: ['start_date' => $startDate, 'end_date' => $endDate, 'granularity' => $granularity, 'tld' => $tld, 'breakdown' => $breakdown, 'breakdown_limit' => $breakdownLimit],
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'granularity' => $granularity, 'tld' => $tld, 'breakdown' => $breakdown, 'breakdown_limit' => $breakdownLimit],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 

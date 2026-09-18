@@ -29,6 +29,13 @@ paths:
             anyOf:
               - {type: array, items: {type: string}}
               - {type: 'null'}
+        - name: born_after
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - {type: string, format: date}
+              - {type: 'null'}
       responses:
         '200':
           description: OK
@@ -103,6 +110,7 @@ components:
         name: {type: string, description: The pet's name}
         status: {$ref: '#/components/schemas/FixturePetStatus'}
         created_on: {type: string, format: date-time}
+        born_on: {type: string, format: date}
         nickname:
           anyOf: [{type: string}, {type: 'null'}]
         weight: {type: number}

@@ -34,9 +34,9 @@ final readonly class AiInferenceUsageSeriesResponse implements ApiModel
     {
         return new self(
             buckets: array_map(static fn (array $item): AiInferenceUsageBucket => AiInferenceUsageBucket::fromArray($item), $data['buckets']),
-            endDate: new \DateTimeImmutable($data['end_date']),
+            endDate: Serializer::parseDate($data['end_date']),
             granularity: UsageGranularity::from($data['granularity']),
-            startDate: new \DateTimeImmutable($data['start_date']),
+            startDate: Serializer::parseDate($data['start_date']),
             product: $data['product'] ?? 'ai_inference',
         );
     }
@@ -48,9 +48,9 @@ final readonly class AiInferenceUsageSeriesResponse implements ApiModel
     {
         return Serializer::normalize([
             'buckets' => $this->buckets,
-            'end_date' => $this->endDate,
+            'end_date' => $this->endDate->format('Y-m-d'),
             'granularity' => $this->granularity,
-            'start_date' => $this->startDate,
+            'start_date' => $this->startDate->format('Y-m-d'),
             'product' => $this->product,
         ]);
     }

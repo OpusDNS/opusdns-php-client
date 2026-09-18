@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OpusDNS\Client\Tests\Support;
 
-use OpusDNS\Client\Serializer;
 use OpusDNS\Generator\Spec;
 use OpusDNS\Generator\TypeResolver;
 
@@ -132,7 +131,7 @@ final class SampleFactory
             return [self::DATE_TIME, self::DATE_TIME];
         }
         if ($format === 'date') {
-            return [self::DATE, Serializer::dateTime(new \DateTimeImmutable(self::DATE))];
+            return [self::DATE, self::DATE];
         }
         if (isset($schema['enum']) && is_array($schema['enum'])) {
             $first = array_values(array_filter($schema['enum'], static fn (mixed $v): bool => $v !== null))[0] ?? 'text';

@@ -212,7 +212,7 @@ final class ModelEmitter
     {
         $lines = [];
         foreach ($properties as $property) {
-            $lines[] = "\t'{$property->key}' => \$this->{$property->name},";
+            $lines[] = "\t'{$property->key}' => " . $property->type->dehydrateExpr("\$this->{$property->name}") . ',';
         }
 
         return "return Serializer::normalize([\n" . implode("\n", $lines) . "\n]);";

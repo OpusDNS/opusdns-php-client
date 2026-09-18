@@ -48,10 +48,10 @@ final readonly class DomainStatisticsResponse implements ApiModel
         return new self(
             breakdown: array_map(static fn (array $item): DomainStatisticsBreakdownRowResponse => DomainStatisticsBreakdownRowResponse::fromArray($item), $data['breakdown']),
             buckets: array_map(static fn (array $item): DomainStatisticsBucketResponse => DomainStatisticsBucketResponse::fromArray($item), $data['buckets']),
-            endDate: new \DateTimeImmutable($data['end_date']),
+            endDate: Serializer::parseDate($data['end_date']),
             granularity: UsageGranularity::from($data['granularity']),
             organizationId: $data['organization_id'],
-            startDate: new \DateTimeImmutable($data['start_date']),
+            startDate: Serializer::parseDate($data['start_date']),
             totals: DomainStatisticsTotalsResponse::fromArray($data['totals']),
             dataAvailableFrom: isset($data['data_available_from']) ? new \DateTimeImmutable($data['data_available_from']) : null,
         );
@@ -65,10 +65,10 @@ final readonly class DomainStatisticsResponse implements ApiModel
         return Serializer::normalize([
             'breakdown' => $this->breakdown,
             'buckets' => $this->buckets,
-            'end_date' => $this->endDate,
+            'end_date' => $this->endDate->format('Y-m-d'),
             'granularity' => $this->granularity,
             'organization_id' => $this->organizationId,
-            'start_date' => $this->startDate,
+            'start_date' => $this->startDate->format('Y-m-d'),
             'totals' => $this->totals,
             'data_available_from' => $this->dataAvailableFrom,
         ]);

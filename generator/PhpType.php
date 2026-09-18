@@ -11,6 +11,7 @@ final class PhpType
 {
     public const KIND_SCALAR = 'scalar';
     public const KIND_DATE = 'date';
+    public const KIND_DATE_ONLY = 'date-only';
     public const KIND_ENUM = 'enum';
     public const KIND_MODEL = 'model';
     public const KIND_LIST = 'list';
@@ -25,6 +26,8 @@ final class PhpType
      * @param \Closure(string): string|null $hydrate Builds the expression that hydrates a decoded value
      * @param list<string> $uses Fully qualified class names the expressions rely on
      * @param string|null $closureReturn Short return type usable in array_map closures
+     * @param \Closure(string): string|null $dehydrate Builds the expression that serializes a value when
+     *     Serializer::normalize() cannot, for example dates without a time part
      */
     public function __construct(
         public readonly string $native,
@@ -36,6 +39,7 @@ final class PhpType
         public readonly array $uses = [],
         public readonly ?string $schemaName = null,
         public readonly ?string $closureReturn = null,
+        public readonly ?\Closure $dehydrate = null,
     ) {
     }
 
@@ -61,6 +65,7 @@ final class PhpType
             $this->uses,
             $this->schemaName,
             $this->closureReturn,
+            $this->dehydrate,
         );
     }
 
@@ -72,6 +77,22 @@ final class PhpType
     public function hydrateExpr(string $expr): string
     {
         return $this->hydrate === null ? $expr : ($this->hydrate)($expr);
+    }
+
+    public function needsDehydration(): bool
+    {
+        return $this->dehydrate !== null;
+    }
+
+    /** Serialization expression for a value; null-safe when the type is nullable. */
+    public function dehydrateExpr(string $expr): string
+    {
+        if ($this->dehydrate === null) {
+            return $expr;
+        }
+        $serialized = ($this->dehydrate)($expr);
+
+        return $this->nullable ? "{$expr} === null ? null : {$serialized}" : $serialized;
     }
 
     /** Type declaration including nullability, for parameters, properties and return types. */

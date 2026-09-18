@@ -56,6 +56,17 @@ final class Serializer
             ->format('Y-m-d\TH:i:s\Z');
     }
 
+    /** A calendar date such as "2026-09-01" as midnight UTC, independent of the process timezone. */
+    public static function parseDate(string $value): \DateTimeImmutable
+    {
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
+        if ($date === false || $date->format('Y-m-d') !== $value) {
+            throw new \UnexpectedValueException("Expected a date in Y-m-d form, got \"{$value}\"");
+        }
+
+        return $date;
+    }
+
     /**
      * Fills the {placeholders} of a path template.
      *

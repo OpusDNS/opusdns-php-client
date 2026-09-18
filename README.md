@@ -160,6 +160,8 @@ is a backed `enum` in `OpusDNS\Client\Enum`.
 - Enumerated fields are typed as enums, so `$domain->renewalMode === RenewalMode::EXPIRE` works and `match`
   expressions are exhaustive. A value the client does not know raises a `ValueError` on hydration.
 - Timestamps are `\DateTimeImmutable` objects; they are sent as UTC RFC 3339 strings with a `Z` suffix.
+  Date-only fields are `\DateTimeImmutable` objects at midnight UTC and are sent as `YYYY-MM-DD`, whatever the
+  process timezone.
 - Nested objects are models, lists are PHP lists and maps are string-keyed arrays, all documented with generic
   types in the constructor docblock.
 - Schemas that are a union of objects become PHP union types. The client resolves them with the discriminator the

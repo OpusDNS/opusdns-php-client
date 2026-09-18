@@ -93,6 +93,9 @@ final class GeneratorTest extends TestCase
         self::assertStringContainsString('public string $id,', $pet);
         self::assertStringContainsString('public FixturePetStatus $status,', $pet);
         self::assertStringContainsString('public \DateTimeImmutable $createdOn,', $pet);
+        self::assertStringContainsString('public ?\DateTimeImmutable $bornOn = null,', $pet);
+        self::assertStringContainsString("bornOn: isset(\$data['born_on']) ? Serializer::parseDate(\$data['born_on']) : null,", $pet);
+        self::assertStringContainsString("'born_on' => \$this->bornOn === null ? null : \$this->bornOn->format('Y-m-d'),", $pet);
         self::assertStringContainsString('public float $weight,', $pet);
         self::assertStringContainsString('public ?string $nickname = null,', $pet);
         self::assertStringContainsString('public array $tags = [],', $pet);
@@ -181,6 +184,23 @@ final class GeneratorTest extends TestCase
         self::assertFalse($page->pagination()->hasNextPage);
     }
 
+    public function testDateOnlyFieldsKeepTheirDayInAnyTimezone(): void
+    {
+        $class = 'OpusDNS\\Client\\Model\\FixturePet';
+        $previous = date_default_timezone_get();
+        date_default_timezone_set('Pacific/Kiritimati');
+        try {
+            $pet = $class::fromArray(['id' => 'x', 'name' => 'x', 'status' => 'available', 'created_on' => '2026-01-01T00:00:00Z', 'weight' => 1, 'born_on' => '2026-03-01']);
+
+            self::assertSame('2026-03-01', $pet->bornOn?->format('Y-m-d'));
+            self::assertSame('UTC', $pet->bornOn?->getTimezone()->getName());
+            self::assertSame('2026-03-01', $pet->toArray()['born_on']);
+            self::assertSame('2026-03-01', $class::fromArray($pet->toArray())->toArray()['born_on']);
+        } finally {
+            date_default_timezone_set($previous);
+        }
+    }
+
     public function testUnknownEnumValuesAreRejected(): void
     {
         $class = 'OpusDNS\\Client\\Model\\FixturePet';
@@ -200,11 +220,15 @@ final class GeneratorTest extends TestCase
     {
         $api = self::source('Service/PetService.php');
         self::assertStringContainsString('final class PetService', $api);
-        self::assertStringContainsString('public function listPets(int $page = 1, ?FixturePetStatus $status = null, ?array $tagIds = null): array', $api);
+        self::assertStringContainsString(
+            "public function listPets(\n        int \$page = 1,\n        ?FixturePetStatus \$status = null,\n        ?array \$tagIds = null,\n        ?\\DateTimeImmutable \$bornAfter = null,\n    ): array {",
+            $api,
+        );
         self::assertStringContainsString('@param list<string>|null $tagIds Filter by tag. Can be repeated.', $api);
         self::assertStringNotContainsString('@param FixturePetStatus|null $status', $api);
         self::assertStringContainsString('@return list<FixturePet>', $api);
-        self::assertStringContainsString("query: ['page' => \$page, 'status' => \$status, 'tag_ids' => \$tagIds]", $api);
+        self::assertStringContainsString("query: ['page' => \$page, 'status' => \$status, 'tag_ids' => \$tagIds, 'born_after' => \$bornAfter === null ? null : \$bornAfter->format('Y-m-d')]", $api);
+        self::assertStringNotContainsString('use OpusDNS\Client\Serializer;', $api);
         self::assertStringContainsString('array_map(static fn (array $item): FixturePet => FixturePet::fromArray($item), $this->client->decodeList($response))', $api);
         self::assertStringContainsString('public function createPet(FixturePetCreate|array $body): ?FixturePet', $api);
         self::assertStringContainsString('Required permissions: pets:write', $api);

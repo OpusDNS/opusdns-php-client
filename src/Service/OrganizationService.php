@@ -752,7 +752,7 @@ final class OrganizationService
             'GET',
             Endpoint::ORGANIZATIONS_BY_ORGANIZATION_ID_USAGE_BY_PRODUCT,
             path: ['organization_id' => $organizationId, 'product' => $product],
-            query: ['start_date' => $startDate, 'end_date' => $endDate, 'granularity' => $granularity],
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'granularity' => $granularity],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -784,7 +784,7 @@ final class OrganizationService
             'GET',
             Endpoint::ORGANIZATIONS_BY_ORGANIZATION_ID_USAGE_BY_PRODUCT_SUMMARY,
             path: ['organization_id' => $organizationId, 'product' => $product],
-            query: ['start_date' => $startDate, 'end_date' => $endDate],
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d')],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 

@@ -30,7 +30,7 @@ final readonly class AiInferenceUsageBucket implements ApiModel
     {
         return new self(
             groups: array_map(static fn (array $item): AiInferenceUsageGroup => AiInferenceUsageGroup::fromArray($item), $data['groups']),
-            periodStart: new \DateTimeImmutable($data['period_start']),
+            periodStart: Serializer::parseDate($data['period_start']),
         );
     }
 
@@ -41,7 +41,7 @@ final readonly class AiInferenceUsageBucket implements ApiModel
     {
         return Serializer::normalize([
             'groups' => $this->groups,
-            'period_start' => $this->periodStart,
+            'period_start' => $this->periodStart->format('Y-m-d'),
         ]);
     }
 

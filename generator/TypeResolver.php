@@ -16,6 +16,7 @@ final class TypeResolver
     public const MODEL_NAMESPACE = self::NAMESPACE . '\\Model';
     public const ENUM_NAMESPACE = self::NAMESPACE . '\\Enum';
     public const UNION_CLASS = self::NAMESPACE . '\\Union';
+    public const SERIALIZER_CLASS = self::NAMESPACE . '\\Serializer';
 
     /** @var array<string, string> */
     private array $classNames = [];
@@ -128,7 +129,7 @@ final class TypeResolver
     private function resolveString(array $schema): PhpType
     {
         $format = $schema['format'] ?? null;
-        if ($format === 'date-time' || $format === 'date') {
+        if ($format === 'date-time') {
             return new PhpType(
                 '\\DateTimeImmutable',
                 '\\DateTimeImmutable',
@@ -136,6 +137,18 @@ final class TypeResolver
                 PhpType::KIND_DATE,
                 hydrate: static fn (string $expr): string => "new \\DateTimeImmutable({$expr})",
                 closureReturn: '\\DateTimeImmutable',
+            );
+        }
+        if ($format === 'date') {
+            return new PhpType(
+                '\\DateTimeImmutable',
+                '\\DateTimeImmutable',
+                'string',
+                PhpType::KIND_DATE_ONLY,
+                hydrate: static fn (string $expr): string => "Serializer::parseDate({$expr})",
+                uses: [self::SERIALIZER_CLASS],
+                closureReturn: '\\DateTimeImmutable',
+                dehydrate: static fn (string $expr): string => "{$expr}->format('Y-m-d')",
             );
         }
         if ($format === 'binary') {
@@ -158,6 +171,7 @@ final class TypeResolver
             hydrate: $this->collectionHydrator($items, 'item'),
             uses: $items->uses,
             closureReturn: 'array',
+            dehydrate: $this->collectionDehydrator($items, 'item'),
         );
     }
 
@@ -179,7 +193,19 @@ final class TypeResolver
             hydrate: $this->collectionHydrator($values, 'value'),
             uses: $values->uses,
             closureReturn: 'array',
+            dehydrate: $this->collectionDehydrator($values, 'value'),
         );
+    }
+
+    /** @return \Closure(string): string|null */
+    private function collectionDehydrator(PhpType $element, string $variable): ?\Closure
+    {
+        if (!$element->needsDehydration()) {
+            return null;
+        }
+        $body = $element->dehydrateExpr("\${$variable}");
+
+        return static fn (string $expr): string => "array_map(static fn ({$element->declaration()} \${$variable}) => {$body}, {$expr})";
     }
 
     /** @return \Closure(string): string|null */

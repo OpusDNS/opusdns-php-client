@@ -140,7 +140,8 @@ final class ServiceEmitter
             if ($param->hasDefault) {
                 $parameter->setDefaultValue($param->default);
             }
-            FileFactory::addUses($namespace, [...$param->type->uses, ...$param->uses]);
+            $uses = array_filter($param->type->uses, static fn (string $use): bool => $use !== TypeResolver::SERIALIZER_CLASS);
+            FileFactory::addUses($namespace, [...$uses, ...$param->uses]);
         }
         FileFactory::addUses($namespace, $return->uses);
 
@@ -308,7 +309,7 @@ final class ServiceEmitter
     private function requestCall(Operation $operation, \Closure $byIn, ?MethodParam $body, ?string $accept): string
     {
         $pairs = static fn (array $params): string => '[' . implode(', ', array_map(
-            static fn (MethodParam $p): string => var_export($p->key, true) . " => \${$p->name}",
+            static fn (MethodParam $p): string => var_export($p->key, true) . ' => ' . $p->type->dehydrateExpr("\${$p->name}"),
             $params,
         )) . ']';
 

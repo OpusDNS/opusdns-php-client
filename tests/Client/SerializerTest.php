@@ -45,6 +45,21 @@ final class SerializerTest extends TestCase
         self::assertSame('/v1/x/enabled', Serializer::path('/v1/x/{s}', ['s' => DnssecStatus::ENABLED]));
     }
 
+    public function testParseDateIsStrictAndTimezoneIndependent(): void
+    {
+        $previous = date_default_timezone_get();
+        date_default_timezone_set('America/Los_Angeles');
+        try {
+            $date = Serializer::parseDate('2026-09-01');
+            self::assertSame('2026-09-01T00:00:00+00:00', $date->format(DATE_ATOM));
+        } finally {
+            date_default_timezone_set($previous);
+        }
+
+        $this->expectException(\UnexpectedValueException::class);
+        Serializer::parseDate('2026-09-01T00:00:00Z');
+    }
+
     public function testQueryRejectsNestedArrays(): void
     {
         $this->expectException(\InvalidArgumentException::class);
