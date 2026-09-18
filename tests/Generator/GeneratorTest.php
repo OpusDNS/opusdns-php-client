@@ -246,9 +246,10 @@ final class GeneratorTest extends TestCase
         $api = self::source('Service/PetService.php');
         self::assertStringContainsString('final class PetService', $api);
         self::assertStringContainsString(
-            "public function listPets(\n        int \$page = 1,\n        FixturePetStatus|string|null \$status = null,\n        ?array \$tagIds = null,\n        ?\\DateTimeImmutable \$bornAfter = null,\n    ): array {",
+            "public function listPets(\n        ?int \$page = null,\n        FixturePetStatus|string|null \$status = null,\n        ?array \$tagIds = null,\n        ?\\DateTimeImmutable \$bornAfter = null,\n    ): array {",
             $api,
         );
+        self::assertStringContainsString('@param int|null $page Server default: 1.', $api);
         self::assertStringContainsString('@param list<string>|null $tagIds Filter by tag. Can be repeated.', $api);
         self::assertStringNotContainsString('@param FixturePetStatus|string|null $status', $api);
         self::assertStringContainsString('@return list<FixturePet>', $api);

@@ -51,16 +51,20 @@ final class DomainForwardService
      *
      * Required permissions: domain_forwards:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param DomainForwardSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listDomainForwards(
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $search = null,
-        DomainForwardSortField|string $sortBy = DomainForwardSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        DomainForwardSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $xDatetimeFormat = null,
     ): PaginationDomainForward {
         $response = $this->client->request(
@@ -131,8 +135,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -141,8 +145,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardMetricsResponse {
         $response = $this->client->request(
@@ -164,8 +168,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -174,8 +178,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardBrowserStatsResponse {
         $response = $this->client->request(
@@ -196,8 +200,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -206,8 +210,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardGeoStatsResponse {
         $response = $this->client->request(
@@ -229,8 +233,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -239,8 +243,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardPlatformStatsResponse {
         $response = $this->client->request(
@@ -261,8 +265,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -271,8 +275,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardReferrerStatsResponse {
         $response = $this->client->request(
@@ -293,8 +297,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -303,8 +307,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardStatusCodeStatsResponse {
         $response = $this->client->request(
@@ -325,8 +329,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -335,8 +339,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardMetricsTimeSeriesResponse {
         $response = $this->client->request(
@@ -357,8 +361,8 @@ final class DomainForwardService
      * Required permissions: domain_forwards:read
      *
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -367,8 +371,8 @@ final class DomainForwardService
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardUserAgentStatsResponse {
         $response = $this->client->request(
@@ -389,21 +393,22 @@ final class DomainForwardService
      *
      * Required permissions: domain_forwards:read
      *
-     * @param MetricsGrouping|string $grouping Grouping key: url, fqdn, domain, forward, or rule
+     * @param MetricsGrouping|string|null $grouping Grouping key: url, fqdn, domain, forward, or rule Server default:
+     *     domain.
      * @param Protocol|string|null $protocol Filter by protocol: http or https
-     * @param TimeRange|string $timeRange Time range: 1h, 1d, 7d, 30d, or 1y
-     * @param bool $excludeBots Exclude platform values: Unknown, Bot
+     * @param TimeRange|string|null $timeRange Time range: 1h, 1d, 7d, 30d, or 1y Server default: 1d.
+     * @param bool|null $excludeBots Exclude platform values: Unknown, Bot Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function visitsByKey(
-        MetricsGrouping|string $grouping = MetricsGrouping::DOMAIN,
+        MetricsGrouping|string|null $grouping = null,
         ?string $hostname = null,
         ?string $domain = null,
         Protocol|string|null $protocol = null,
-        TimeRange|string $timeRange = TimeRange::_1D,
-        bool $excludeBots = false,
+        TimeRange|string|null $timeRange = null,
+        ?bool $excludeBots = null,
         ?string $xDatetimeFormat = null,
     ): DomainForwardVisitsByKeyResponse {
         $response = $this->client->request(

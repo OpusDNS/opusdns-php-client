@@ -72,9 +72,15 @@ final class DomainService
      *
      * Required permissions: domains:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param DomainSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param list<StatusTagType|string>|null $statusTags Filter by status tag types. Can be specified multiple
      *     times.
+     * @param TagFilterMode|string|null $statusTagMode Server default: match_any.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
+     * @param TagFilterMode|string|null $tagMode Server default: match_any.
      * @param list<string>|null $tld Filter by top-level domain (e.g., 'com', 'org'). Can be specified multiple times
      *     (union of all provided values).
      * @param list<string>|null $registryStatuses Filter domains by registry status. Can be specified multiple times
@@ -96,14 +102,14 @@ final class DomainService
      *     sent.
      */
     public function getDomains(
-        int $page = 1,
-        int $pageSize = 10,
-        DomainSortField|string $sortBy = DomainSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        DomainSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?array $statusTags = null,
-        TagFilterMode|string $statusTagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string|null $statusTagMode = null,
         ?array $tagIds = null,
-        TagFilterMode|string $tagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string|null $tagMode = null,
         ?string $name = null,
         ?string $search = null,
         ?array $tld = null,
@@ -266,6 +272,9 @@ final class DomainService
      *
      * Required permissions: domains:read
      *
+     * @param UsageGranularity|string|null $granularity Server default: day.
+     * @param DomainStatisticsBreakdown|string|null $breakdown Server default: none.
+     * @param int|null $breakdownLimit Server default: 10.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -273,10 +282,10 @@ final class DomainService
     public function getDomainStatistics(
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
-        UsageGranularity|string $granularity = UsageGranularity::DAY,
+        UsageGranularity|string|null $granularity = null,
         ?string $tld = null,
-        DomainStatisticsBreakdown|string $breakdown = DomainStatisticsBreakdown::NONE,
-        int $breakdownLimit = 10,
+        DomainStatisticsBreakdown|string|null $breakdown = null,
+        ?int $breakdownLimit = null,
         ?string $xDatetimeFormat = null,
     ): DomainStatisticsResponse {
         $response = $this->client->request(

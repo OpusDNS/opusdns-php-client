@@ -48,7 +48,12 @@ final class DnsService
      *
      * Required permissions: dns:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param ZoneSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
+     * @param TagFilterMode|string|null $tagMode Server default: match_any.
      * @param list<ZoneIncludeField|string>|null $include Include additional data in the response. Can be specified
      *     multiple times.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -56,12 +61,12 @@ final class DnsService
      *     sent.
      */
     public function listZones(
-        int $page = 1,
-        int $pageSize = 10,
-        ZoneSortField|string $sortBy = ZoneSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ZoneSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?array $tagIds = null,
-        TagFilterMode|string $tagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string|null $tagMode = null,
         DnssecStatus|string|null $dnssecStatus = null,
         ?string $name = null,
         ?string $search = null,
@@ -113,16 +118,20 @@ final class DnsService
      *
      * Required permissions: dns:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param DomainForwardZoneSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listDomainForwardsByZone(
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $search = null,
-        DomainForwardZoneSortField|string $sortBy = DomainForwardZoneSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        DomainForwardZoneSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $xDatetimeFormat = null,
     ): PaginationDomainForwardZone {
         $response = $this->client->request(
@@ -142,16 +151,20 @@ final class DnsService
      *
      * Required permissions: dns:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param EmailForwardZoneSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listEmailForwardsByZone(
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $search = null,
-        EmailForwardZoneSortField|string $sortBy = EmailForwardZoneSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        EmailForwardZoneSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $xDatetimeFormat = null,
     ): PaginationEmailForwardZone {
         $response = $this->client->request(

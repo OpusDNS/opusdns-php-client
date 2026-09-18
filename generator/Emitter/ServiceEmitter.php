@@ -7,7 +7,6 @@ namespace OpusDNS\Generator\Emitter;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
-use OpusDNS\Generator\Defaults;
 use OpusDNS\Generator\Doc;
 use OpusDNS\Generator\FileFactory;
 use OpusDNS\Generator\Naming;
@@ -96,13 +95,13 @@ final class ServiceEmitter
             }
             $indexes = array_keys($names, $name, true);
             $segmentLists = array_map(
-                static fn (int $i): array => array_values(array_filter(explode('/', $operations[$i]->path), static fn (string $s): bool => $s !== '')),
+                static fn (int $index): array => array_values(array_filter(explode('/', $operations[$index]->path), static fn (string $segment): bool => $segment !== '')),
                 $indexes,
             );
             $common = array_intersect(...$segmentLists);
             foreach ($indexes as $position => $index) {
                 $distinct = array_diff($segmentLists[$position], $common);
-                $suffix = Naming::pascal(implode('-', array_map(static fn (string $s): string => trim($s, '{}'), $distinct)));
+                $suffix = Naming::pascal(implode('-', array_map(static fn (string $segment): string => trim($segment, '{}'), $distinct)));
                 $names[$index] = $name . ($suffix !== '' ? $suffix : ucfirst($operations[$index]->method));
             }
         }
@@ -124,7 +123,7 @@ final class ServiceEmitter
 
         $byIn = static fn (string $in, ?bool $required = null): array => array_values(array_filter(
             $params,
-            static fn (MethodParam $p): bool => $p->in === $in && ($required === null || $p->required === $required),
+            static fn (MethodParam $param): bool => $param->in === $in && ($required === null || $param->required === $required),
         ));
         $ordered = [
             ...$byIn(MethodParam::IN_PATH),
@@ -175,14 +174,12 @@ final class ServiceEmitter
                 continue;
             }
 
-            $required = (bool) ($raw['required'] ?? false);
-            [$hasDefault, $default] = $in === MethodParam::IN_QUERY ? Defaults::for($schema, $type, $this->types) : [false, null];
-            $nullable = $type->nullable || (!$required && !$hasDefault);
-            if (!$hasDefault && $nullable) {
-                $hasDefault = true;
-                $default = null;
+            $mandatory = (bool) ($raw['required'] ?? false) && !$type->nullable;
+            $default = $schema['default'] ?? null;
+            if (is_scalar($default)) {
+                $description = trim($description . ' Server default: ' . (is_bool($default) ? var_export($default, true) : (string) $default) . '.');
             }
-            $params[] = new MethodParam($phpName, $key, $in, $type->withNullable($nullable), $required && !$hasDefault, $hasDefault, $default, $description);
+            $params[] = new MethodParam($phpName, $key, $in, $type->withNullable(!$mandatory), $mandatory, !$mandatory, null, $description);
         }
 
         return $params;
@@ -243,7 +240,7 @@ final class ServiceEmitter
     private function returnSpec(Operation $operation): ReturnSpec
     {
         $responses = is_array($operation->raw['responses'] ?? null) ? $operation->raw['responses'] : [];
-        $codes = array_values(array_filter(array_map(strval(...), array_keys($responses)), static fn (string $c): bool => str_starts_with($c, '2')));
+        $codes = array_values(array_filter(array_map(strval(...), array_keys($responses)), static fn (string $code): bool => str_starts_with($code, '2')));
         sort($codes);
 
         $hasEmpty = false;
@@ -314,7 +311,7 @@ final class ServiceEmitter
     private function requestCall(Operation $operation, \Closure $byIn, ?MethodParam $body, ?string $accept): string
     {
         $pairs = static fn (array $params): string => '[' . implode(', ', array_map(
-            static fn (MethodParam $p): string => var_export($p->key, true) . ' => ' . $p->type->dehydrateExpr("\${$p->name}"),
+            static fn (MethodParam $param): string => var_export($param->key, true) . ' => ' . $param->type->dehydrateExpr("\${$param->name}"),
             $params,
         )) . ']';
 
@@ -329,7 +326,7 @@ final class ServiceEmitter
             $args[] = 'body: $body';
         }
         $headers = array_map(
-            static fn (MethodParam $p): string => var_export($p->key, true) . " => \${$p->name}",
+            static fn (MethodParam $param): string => var_export($param->key, true) . " => \${$param->name}",
             $byIn(MethodParam::IN_HEADER),
         );
         if ($accept !== null) {

@@ -36,20 +36,25 @@ final class EventService
      *
      * Required permissions: events:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param EventSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param bool|null $acknowledged Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getEvents(
-        int $page = 1,
-        int $pageSize = 10,
-        EventSortField|string $sortBy = EventSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        EventSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         EventObjectType|string|null $objectType = null,
         ?string $objectId = null,
         EventType|string|null $type = null,
         EventSubtype|string|null $subtype = null,
-        ?bool $acknowledged = false,
+        ?bool $acknowledged = null,
         ?string $xDatetimeFormat = null,
     ): PaginationEventResponse {
         $response = $this->client->request(

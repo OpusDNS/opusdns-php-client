@@ -175,11 +175,7 @@ final class TypeResolver
         );
     }
 
-    /**
-     * An empty map serializes as an empty object, since an empty PHP array would encode as a JSON list.
-     *
-     * @param array<string, mixed> $schema
-     */
+    /** @param array<string, mixed> $schema */
     private function resolveObject(array $schema): PhpType
     {
         $additional = $schema['additionalProperties'] ?? true;
@@ -309,15 +305,15 @@ final class TypeResolver
         }
 
         [$hydrate, $extraUses] = $this->unionHydrator($types, $discriminator);
-        $allModels = array_reduce($types, static fn (bool $c, PhpType $t): bool => $c && $t->kind === PhpType::KIND_MODEL, true);
+        $allModels = array_reduce($types, static fn (bool $allSoFar, PhpType $memberType): bool => $allSoFar && $memberType->kind === PhpType::KIND_MODEL, true);
         $uses = $extraUses;
         foreach ($types as $type) {
             $uses = [...$uses, ...$type->uses];
         }
 
         return new PhpType(
-            self::joinTypes(array_map(static fn (PhpType $t): string => $t->native, $types)),
-            self::joinTypes(array_map(static fn (PhpType $t): string => $t->doc, $types)),
+            self::joinTypes(array_map(static fn (PhpType $memberType): string => $memberType->native, $types)),
+            self::joinTypes(array_map(static fn (PhpType $memberType): string => $memberType->doc, $types)),
             $allModels ? 'array' : 'mixed',
             PhpType::KIND_UNION,
             $nullable,
@@ -364,9 +360,9 @@ final class TypeResolver
      */
     private function unionHydrator(array $types, ?array $discriminator): array
     {
-        $models = array_values(array_filter($types, static fn (PhpType $t): bool => $t->kind === PhpType::KIND_MODEL));
-        $enums = array_values(array_filter($types, static fn (PhpType $t): bool => $t->kind === PhpType::KIND_ENUM));
-        $others = array_values(array_filter($types, static fn (PhpType $t): bool => !in_array($t->kind, [PhpType::KIND_MODEL, PhpType::KIND_ENUM], true)));
+        $models = array_values(array_filter($types, static fn (PhpType $memberType): bool => $memberType->kind === PhpType::KIND_MODEL));
+        $enums = array_values(array_filter($types, static fn (PhpType $memberType): bool => $memberType->kind === PhpType::KIND_ENUM));
+        $others = array_values(array_filter($types, static fn (PhpType $memberType): bool => !in_array($memberType->kind, [PhpType::KIND_MODEL, PhpType::KIND_ENUM], true)));
 
         if (count($models) === count($types)) {
             if (isset($discriminator['propertyName'])) {
@@ -385,7 +381,7 @@ final class TypeResolver
                     array_keys($mapping),
                     $mapping,
                 ));
-                $expr = static fn (string $e): string => "Union::discriminate({$e}, " . var_export($property, true) . ", {$map})";
+                $expr = static fn (string $expr): string => "Union::discriminate({$expr}, " . var_export($property, true) . ", {$map})";
 
                 return [$expr, [self::UNION_CLASS]];
             }
@@ -394,24 +390,24 @@ final class TypeResolver
             foreach ($models as $model) {
                 $candidates[$model->shortName()] = array_values(array_map(strval(...), $this->spec->schema((string) $model->schemaName)['required'] ?? []));
             }
-            uasort($candidates, static fn (array $a, array $b): int => count($b) <=> count($a));
+            uasort($candidates, static fn (array $firstRequired, array $secondRequired): int => count($secondRequired) <=> count($firstRequired));
             $list = self::arrayLiteral(array_map(
-                static fn (string $class, array $required): string => "{$class}::class => [" . implode(', ', array_map(static fn (string $k): string => var_export($k, true), $required)) . ']',
+                static fn (string $class, array $required): string => "{$class}::class => [" . implode(', ', array_map(static fn (string $requiredKey): string => var_export($requiredKey, true), $required)) . ']',
                 array_keys($candidates),
                 $candidates,
             ));
 
-            return [static fn (string $e): string => "Union::hydrate({$e}, {$list})", [self::UNION_CLASS]];
+            return [static fn (string $expr): string => "Union::hydrate({$expr}, {$list})", [self::UNION_CLASS]];
         }
 
-        if (count($enums) === 1 && count($models) === 0 && array_reduce($others, static fn (bool $c, PhpType $t): bool => $c && in_array($t->native, ['string', 'int'], true), true)) {
+        if (count($enums) === 1 && count($models) === 0 && array_reduce($others, static fn (bool $allSoFar, PhpType $memberType): bool => $allSoFar && in_array($memberType->native, ['string', 'int'], true), true)) {
             return [$enums[0]->hydrate, []];
         }
 
         if (count($models) === 1 && count($enums) === 0) {
             $model = $models[0];
 
-            return [static fn (string $e): string => "is_array({$e}) ? {$model->hydrateExpr($e)} : {$e}", []];
+            return [static fn (string $expr): string => "is_array({$expr}) ? {$model->hydrateExpr($expr)} : {$expr}", []];
         }
 
         return [null, []];

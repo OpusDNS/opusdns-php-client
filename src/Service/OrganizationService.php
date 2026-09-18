@@ -59,15 +59,19 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param OrganizationSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listOrganizations(
-        int $page = 1,
-        int $pageSize = 10,
-        OrganizationSortField|string $sortBy = OrganizationSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        OrganizationSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $search = null,
         ?string $countryCode = null,
         ?string $xDatetimeFormat = null,
@@ -427,15 +431,19 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param UserSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listUsers(
-        int $page = 1,
-        int $pageSize = 10,
-        UserSortField|string $sortBy = UserSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        UserSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $search = null,
         ?string $xDatetimeFormat = null,
     ): PaginationUserPublicWithRole {
@@ -582,14 +590,16 @@ final class OrganizationService
      *
      * Required permissions: billing:manage
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listInvoices(
         string $organizationId,
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): PaginationInvoiceResponse {
         $response = $this->client->request(
@@ -610,14 +620,16 @@ final class OrganizationService
      *
      * Required permissions: billing:manage
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listReceipts(
         string $organizationId,
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): PaginationInvoiceResponse {
         $response = $this->client->request(
@@ -668,16 +680,20 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param BillingTransactionSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getTransactions(
         string $organizationId,
-        int $page = 1,
-        int $pageSize = 10,
-        BillingTransactionSortField|string $sortBy = BillingTransactionSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        BillingTransactionSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $productReference = null,
         BillingTransactionProductType|string|null $productType = null,
         BillingTransactionAction|string|null $action = null,
@@ -735,7 +751,7 @@ final class OrganizationService
      *
      * @param \DateTimeImmutable $startDate Inclusive start date (YYYY-MM-DD)
      * @param \DateTimeImmutable $endDate Inclusive end date (YYYY-MM-DD)
-     * @param UsageGranularity|string $granularity Time-bucket size
+     * @param UsageGranularity|string|null $granularity Time-bucket size Server default: day.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -745,7 +761,7 @@ final class OrganizationService
         UsageProduct|string $product,
         \DateTimeImmutable $startDate,
         \DateTimeImmutable $endDate,
-        UsageGranularity|string $granularity = UsageGranularity::DAY,
+        UsageGranularity|string|null $granularity = null,
         ?string $xDatetimeFormat = null,
     ): AiInferenceUsageSeriesResponse {
         $response = $this->client->request(

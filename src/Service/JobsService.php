@@ -145,20 +145,20 @@ final class JobsService
      * Required permissions: jobs:read
      *
      * @param BatchStatus|string|null $status Filter by batch status (pending or complete)
-     * @param BatchSortField|string $sortBy Sort field
-     * @param SortOrder|string $sortOrder Sort order
-     * @param int $page Page number (1-indexed)
-     * @param int $pageSize Number of batches per page
+     * @param BatchSortField|string|null $sortBy Sort field Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order Server default: desc.
+     * @param int|null $page Page number (1-indexed) Server default: 1.
+     * @param int|null $pageSize Number of batches per page Server default: 50.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listBatches(
         BatchStatus|string|null $status = null,
-        BatchSortField|string $sortBy = BatchSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
-        int $page = 1,
-        int $pageSize = 50,
+        BatchSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): PageResponseJobBatchMetadataResponse {
         $response = $this->client->request(
@@ -244,8 +244,8 @@ final class JobsService
      * @param list<JobStatus|string>|null $status Filter by job status (repeatable)
      * @param BatchSortField|string|null $sortBy Sort field
      * @param SortOrder|string|null $sortOrder Sort order
-     * @param int $page Page number (1-indexed)
-     * @param int $pageSize Number of jobs per page
+     * @param int|null $page Page number (1-indexed) Server default: 1.
+     * @param int|null $pageSize Number of jobs per page Server default: 100.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -255,8 +255,8 @@ final class JobsService
         ?array $status = null,
         BatchSortField|string|null $sortBy = null,
         SortOrder|string|null $sortOrder = null,
-        int $page = 1,
-        int $pageSize = 100,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): PageResponseJobResponse {
         $response = $this->client->request(

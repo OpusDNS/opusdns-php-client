@@ -137,7 +137,8 @@ $client->dns()->patchZoneRrsets('example.com', new DnsZoneRrsetsPatchOps([
 ```
 
 Method parameters follow the specification: path parameters first, then required query parameters and the
-request body, then optional query parameters with their documented defaults. Named arguments keep calls readable:
+request body, then optional query parameters. Optional parameters left at `null` are not sent. Named arguments
+keep calls readable:
 
 ```php
 $page = $client->domain()->getDomains(search: 'example', expiresIn30Days: true, pageSize: 50);

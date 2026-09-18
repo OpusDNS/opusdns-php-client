@@ -88,23 +88,25 @@ final class AiConciergeService
      *
      * Required permissions: ai_concierge:manage
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 20.
      * @param string|null $sort Comma-separated sort fields. Prefix with `-` for DESC.
-     * @param string|null $q Full-text search on title/summary.
+     * @param string|null $query Full-text search on title/summary.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listConversations(
-        int $page = 1,
-        int $pageSize = 20,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $sort = null,
-        ?string $q = null,
+        ?string $query = null,
         ?string $xDatetimeFormat = null,
     ): ConversationListResponse {
         $response = $this->client->request(
             'GET',
             Endpoint::AI_CONCIERGE_CONVERSATIONS,
-            query: ['page' => $page, 'page_size' => $pageSize, 'sort' => $sort, 'q' => $q],
+            query: ['page' => $page, 'page_size' => $pageSize, 'sort' => $sort, 'q' => $query],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -211,14 +213,16 @@ final class AiConciergeService
      *
      * Required permissions: ai_concierge:manage
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 20.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listContexts(
         string $conversationId,
-        int $page = 1,
-        int $pageSize = 20,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): ContextListResponse {
         $response = $this->client->request(
@@ -272,6 +276,8 @@ final class AiConciergeService
      *
      * Required permissions: ai_concierge:manage
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 20.
      * @param int|null $recent If set, returns last N messages and overrides pagination.
      * @param string|null $exclude Comma-separated tokens to exclude (case-insensitive). Supports `tools`.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -280,8 +286,8 @@ final class AiConciergeService
      */
     public function listMessages(
         string $conversationId,
-        int $page = 1,
-        int $pageSize = 20,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?int $recent = null,
         ?string $exclude = null,
         ?string $xDatetimeFormat = null,
@@ -351,12 +357,13 @@ final class AiConciergeService
      *
      * Required permissions: ai_concierge:manage
      *
+     * @param int|null $limit Server default: 50.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listMemoryFacts(
-        int $limit = 50,
+        ?int $limit = null,
         ?string $cursor = null,
         ?string $kind = null,
         ?string $xDatetimeFormat = null,

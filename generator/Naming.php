@@ -50,10 +50,15 @@ final class Naming
         return $name;
     }
 
+    /** Keys too short to make a readable variable name and the name used instead. */
+    private const SHORT_KEYS = [
+        'q' => 'query',
+    ];
+
     /** JSON property key to PHP property name: dnssec_status becomes dnssecStatus. */
     public static function propertyName(string $key): string
     {
-        $name = self::camel($key);
+        $name = self::camel(self::SHORT_KEYS[$key] ?? $key);
         if ($name === '') {
             throw new \InvalidArgumentException("Cannot derive a property name from key '{$key}'");
         }
@@ -116,7 +121,7 @@ final class Naming
     /** /v1/dns/{zone_name}/rrsets becomes DnsByZoneNameRrsets. */
     public static function pathName(string $path): string
     {
-        $segments = array_values(array_filter(explode('/', $path), static fn (string $s): bool => $s !== '' && $s !== 'v1'));
+        $segments = array_values(array_filter(explode('/', $path), static fn (string $segment): bool => $segment !== '' && $segment !== 'v1'));
 
         return implode('', array_map(static function (string $segment): string {
             if (str_starts_with($segment, '{') && str_ends_with($segment, '}')) {

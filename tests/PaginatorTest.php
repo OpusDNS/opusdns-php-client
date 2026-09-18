@@ -49,7 +49,7 @@ final class PaginatorTest extends TestCase
             3 => PageFetcher::page(3, 0, true, ['never']),
         ]);
 
-        $names = array_map(static fn (DnsZoneResponse $z): string => $z->name, iterator_to_array(Paginator::items($fetch), false));
+        $names = array_map(static fn (DnsZoneResponse $zone): string => $zone->name, iterator_to_array(Paginator::items($fetch), false));
 
         self::assertSame(['a.example'], $names);
         self::assertSame([1, 2], $fetch->requested);

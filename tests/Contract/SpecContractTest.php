@@ -83,7 +83,7 @@ final class SpecContractTest extends TestCase
             }
         }
 
-        $tags = array_unique(array_map(static fn (Operation $o): string => $o->tag(), self::$spec->operations()));
+        $tags = array_unique(array_map(static fn (Operation $operation): string => $operation->tag(), self::$spec->operations()));
         self::assertSame(count($tags), $services);
         self::assertSame(count(self::$spec->operations()), $methods);
     }
@@ -129,7 +129,7 @@ final class SpecContractTest extends TestCase
     private function assertMethodMatches(\ReflectionMethod $method, Operation $operation): void
     {
         [$expectedNames, $mandatory] = $this->expectedParameters($operation);
-        $actualNames = array_map(static fn (\ReflectionParameter $p): string => $p->getName(), $method->getParameters());
+        $actualNames = array_map(static fn (\ReflectionParameter $parameter): string => $parameter->getName(), $method->getParameters());
         self::assertSame($expectedNames, $actualNames, 'parameter list differs');
 
         foreach ($method->getParameters() as $parameter) {
@@ -181,7 +181,7 @@ final class SpecContractTest extends TestCase
                     $headers[] = $name;
                     break;
                 case 'query':
-                    $required = ($parameter['required'] ?? false) && !$this->hasDefault($schema) && !$this->isNullable($schema);
+                    $required = ($parameter['required'] ?? false) && !$this->isNullable($schema);
                     if ($required) {
                         $requiredQuery[] = $name;
                     } else {
@@ -269,12 +269,6 @@ final class SpecContractTest extends TestCase
         }
 
         return [null, $hasEmpty];
-    }
-
-    /** @param array<string, mixed> $schema */
-    private function hasDefault(array $schema): bool
-    {
-        return array_key_exists('const', $schema) || (array_key_exists('default', $schema) && $schema['default'] !== null);
     }
 
     /** @param array<string, mixed> $schema */

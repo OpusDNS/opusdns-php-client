@@ -50,9 +50,15 @@ final class ContactService
      *
      * Required permissions: contacts:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param ContactSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param list<StatusTagType|string>|null $statusTags Filter by status tag types. Can be specified multiple
      *     times.
+     * @param TagFilterMode|string|null $statusTagMode Server default: match_any.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
+     * @param TagFilterMode|string|null $tagMode Server default: match_any.
      * @param list<ContactIncludeField|string>|null $include Include additional data in the response. Can be
      *     specified multiple times.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -60,14 +66,14 @@ final class ContactService
      *     sent.
      */
     public function getContacts(
-        int $page = 1,
-        int $pageSize = 10,
-        ContactSortField|string $sortBy = ContactSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ContactSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?array $statusTags = null,
-        TagFilterMode|string $statusTagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string|null $statusTagMode = null,
         ?array $tagIds = null,
-        TagFilterMode|string $tagMode = TagFilterMode::MATCH_ANY,
+        TagFilterMode|string|null $tagMode = null,
         ?string $firstName = null,
         ?string $lastName = null,
         ?string $email = null,
@@ -118,15 +124,19 @@ final class ContactService
      *
      * Required permissions: contacts:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param ContactAttributeSetSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listAttributeSets(
-        int $page = 1,
-        int $pageSize = 10,
-        ContactAttributeSetSortField|string $sortBy = ContactAttributeSetSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ContactAttributeSetSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
         ?string $tld = null,
         ?string $label = null,
         ?string $xDatetimeFormat = null,

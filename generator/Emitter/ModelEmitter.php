@@ -170,7 +170,7 @@ final class ModelEmitter
             );
         }
 
-        usort($properties, static fn (ModelProperty $a, ModelProperty $b): int => (int) $a->hasDefault <=> (int) $b->hasDefault);
+        usort($properties, static fn (ModelProperty $first, ModelProperty $second): int => (int) $first->hasDefault <=> (int) $second->hasDefault);
 
         return $properties;
     }
@@ -186,10 +186,6 @@ final class ModelEmitter
         return "return new self(\n" . implode("\n", $lines) . "\n);";
     }
 
-    /**
-     * Maps are cast with (array) so that decoded objects, including the empty object toArray() emits for an
-     * empty map, hydrate back into arrays.
-     */
     private function hydration(ModelProperty $property): string
     {
         $access = "\$data['{$property->key}']";

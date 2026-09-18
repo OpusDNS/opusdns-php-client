@@ -33,6 +33,8 @@ final class ReportService
      *
      * Required permissions: organization:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 50.
      * @param list<ReportType|string>|null $reportType
      * @param list<ReportStatus|string>|null $status
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -40,8 +42,8 @@ final class ReportService
      *     sent.
      */
     public function listReports(
-        int $page = 1,
-        int $pageSize = 50,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?array $reportType = null,
         ?array $status = null,
         ReportTriggerType|string|null $triggerType = null,

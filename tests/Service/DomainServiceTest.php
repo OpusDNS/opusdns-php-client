@@ -204,10 +204,10 @@ final class DomainServiceTest extends TestCase
             'results' => [self::domainJson()],
         ]);
 
-        $page = $client->domain()->getDomains(search: 'exam', expiresIn30Days: true);
+        $page = $client->domain()->getDomains(search: 'exam', expiresIn30Days: true, pageSize: 50);
 
         self::assertSame(
-            'https://sandbox.opusdns.com/v1/domains?page=1&page_size=10&sort_by=created_on&sort_order=desc&status_tag_mode=match_any&tag_mode=match_any&search=exam&expires_in_30_days=true',
+            'https://sandbox.opusdns.com/v1/domains?page_size=50&search=exam&expires_in_30_days=true',
             (string) $http->lastRequest()->getUri(),
         );
         self::assertSame(1, $page->pagination->totalItems);

@@ -61,7 +61,7 @@ final class SampleFactory
             $name = Spec::refName((string) $schema['$ref']);
             $target = $this->spec->schema($name);
             if (TypeResolver::isEnumSchema($target)) {
-                $first = array_values(array_filter($target['enum'], static fn (mixed $v): bool => $v !== null))[0];
+                $first = array_values(array_filter($target['enum'], static fn (mixed $enumValue): bool => $enumValue !== null))[0];
 
                 return [$first, $first];
             }
@@ -134,7 +134,7 @@ final class SampleFactory
             return [self::DATE, self::DATE];
         }
         if (isset($schema['enum']) && is_array($schema['enum'])) {
-            $first = array_values(array_filter($schema['enum'], static fn (mixed $v): bool => $v !== null))[0] ?? 'text';
+            $first = array_values(array_filter($schema['enum'], static fn (mixed $enumValue): bool => $enumValue !== null))[0] ?? 'text';
 
             return [$first, $first];
         }

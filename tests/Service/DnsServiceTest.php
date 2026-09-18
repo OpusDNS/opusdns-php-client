@@ -98,7 +98,7 @@ final class DnsServiceTest extends TestCase
         ], json_decode((string) $request->getBody(), true));
     }
 
-    public function testListZonesSendsDefaultsAndHydratesPages(): void
+    public function testListZonesSendsOnlyGivenParametersAndHydratesPages(): void
     {
         [$client, $http] = ClientFactory::create();
         $http->queueJson(200, [
@@ -108,10 +108,7 @@ final class DnsServiceTest extends TestCase
 
         $page = $client->dns()->listZones(search: 'exam');
 
-        self::assertSame(
-            'https://sandbox.opusdns.com/v1/dns?page=1&page_size=10&sort_by=created_on&sort_order=desc&tag_mode=match_any&search=exam',
-            (string) $http->lastRequest()->getUri(),
-        );
+        self::assertSame('https://sandbox.opusdns.com/v1/dns?search=exam', (string) $http->lastRequest()->getUri());
         self::assertSame(1, $page->pagination->totalItems);
         self::assertFalse($page->pagination->hasNextPage);
         self::assertSame('example.com', $page->results[0]->name);

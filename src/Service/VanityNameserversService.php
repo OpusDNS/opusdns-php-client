@@ -36,13 +36,15 @@ final class VanityNameserversService
      *
      * Required permissions: vanity_ns:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listVanityNameserverSets(
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): ListVanityNameserverSetsRes {
         $response = $this->client->request(
@@ -268,14 +270,16 @@ final class VanityNameserversService
      *
      * Required permissions: vanity_ns:read
      *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function listZonesReferencingVanityNameserverSet(
         string $setId,
-        int $page = 1,
-        int $pageSize = 10,
+        ?int $page = null,
+        ?int $pageSize = null,
         ?string $xDatetimeFormat = null,
     ): ListZonesReferencingSetRes {
         $response = $this->client->request(

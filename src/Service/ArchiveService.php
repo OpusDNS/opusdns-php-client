@@ -41,6 +41,10 @@ final class ArchiveService
      *
      * Required permissions: email_forwards:read
      *
+     * @param EmailForwardLogSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param int|null $pageSize Server default: 50.
+     * @param int|null $page Server default: 1.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -48,10 +52,10 @@ final class ArchiveService
     public function getEmailForwardLogsByAlias(
         string $emailForwardAliasId,
         string $emailForwardId,
-        EmailForwardLogSortField|string $sortBy = EmailForwardLogSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
-        int $pageSize = 50,
-        int $page = 1,
+        EmailForwardLogSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
+        ?int $pageSize = null,
+        ?int $page = null,
         EmailForwardLogStatus|string|null $finalStatus = null,
         ?\DateTimeImmutable $startTime = null,
         ?\DateTimeImmutable $endTime = null,
@@ -76,16 +80,20 @@ final class ArchiveService
      *
      * Required permissions: email_forwards:read
      *
+     * @param EmailForwardLogSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param int|null $pageSize Server default: 50.
+     * @param int|null $page Server default: 1.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getEmailForwardLogs(
         string $emailForwardId,
-        EmailForwardLogSortField|string $sortBy = EmailForwardLogSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
-        int $pageSize = 50,
-        int $page = 1,
+        EmailForwardLogSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
+        ?int $pageSize = null,
+        ?int $page = null,
         EmailForwardLogStatus|string|null $finalStatus = null,
         ?\DateTimeImmutable $startTime = null,
         ?\DateTimeImmutable $endTime = null,
@@ -109,15 +117,19 @@ final class ArchiveService
      *
      * Required permissions: organization:read
      *
+     * @param ObjectLogSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param int|null $pageSize Server default: 50.
+     * @param int|null $page Server default: 1.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getObjectLogs(
-        ObjectLogSortField|string $sortBy = ObjectLogSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
-        int $pageSize = 50,
-        int $page = 1,
+        ObjectLogSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
+        ?int $pageSize = null,
+        ?int $page = null,
         ?string $objectLogId = null,
         ?string $objectType = null,
         ObjectEventType|string|null $action = null,
@@ -146,16 +158,20 @@ final class ArchiveService
      *
      * Required permissions: organization:read
      *
+     * @param ObjectLogSortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param int|null $pageSize Server default: 50.
+     * @param int|null $page Server default: 1.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getObjectLogsByObjectId(
         string $objectId,
-        ObjectLogSortField|string $sortBy = ObjectLogSortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
-        int $pageSize = 50,
-        int $page = 1,
+        ObjectLogSortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
+        ?int $pageSize = null,
+        ?int $page = null,
         ?string $objectLogId = null,
         ?string $objectType = null,
         ObjectEventType|string|null $action = null,
@@ -184,15 +200,19 @@ final class ArchiveService
      *
      * Required permissions: organization:read
      *
+     * @param RequestHistorySortField|string|null $sortBy Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param int|null $pageSize Server default: 50.
+     * @param int|null $page Server default: 1.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
     public function getRequestHistory(
-        RequestHistorySortField|string $sortBy = RequestHistorySortField::CREATED_ON,
-        SortOrder|string $sortOrder = SortOrder::DESC,
-        int $pageSize = 50,
-        int $page = 1,
+        RequestHistorySortField|string|null $sortBy = null,
+        SortOrder|string|null $sortOrder = null,
+        ?int $pageSize = null,
+        ?int $page = null,
         HTTPMethod|string|null $method = null,
         ?string $path = null,
         ?int $statusCode = null,
