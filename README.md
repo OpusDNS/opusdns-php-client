@@ -316,13 +316,14 @@ Run `composer spec:sync`, then `composer generate`, `composer test` and `compose
 change for consumers. Regenerate whenever the API adds enum values: hydration is strict, so a client built from
 an older specification keeps values it has never seen as raw strings.
 
-The CI workflow does the same on a weekly schedule and on manual runs: it syncs the specification, regenerates,
-runs the checks and commits the result to `main` when anything changed. On pushes and pull requests it verifies
-instead that `src/` matches the committed specification and that the checks pass.
+The "Spec update" workflow does the same on a weekly schedule and on manual runs: it syncs the specification,
+regenerates, runs the checks and opens a pull request when anything changed. The "CI" workflow verifies on every
+push and pull request that `src/` matches the committed specification and that the checks pass.
 
 ### Releasing
 
-Tag a commit on `main` as `vX.Y.Z` and push the tag. Packagist picks it up through its GitHub hook.
+Tag a commit on `main` as `vX.Y.Z` and push the tag. The "Release" workflow runs the checks and creates the
+GitHub release with generated notes; Packagist picks the tag up through its GitHub hook.
 
 ### How the generator maps the specification
 

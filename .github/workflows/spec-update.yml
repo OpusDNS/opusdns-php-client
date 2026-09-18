@@ -1,0 +1,84 @@
+name: Spec update
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: api-spec branch, tag or commit to sync the specification from
+        required: false
+        default: main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Sync and regenerate
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Sync the specification from api-spec
+        run: bin/spec-sync --ref "${{ github.event.inputs.ref || 'main' }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Regenerate the client
+        run: composer generate
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if [ -z "$(git status --porcelain -- src spec)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "commit=$(sed -n 's/^api_spec_commit: //p' spec/version.yaml | cut -c1-7)" >> "$GITHUB_OUTPUT"
+            echo "package=$(sed -n 's/^npm_version: //p' spec/version.yaml)" >> "$GITHUB_OUTPUT"
+            echo "spec=$(sed -n 's/^info_version: //p' spec/version.yaml)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run tests
+        if: steps.diff.outputs.changed == 'true'
+        run: composer test
+
+      - name: Run static analysis
+        if: steps.diff.outputs.changed == 'true'
+        run: composer stan
+
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          add-paths: |
+            src/**
+            spec/**
+          branch: bot/spec-update
+          commit-message: update api spec to ${{ steps.diff.outputs.commit }}
+          title: Update the API specification to ${{ steps.diff.outputs.commit }}
+          body: |
+            Regenerated from `OpusDNS/api-spec@${{ steps.diff.outputs.commit }}` (package ${{ steps.diff.outputs.package }}, spec ${{ steps.diff.outputs.spec }}).
+
+            Tests and static analysis passed on the regenerated client before this pull request was opened.
+          labels: |
+            automated
+            spec-update
+          delete-branch: true
