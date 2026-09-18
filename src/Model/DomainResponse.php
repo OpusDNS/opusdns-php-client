@@ -34,7 +34,7 @@ final readonly class DomainResponse implements ApiModel
      *     the flag, so it tracks the registry's current classification. Registries classify each action separately,
      *     so a domain premium only to restore is not premium here.
      * @param list<Nameserver>|null $nameservers The nameservers of the domain
-     * @param string $ownerId The organization that owns the domain TypeID prefix: organization.
+     * @param string|null $ownerId The organization that owns the domain TypeID prefix: organization.
      * @param bool $readOnly Whether the domain is read-only in OpusDNS. When `true`, the domain is listed in your
      *     portfolio but cannot be managed — for example while it awaits a migration, is locked for legal reasons,
      *     or is managed at an external registrar. The flag is set and removed by OpusDNS; it cannot be changed
@@ -44,7 +44,7 @@ final readonly class DomainResponse implements ApiModel
      *     domain is synced from. Null unless `include=registrar_credential` is requested, and null even then for
      *     natively registered domains, for domains on operator-managed registry accounts, and when the credential
      *     was deleted.
-     * @param string $registryAccountId TypeID prefix: registry_account.
+     * @param string|null $registryAccountId TypeID prefix: registry_account.
      * @param list<string>|null $registryStatuses All the domain statuses
      * @param RenewalMode|string|null $renewalMode The renewal mode of the domain
      * @param string|null $renewalPeriod Renewal period of the domain as an ISO 8601 duration (e.g. 'P1M', 'P1Y').
@@ -77,11 +77,11 @@ final readonly class DomainResponse implements ApiModel
         public ?array $hosts = null,
         public bool $isPremium = false,
         public ?array $nameservers = null,
-        public string $ownerId = 'None',
+        public ?string $ownerId = null,
         public bool $readOnly = false,
         public ?\DateTimeImmutable $registeredOn = null,
         public ?DomainRegistrarCredentialResponse $registrarCredential = null,
-        public string $registryAccountId = 'None',
+        public ?string $registryAccountId = null,
         public ?array $registryStatuses = null,
         public RenewalMode|string|null $renewalMode = null,
         public ?string $renewalPeriod = null,
@@ -116,11 +116,11 @@ final readonly class DomainResponse implements ApiModel
             hosts: isset($data['hosts']) ? array_map(static fn (array $item): DomainHostResponse => DomainHostResponse::fromArray($item), $data['hosts']) : null,
             isPremium: $data['is_premium'] ?? false,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
-            ownerId: $data['owner_id'] ?? 'None',
+            ownerId: $data['owner_id'] ?? null,
             readOnly: $data['read_only'] ?? false,
             registeredOn: isset($data['registered_on']) ? new \DateTimeImmutable($data['registered_on']) : null,
             registrarCredential: isset($data['registrar_credential']) ? DomainRegistrarCredentialResponse::fromArray($data['registrar_credential']) : null,
-            registryAccountId: $data['registry_account_id'] ?? 'None',
+            registryAccountId: $data['registry_account_id'] ?? null,
             registryStatuses: $data['registry_statuses'] ?? null,
             renewalMode: isset($data['renewal_mode']) ? RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
             renewalPeriod: $data['renewal_period'] ?? null,

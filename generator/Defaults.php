@@ -20,7 +20,7 @@ final class Defaults
         if (array_key_exists('const', $schema) && is_scalar($schema['const'])) {
             return [true, $schema['const']];
         }
-        if (!array_key_exists('default', $schema) || $schema['default'] === null) {
+        if (!array_key_exists('default', $schema) || $schema['default'] === null || $schema['default'] === 'None') {
             return [false, null];
         }
 

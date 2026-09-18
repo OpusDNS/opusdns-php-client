@@ -95,6 +95,8 @@ final class GeneratorTest extends TestCase
         self::assertStringContainsString("status: FixturePetStatus::tryFrom(\$data['status']) ?? \$data['status'],", $pet);
         self::assertStringContainsString('public \DateTimeImmutable $createdOn,', $pet);
         self::assertStringContainsString('public ?\DateTimeImmutable $bornOn = null,', $pet);
+        self::assertStringContainsString('public ?string $ownerId = null,', $pet);
+        self::assertStringNotContainsString("'None'", $pet);
         self::assertStringContainsString("bornOn: isset(\$data['born_on']) ? Serializer::parseDate(\$data['born_on']) : null,", $pet);
         self::assertStringContainsString("'born_on' => \$this->bornOn === null ? null : \$this->bornOn->format('Y-m-d'),", $pet);
         self::assertStringContainsString('public float $weight,', $pet);

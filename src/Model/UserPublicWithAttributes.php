@@ -20,7 +20,7 @@ final readonly class UserPublicWithAttributes implements ApiModel
      * @param string $lastName The user's last name
      * @param string $username The user's unique username
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
-     * @param string $organizationId The user's organization id TypeID prefix: organization.
+     * @param string|null $organizationId The user's organization id TypeID prefix: organization.
      * @param string|null $phone The user's phone number
      * @param \DateTimeImmutable|null $updatedOn The date/time the entry was last updated on
      * @param array<string, mixed>|null $userAttributes All of the user attributes
@@ -33,7 +33,7 @@ final readonly class UserPublicWithAttributes implements ApiModel
         public string $locale,
         public string $username,
         public ?\DateTimeImmutable $createdOn = null,
-        public string $organizationId = 'None',
+        public ?string $organizationId = null,
         public ?string $phone = null,
         public ?\DateTimeImmutable $updatedOn = null,
         public ?array $userAttributes = null,
@@ -53,7 +53,7 @@ final readonly class UserPublicWithAttributes implements ApiModel
             locale: $data['locale'],
             username: $data['username'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
-            organizationId: $data['organization_id'] ?? 'None',
+            organizationId: $data['organization_id'] ?? null,
             phone: $data['phone'] ?? null,
             updatedOn: isset($data['updated_on']) ? new \DateTimeImmutable($data['updated_on']) : null,
             userAttributes: isset($data['user_attributes']) ? (array) $data['user_attributes'] : null,

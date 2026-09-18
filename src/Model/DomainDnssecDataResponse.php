@@ -24,7 +24,7 @@ final readonly class DomainDnssecDataResponse implements ApiModel
      * @param string|null $digest Digest value for DS records
      * @param DnssecDigestType|int|null $digestType Digest type for DS records
      * @param string|null $domainDnssecDataId TypeID prefix: domain_dnssec.
-     * @param string $domainId The domain this DNSSEC record belongs to TypeID prefix: domain.
+     * @param string|null $domainId The domain this DNSSEC record belongs to TypeID prefix: domain.
      * @param int|null $flags DNSKEY flags for key records
      * @param int|null $keyTag Key tag for DS records
      * @param int|null $protocol Protocol field for key records (typically 3)
@@ -38,7 +38,7 @@ final readonly class DomainDnssecDataResponse implements ApiModel
         public ?string $digest = null,
         public DnssecDigestType|int|null $digestType = null,
         public ?string $domainDnssecDataId = null,
-        public string $domainId = 'None',
+        public ?string $domainId = null,
         public ?int $flags = null,
         public ?int $keyTag = null,
         public ?int $protocol = null,
@@ -59,7 +59,7 @@ final readonly class DomainDnssecDataResponse implements ApiModel
             digest: $data['digest'] ?? null,
             digestType: isset($data['digest_type']) ? DnssecDigestType::tryFrom($data['digest_type']) ?? $data['digest_type'] : null,
             domainDnssecDataId: $data['domain_dnssec_data_id'] ?? null,
-            domainId: $data['domain_id'] ?? 'None',
+            domainId: $data['domain_id'] ?? null,
             flags: $data['flags'] ?? null,
             keyTag: $data['key_tag'] ?? null,
             protocol: $data['protocol'] ?? null,

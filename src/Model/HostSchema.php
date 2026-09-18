@@ -18,7 +18,7 @@ final readonly class HostSchema implements ApiModel
     /**
      * @param string $hostname Hostname of the host object
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
-     * @param string $domainId The domain that the host object belongs to TypeID prefix: domain.
+     * @param string|null $domainId The domain that the host object belongs to TypeID prefix: domain.
      * @param string|null $hostId TypeID prefix: host.
      * @param string|null $registryAccountId The registry account that the host object belongs to
      * @param HostStatus|string $status Status of the host object
@@ -27,7 +27,7 @@ final readonly class HostSchema implements ApiModel
     public function __construct(
         public string $hostname,
         public ?\DateTimeImmutable $createdOn = null,
-        public string $domainId = 'None',
+        public ?string $domainId = null,
         public ?string $hostId = null,
         public ?string $registryAccountId = null,
         public HostStatus|string $status = HostStatus::INACTIVE,
@@ -43,7 +43,7 @@ final readonly class HostSchema implements ApiModel
         return new self(
             hostname: $data['hostname'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
-            domainId: $data['domain_id'] ?? 'None',
+            domainId: $data['domain_id'] ?? null,
             hostId: $data['host_id'] ?? null,
             registryAccountId: $data['registry_account_id'] ?? null,
             status: isset($data['status']) ? HostStatus::tryFrom($data['status']) ?? $data['status'] : HostStatus::INACTIVE,

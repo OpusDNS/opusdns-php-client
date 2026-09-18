@@ -26,7 +26,7 @@ final readonly class OrganizationCredential implements ApiModel
      * @param \DateTimeImmutable|null $deletedOn The date/time the entry was deleted on
      * @param \DateTimeImmutable|null $expiresAt The date and time the credential expiration.
      * @param \DateTimeImmutable|null $lastUsedOn The date/time the entry was last used on
-     * @param string $organizationId TypeID prefix: organization.
+     * @param string|null $organizationId TypeID prefix: organization.
      * @param PublicRole|string|null $role
      */
     public function __construct(
@@ -38,7 +38,7 @@ final readonly class OrganizationCredential implements ApiModel
         public ?\DateTimeImmutable $deletedOn = null,
         public ?\DateTimeImmutable $expiresAt = null,
         public ?\DateTimeImmutable $lastUsedOn = null,
-        public string $organizationId = 'None',
+        public ?string $organizationId = null,
         public PublicRole|string|null $role = null,
     ) {
     }
@@ -57,7 +57,7 @@ final readonly class OrganizationCredential implements ApiModel
             deletedOn: isset($data['deleted_on']) ? new \DateTimeImmutable($data['deleted_on']) : null,
             expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
             lastUsedOn: isset($data['last_used_on']) ? new \DateTimeImmutable($data['last_used_on']) : null,
-            organizationId: $data['organization_id'] ?? 'None',
+            organizationId: $data['organization_id'] ?? null,
             role: isset($data['role']) ? PublicRole::tryFrom($data['role']) ?? $data['role'] : null,
         );
     }
