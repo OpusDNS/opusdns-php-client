@@ -186,6 +186,36 @@ final class ClientTest extends TestCase
         }
     }
 
+    public function testRateLimitExposesRetryAfter(): void
+    {
+        [$client, $http] = ClientFactory::create();
+
+        $http->queue(new Response(429, ['Retry-After' => '30']));
+        try {
+            $client->request('GET', Endpoint::DNS);
+            self::fail('Expected a RateLimitException');
+        } catch (RateLimitException $exception) {
+            self::assertSame(30, $exception->retryAfter());
+        }
+
+        $httpDateFormat = 'D, d M Y H:i:s \G\M\T';
+        $http->queue(new Response(429, ['Retry-After' => gmdate($httpDateFormat, time() + 120)]));
+        try {
+            $client->request('GET', Endpoint::DNS);
+            self::fail('Expected a RateLimitException');
+        } catch (RateLimitException $exception) {
+            self::assertEqualsWithDelta(120, $exception->retryAfter(), 2);
+        }
+
+        $http->queue(new Response(429));
+        try {
+            $client->request('GET', Endpoint::DNS);
+            self::fail('Expected a RateLimitException');
+        } catch (RateLimitException $exception) {
+            self::assertNull($exception->retryAfter());
+        }
+    }
+
     public function testValidationErrorsExposeMessages(): void
     {
         [$client, $http] = ClientFactory::create();

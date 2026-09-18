@@ -206,7 +206,7 @@ All exceptions extend `OpusDNS\Client\Exception\OpusDnsException`, which extends
 | `NotFoundException` | 404 |
 | `ConflictException` | 409, for example registering a name that is already registered |
 | `ValidationException` | 422; `messages()` lists the failing fields as `field.path: message` |
-| `RateLimitException` | 429 |
+| `RateLimitException` | 429; `retryAfter()` gives the seconds to wait when the API sends `Retry-After` |
 | `ServerException` | Any 5xx |
 | `DecodingException` | A successful response could not be decoded or hydrated into its model |
 
