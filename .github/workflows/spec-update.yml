@@ -21,7 +21,7 @@ concurrency:
 jobs:
   update:
     name: Sync and regenerate
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
