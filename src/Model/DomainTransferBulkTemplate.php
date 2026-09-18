@@ -33,17 +33,18 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
      *     contact whose `.de` attribute set has `DE_CONTACT_TYPE` = `REQUEST`. `.de` only. Boolean keys also accept
      *     `1` and `yes`. Written by the platform and rejected if supplied: `verification_required`, `promotion`,
      *     `promotion_eligibility`, `nor_id_declaration`, `nor_id_declaration_token`, `punktum_dk_tracking_no`,
-     *     `domain_contact_attributes`. They are never returned under `attributes`; inline contact attributes surface
-     *     on the matching `contacts` entry instead. Derived from the signed `.no` applicant declaration and ignored
-     *     if supplied on create: `nor_id_applicant_version`, `nor_id_applicant_accept_name`,
-     *     `nor_id_applicant_accept_date`. On update, every registry stores the supplied attributes, and the update
-     *     is not sent to the registry unless they store; a registry that rejects the change stores nothing. An empty
-     *     value removes the stored attribute, except for `auto_renew_period`, whose only accepted values are
-     *     `monthly` and `yearly`. `.dk` also reads `punktum_dk_terms_acceptance` to confirm a registrant change. An
-     *     update cannot change what the registrant accepted at registration, so these are rejected on update:
-     *     `music_registrant_attestation`, `nic_it_compliance_confirmation`, `travel_industry_acknowledgement`,
-     *     `internet_ee_registrant_agreement` and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`
-     *     stays settable for a registrant change but cannot be removed with an empty value.
+     *     `domain_contact_attributes`, `registry_reseller_id`. They are never returned under `attributes`; inline
+     *     contact attributes surface on the matching `contacts` entry instead. Derived from the signed `.no`
+     *     applicant declaration and ignored if supplied on create: `nor_id_applicant_version`,
+     *     `nor_id_applicant_accept_name`, `nor_id_applicant_accept_date`. On update, every registry stores the
+     *     supplied attributes, and the update is not sent to the registry unless they store; a registry that rejects
+     *     the change stores nothing. An empty value removes the stored attribute, except for `auto_renew_period`,
+     *     whose only accepted values are `monthly` and `yearly`. `.dk` also reads `punktum_dk_terms_acceptance` to
+     *     confirm a registrant change. An update cannot change what the registrant accepted at registration, so
+     *     these are rejected on update: `music_registrant_attestation`, `nic_it_compliance_confirmation`,
+     *     `travel_industry_acknowledgement`, `internet_ee_registrant_agreement` and the three `nor_id_applicant_*`
+     *     keys. `punktum_dk_terms_acceptance` stays settable for a registrant change but cannot be removed with an
+     *     empty value.
      * @param array<string, list<ContactHandle>>|null $contacts The contacts of the domain. Optional for transfers
      *     when all supported contact roles have a minimum of 0 in the TLD specification.
      * @param bool $createZone Create a zone on OpusDNS nameserver infrastructure
