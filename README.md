@@ -322,8 +322,11 @@ push and pull request that `src/` matches the committed specification and that t
 
 ### Releasing
 
-Tag a commit on `main` as `vX.Y.Z` and push the tag. The "Release" workflow runs the checks and creates the
-GitHub release with generated notes; Packagist picks the tag up through its GitHub hook.
+Merging a pull request into `main` releases: the "Release" workflow runs the checks, bumps the version from the
+latest tag, pushes the new tag and creates the GitHub release with generated notes. The pull request's label
+picks the bump: `major`, `minor` or `patch`, with `patch` when no label is set; a `no-release` label skips the
+release. The same workflow can be run by hand with the bump chosen from a dropdown. Packagist picks the tag up
+through its GitHub hook.
 
 ### How the generator maps the specification
 
