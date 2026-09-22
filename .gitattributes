@@ -1,0 +1,12 @@
+/.env.example   export-ignore
+/.gitattributes export-ignore
+/.github        export-ignore
+/.gitignore     export-ignore
+/bin            export-ignore
+/composer.lock  export-ignore
+/examples       export-ignore
+/generator      export-ignore
+/phpstan.neon   export-ignore
+/phpunit.xml    export-ignore
+/spec           export-ignore
+/tests          export-ignore
