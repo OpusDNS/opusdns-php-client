@@ -20,6 +20,7 @@ use OpusDNS\Client\Enum\SortOrder;
 use OpusDNS\Client\Enum\UsageGranularity;
 use OpusDNS\Client\Enum\UsageProduct;
 use OpusDNS\Client\Enum\UserSortField;
+use OpusDNS\Client\Enum\WaitlistProduct;
 use OpusDNS\Client\Model\AiInferenceUsageSeriesResponse;
 use OpusDNS\Client\Model\AiInferenceUsageSummaryResponse;
 use OpusDNS\Client\Model\BillingTransactionResponse;
@@ -41,6 +42,9 @@ use OpusDNS\Client\Model\PaginationOrganization;
 use OpusDNS\Client\Model\PaginationUserPublicWithRole;
 use OpusDNS\Client\Model\PublicPermissionSet;
 use OpusDNS\Client\Model\PublicRoleDefinition;
+use OpusDNS\Client\Model\WaitlistApplyRequest;
+use OpusDNS\Client\Model\WaitlistEntryResponse;
+use OpusDNS\Client\Model\WaitlistProductListResponse;
 
 /**
  * Operations tagged "organization".
@@ -136,7 +140,8 @@ final class OrganizationService
     /**
      * Update organization attributes
      *
-     * Updates one or more organization attributes for the current organization
+     * Updates one or more organization attributes for the current organization. Setting a billing, pricing
+     * or abuse notification email requires the organization owner or an admin of a parent organization.
      *
      * @param list<OrganizationAttributeUpdate>|list<array<string, mixed>> $body
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -283,6 +288,63 @@ final class OrganizationService
             path: ['ip_restriction_id' => $ipRestrictionId],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
+    }
+
+    /**
+     * List product waitlists
+     *
+     * Lists the waitlisted products your organization has been invited to, or that you have already
+     * applied for, with where your own application stands on each. Any other product is omitted entirely.
+     * An API key sees the invited products but has no application of its own: `status` is null and
+     * `can_apply` is false.
+     *
+     * Required permissions: organization:read
+     *
+     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
+     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
+     *     sent.
+     */
+    public function listProductWaitlists(?string $xDatetimeFormat = null): WaitlistProductListResponse
+    {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::ORGANIZATIONS_PRODUCT_WAITLIST,
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): WaitlistProductListResponse => WaitlistProductListResponse::fromArray($data));
+    }
+
+    /**
+     * Apply for a product waitlist
+     *
+     * Applies you for a product's waitlist, optionally saying what you would use the product for. Any
+     * member of an invited organization may apply. The application is recorded as `pending` until OpusDNS
+     * decides on it. One application per user per product: a second apply is refused, and a rejection is
+     * reconsidered by OpusDNS rather than by applying again. A colleague's application does not stand in
+     * for yours, nor block it.
+     *
+     * Required permissions: organization:read
+     *
+     * @param WaitlistApplyRequest|array<string, mixed>|null $body
+     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
+     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
+     *     sent.
+     */
+    public function applyForProductWaitlist(
+        WaitlistProduct|string $product,
+        WaitlistApplyRequest|array|null $body = null,
+        ?string $xDatetimeFormat = null,
+    ): WaitlistEntryResponse {
+        $response = $this->client->request(
+            'POST',
+            Endpoint::ORGANIZATIONS_PRODUCT_WAITLIST_BY_PRODUCT_APPLY,
+            path: ['product' => $product],
+            body: $body,
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): WaitlistEntryResponse => WaitlistEntryResponse::fromArray($data));
     }
 
     /**
@@ -559,7 +621,9 @@ final class OrganizationService
     /**
      * Update organization attributes
      *
-     * Updates one or more organization attributes for the specified organization
+     * Updates one or more organization attributes for the specified organization. Setting a billing,
+     * pricing or abuse notification email requires the organization owner or an admin of a parent
+     * organization.
      *
      * @param list<OrganizationAttributeUpdate>|list<array<string, mixed>> $body
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes

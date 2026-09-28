@@ -594,6 +594,409 @@ components:
       - updated_on
       title: BrandingAsset
       type: object
+    BrandingDesignActions:
+      properties:
+        can_activate:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Can Activate
+        download_filename:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Download Filename
+        write:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignWrite'
+          - type: 'null'
+      title: BrandingDesignActions
+      type: object
+    BrandingDesignContext:
+      properties:
+        context_id:
+          examples:
+          - ctx_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^ctx_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Context Id
+          type: string
+          x-typeid-prefix: ctx
+        conversation_id:
+          examples:
+          - conv_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^conv_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Conversation Id
+          type: string
+          x-typeid-prefix: conv
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        kind:
+          const: branding_design
+          default: branding_design
+          title: Kind
+          type: string
+        organization_id:
+          examples:
+          - organization_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^organization_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Organization Id
+          type: string
+          x-typeid-prefix: organization
+        payload:
+          $ref: '#/components/schemas/BrandingDesignContextPayload'
+        user_id:
+          title: User Id
+          type: string
+      required:
+      - context_id
+      - conversation_id
+      - organization_id
+      - user_id
+      - created_at
+      - payload
+      title: BrandingDesignContext
+      type: object
+    BrandingDesignContextPayload:
+      properties:
+        actions:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignActions'
+          - type: 'null'
+        diff:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignDiff'
+          - type: 'null'
+        notices:
+          items:
+            $ref: '#/components/schemas/BrandingDesignNotice'
+          title: Notices
+          type: array
+        results:
+          items:
+            $ref: '#/components/schemas/BrandingDesignVariant'
+          title: Results
+          type: array
+        source:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignSource'
+          - type: 'null'
+        summary:
+          default: ''
+          title: Summary
+          type: string
+        summary_parts:
+          items:
+            $ref: '#/components/schemas/BrandingDesignPhrase'
+          title: Summary Parts
+          type: array
+        warnings:
+          items:
+            type: string
+          title: Warnings
+          type: array
+      required:
+      - results
+      title: BrandingDesignContextPayload
+      type: object
+    BrandingDesignContrast:
+      properties:
+        all_pass:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: All Pass
+        checks:
+          items:
+            $ref: '#/components/schemas/BrandingDesignContrastCheck'
+          title: Checks
+          type: array
+        min_ratio:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Min Ratio
+      title: BrandingDesignContrast
+      type: object
+    BrandingDesignContrastCheck:
+      properties:
+        bg:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bg
+        fg:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fg
+        hard:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Hard
+        kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+        max:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max
+        min:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Min
+        mode:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mode
+        ok:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Ok
+        ratio:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Ratio
+      title: BrandingDesignContrastCheck
+      type: object
+    BrandingDesignDiff:
+      properties:
+        changed_paths:
+          items:
+            type: string
+          title: Changed Paths
+          type: array
+        merged_with_current:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Merged With Current
+      title: BrandingDesignDiff
+      type: object
+    BrandingDesignDocument:
+      additionalProperties: true
+      title: BrandingDesignDocument
+      type: object
+    BrandingDesignNotice:
+      properties:
+        code:
+          title: Code
+          type: string
+        message:
+          default: ''
+          title: Message
+          type: string
+        params:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - items:
+                type: string
+              type: array
+          title: Params
+          type: object
+        severity:
+          title: Severity
+          type: string
+        variants:
+          items:
+            type: string
+          title: Variants
+          type: array
+      required:
+      - code
+      - severity
+      title: BrandingDesignNotice
+      type: object
+    BrandingDesignPhrase:
+      properties:
+        code:
+          title: Code
+          type: string
+        params:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - items:
+                type: string
+              type: array
+          title: Params
+          type: object
+      required:
+      - code
+      title: BrandingDesignPhrase
+      type: object
+    BrandingDesignPreview:
+      properties:
+        dark_strategy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dark Strategy
+        font_family:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Font Family
+        mood:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mood
+        neutral_tint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Neutral Tint
+        preset_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preset Base
+        primary_color:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Primary Color
+        radius_rem:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Radius Rem
+        recolor_preset:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Recolor Preset
+        swatches:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignSwatches'
+          - type: 'null'
+      title: BrandingDesignPreview
+      type: object
+    BrandingDesignSource:
+      properties:
+        confidence:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Confidence
+        kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+        logo_asset_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo Asset Url
+        preset_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preset Id
+        signals:
+          items:
+            type: string
+          title: Signals
+          type: array
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+      title: BrandingDesignSource
+      type: object
+    BrandingDesignSwatches:
+      properties:
+        dark:
+          additionalProperties:
+            type: string
+          title: Dark
+          type: object
+        light:
+          additionalProperties:
+            type: string
+          title: Light
+          type: object
+      title: BrandingDesignSwatches
+      type: object
+    BrandingDesignVariant:
+      properties:
+        changed_seeds:
+          items:
+            type: string
+          title: Changed Seeds
+          type: array
+        contrast:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignContrast'
+          - type: 'null'
+        document:
+          $ref: '#/components/schemas/BrandingDesignDocument'
+        label:
+          default: ''
+          title: Label
+          type: string
+        preview:
+          anyOf:
+          - $ref: '#/components/schemas/BrandingDesignPreview'
+          - type: 'null'
+        rationale:
+          default: ''
+          title: Rationale
+          type: string
+        rationale_parts:
+          items:
+            $ref: '#/components/schemas/BrandingDesignPhrase'
+          title: Rationale Parts
+          type: array
+        variant_id:
+          title: Variant Id
+          type: string
+      required:
+      - variant_id
+      - document
+      title: BrandingDesignVariant
+      type: object
+    BrandingDesignWrite:
+      properties:
+        method:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Method
+        path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Path
+        permission:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Permission
+      title: BrandingDesignWrite
+      type: object
     BrandingDocument:
       properties:
         auth:
@@ -2294,6 +2697,7 @@ components:
             discriminator:
               mapping:
                 aggregations: '#/components/schemas/AggregationsContext'
+                branding_design: '#/components/schemas/BrandingDesignContext'
                 contacts: '#/components/schemas/ContactsContext'
                 domain_forwards: '#/components/schemas/DomainForwardsContext'
                 domain_recommendations: '#/components/schemas/DomainRecommendationsContext'
@@ -2309,6 +2713,7 @@ components:
             - $ref: '#/components/schemas/EmailForwardsContext'
             - $ref: '#/components/schemas/DomainRecommendationsContext'
             - $ref: '#/components/schemas/AggregationsContext'
+            - $ref: '#/components/schemas/BrandingDesignContext'
           title: Results
           type: array
       required:
@@ -5442,7 +5847,7 @@ components:
       enum:
       - tags
       - renewal_price
-      - registrar_credential
+      - connected_account
       title: DomainIncludeField
       type: string
     DomainLifecycleBase:
@@ -5604,7 +6009,7 @@ components:
         implement every member.'
       enum:
       - tags
-      - registrar_credential
+      - connected_account
       title: DomainListIncludeField
       type: string
     DomainNameParts:
@@ -5727,7 +6132,14 @@ components:
           title: Registrar Credential Id
           type: string
           x-typeid-prefix: registrar_credential
+        type:
+          const: ras
+          description: 'Kind of connected account. `ras`: a registrar credential managed
+            under `/v1/connect/registrars`.'
+          title: Type
+          type: string
       required:
+      - type
       - registrar_credential_id
       - name
       - registrar
@@ -5844,6 +6256,20 @@ components:
           - type: 'null'
           description: When the domain was deleted
           title: Canceled On
+        connected_account:
+          anyOf:
+          - discriminator:
+              mapping:
+                ras: '#/components/schemas/DomainRegistrarCredentialResponse'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/DomainRegistrarCredentialResponse'
+          - type: 'null'
+          description: The connected account this domain is synced from. Null unless
+            `include=connected_account` is requested, and null even then for natively
+            registered domains, for domains on operator-managed registry accounts,
+            and when the connected account was deleted.
+          title: Connected Account
         contacts:
           description: The contacts of the domain
           items:
@@ -5931,14 +6357,6 @@ components:
           - type: 'null'
           description: When the domain was registered
           title: Registered On
-        registrar_credential:
-          anyOf:
-          - $ref: '#/components/schemas/DomainRegistrarCredentialResponse'
-          - type: 'null'
-          description: The connected registrar credential this domain is synced from.
-            Null unless `include=registrar_credential` is requested, and null even
-            then for natively registered domains, for domains on operator-managed
-            registry accounts, and when the credential was deleted.
         registry_account_id:
           default: None
           examples:
@@ -6468,20 +6886,21 @@ components:
         by_organization:
           additionalProperties:
             type: integer
-          description: 'Domain counts by organization name (name: count)'
+          description: 'Domain counts for the organization and its sub-organizations,
+            by name (name: count), only organizations with at least one domain'
           title: By Organization
           type: object
         by_status:
           additionalProperties:
             type: integer
-          description: 'Domain counts by status (status: count)'
+          description: 'The organization''s domain counts by status (status: count)'
           title: By Status
           type: object
         by_status_tag:
           additionalProperties:
             type: integer
-          description: 'Domain counts by status tag (status_tag: count), only status
-            tags with at least one domain'
+          description: 'The organization''s domain counts by status tag (status_tag:
+            count), only status tags with at least one domain'
           propertyNames:
             $ref: '#/components/schemas/StatusTagType'
           title: By Status Tag
@@ -6489,14 +6908,14 @@ components:
         by_tld:
           additionalProperties:
             type: integer
-          description: 'Domain counts by TLD (tld: count)'
+          description: 'The organization''s domain counts by TLD (tld: count)'
           title: By Tld
           type: object
         expiring_soon:
           $ref: '#/components/schemas/DomainsExpiringSoon'
-          description: Domains expiring soon
+          description: The organization's domains expiring soon
         total_count:
-          description: Total number of domains including sub-organizations
+          description: Total number of domains owned by the organization
           title: Total Count
           type: integer
       required:
@@ -10675,6 +11094,7 @@ components:
       - UPDATED
       - DELETED
       - IMPORTED
+      - SYNCED_AFTER_IMPORT
       - TRANSFER_STARTED
       - TRANSFER_COMPLETED
       - TRANSFER_OUT_STARTED
@@ -13209,6 +13629,7 @@ components:
       - vanity_ns
       - whitelabel_branding
       - ai_concierge
+      - ai_concierge_waitlist
       title: PublicResource
       type: string
     PublicRole:
@@ -14898,6 +15319,56 @@ components:
       - authinfo_required
       title: TransferPoliciesBase
       type: object
+    UnknownContext:
+      properties:
+        context_id:
+          examples:
+          - ctx_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^ctx_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Context Id
+          type: string
+          x-typeid-prefix: ctx
+        conversation_id:
+          examples:
+          - conv_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^conv_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Conversation Id
+          type: string
+          x-typeid-prefix: conv
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        kind:
+          title: Kind
+          type: string
+        organization_id:
+          examples:
+          - organization_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^organization_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Organization Id
+          type: string
+          x-typeid-prefix: organization
+        payload:
+          additionalProperties: true
+          title: Payload
+          type: object
+        user_id:
+          title: User Id
+          type: string
+      required:
+      - context_id
+      - conversation_id
+      - organization_id
+      - user_id
+      - created_at
+      - kind
+      - payload
+      title: UnknownContext
+      type: object
     UsageGranularity:
       enum:
       - day
@@ -16076,6 +16547,126 @@ components:
       - unique
       title: VisitsByKeyBucket
       type: object
+    WaitlistApplyRequest:
+      description: What you say when applying for a product.
+      properties:
+        note:
+          anyOf:
+          - maxLength: 1000
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: What you would use the product for
+          examples:
+          - We manage 12k domains for agency clients and triage renewals by hand.
+          title: Note
+      title: WaitlistApplyRequest
+      type: object
+    WaitlistEntryResponse:
+      description: Your own waitlist application.
+      properties:
+        applied_on:
+          description: When you applied
+          format: date-time
+          title: Applied On
+          type: string
+        decided_on:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: When the application was decided; null while it is pending
+          title: Decided On
+        product:
+          $ref: '#/components/schemas/WaitlistProduct'
+          description: Product the application is for
+        status:
+          $ref: '#/components/schemas/WaitlistEntryStatus'
+          description: Where the application stands
+      required:
+      - product
+      - status
+      - applied_on
+      title: WaitlistEntryResponse
+      type: object
+    WaitlistEntryStatus:
+      enum:
+      - pending
+      - granted
+      - rejected
+      title: WaitlistEntryStatus
+      type: string
+    WaitlistProduct:
+      description: 'A product that is not generally available and is reached through
+        the waitlist.
+
+
+        The member value is the wire form used in URLs and API bodies; the column
+        persists the
+
+        member NAME (StringEnum binds `value.name`), so renaming a member is a data
+        migration.'
+      enum:
+      - ai_concierge
+      title: WaitlistProduct
+      type: string
+    WaitlistProductListResponse:
+      description: The waitlisted products you may see.
+      properties:
+        products:
+          description: Waitlisted products you may see
+          items:
+            $ref: '#/components/schemas/WaitlistProductState'
+          title: Products
+          type: array
+      title: WaitlistProductListResponse
+      type: object
+    WaitlistProductState:
+      description: A waitlisted product, and where your own application for it stands.
+      properties:
+        applied_on:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: When you applied, if you have
+          title: Applied On
+        can_apply:
+          description: Whether an apply from you would be accepted right now; false
+            for an API key
+          title: Can Apply
+          type: boolean
+        decided_on:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: When your application was decided, if it was
+          title: Decided On
+        description:
+          description: What the product does
+          title: Description
+          type: string
+        display_name:
+          description: Human-readable product name
+          title: Display Name
+          type: string
+        product:
+          $ref: '#/components/schemas/WaitlistProduct'
+          description: Product key, used in the apply path
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/WaitlistEntryStatus'
+          - type: 'null'
+          description: Where your application stands; null until you apply, and for
+            an API key
+      required:
+      - product
+      - display_name
+      - description
+      - can_apply
+      title: WaitlistProductState
+      type: object
     WhitelabelBaseCreate:
       additionalProperties: false
       description: 'Create the base tier: served on a managed subdomain composed from
@@ -17057,7 +17648,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-09-20-175357
+  version: 2026-09-25-185651
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg
@@ -17087,6 +17678,7 @@ paths:
                 discriminator:
                   mapping:
                     aggregations: '#/components/schemas/AggregationsContext'
+                    branding_design: '#/components/schemas/BrandingDesignContext'
                     contacts: '#/components/schemas/ContactsContext'
                     domain_forwards: '#/components/schemas/DomainForwardsContext'
                     domain_recommendations: '#/components/schemas/DomainRecommendationsContext'
@@ -17102,6 +17694,7 @@ paths:
                 - $ref: '#/components/schemas/EmailForwardsContext'
                 - $ref: '#/components/schemas/DomainRecommendationsContext'
                 - $ref: '#/components/schemas/AggregationsContext'
+                - $ref: '#/components/schemas/BrandingDesignContext'
                 title: Response Get Context V1 Ai Concierge Contexts  Context Id  Get
           description: Successful Response
         '401':
@@ -17689,6 +18282,7 @@ paths:
                 discriminator:
                   mapping:
                     aggregations: '#/components/schemas/AggregationsContext'
+                    branding_design: '#/components/schemas/BrandingDesignContext'
                     contacts: '#/components/schemas/ContactsContext'
                     domain_forwards: '#/components/schemas/DomainForwardsContext'
                     domain_recommendations: '#/components/schemas/DomainRecommendationsContext'
@@ -17704,6 +18298,7 @@ paths:
                 - $ref: '#/components/schemas/EmailForwardsContext'
                 - $ref: '#/components/schemas/DomainRecommendationsContext'
                 - $ref: '#/components/schemas/AggregationsContext'
+                - $ref: '#/components/schemas/BrandingDesignContext'
                 title: Response Create Context V1 Ai Concierge Conversations  Conversation
                   Id  Contexts Post
           description: Successful Response
@@ -25295,7 +25890,7 @@ paths:
       - description: Filter domains held at an external registrar by the connected
           registrar credential they were synced from. Can be specified multiple times
           (union of all provided values); combined with `registrar`, both must match.
-          Matches exactly the domains whose `registrar_credential` field carries the
+          Matches exactly the domains whose `connected_account` field carries the
           id, so domains OpusDNS sponsors never match.
         in: query
         name: registrar_credential_id
@@ -25314,13 +25909,13 @@ paths:
           description: Filter domains held at an external registrar by the connected
             registrar credential they were synced from. Can be specified multiple
             times (union of all provided values); combined with `registrar`, both
-            must match. Matches exactly the domains whose `registrar_credential` field
+            must match. Matches exactly the domains whose `connected_account` field
             carries the id, so domains OpusDNS sponsors never match.
           title: Registrar Credential Id
       - description: Filter domains held at an external registrar by that registrar.
           Can be specified multiple times (union of all provided values); combined
           with `registrar_credential_id`, both must match. Matches exactly the domains
-          whose `registrar_credential` field carries the registrar, so domains OpusDNS
+          whose `connected_account` field carries the registrar, so domains OpusDNS
           sponsors never match.
         in: query
         name: registrar
@@ -25334,13 +25929,13 @@ paths:
           description: Filter domains held at an external registrar by that registrar.
             Can be specified multiple times (union of all provided values); combined
             with `registrar_credential_id`, both must match. Matches exactly the domains
-            whose `registrar_credential` field carries the registrar, so domains OpusDNS
+            whose `connected_account` field carries the registrar, so domains OpusDNS
             sponsors never match.
           title: Registrar
       - description: Extra data to include in each result. `tags` populates the `tags`
           (user tags) and `status_tags` fields, which are otherwise null; filtering
-          by `tag_ids` or `status_tags` alone does not populate them. `registrar_credential`
-          populates the `registrar_credential` field for domains held at an external
+          by `tag_ids` or `status_tags` alone does not populate them. `connected_account`
+          populates the `connected_account` field for domains held at an external
           registrar.
         in: query
         name: include
@@ -25354,8 +25949,8 @@ paths:
           description: Extra data to include in each result. `tags` populates the
             `tags` (user tags) and `status_tags` fields, which are otherwise null;
             filtering by `tag_ids` or `status_tags` alone does not populate them.
-            `registrar_credential` populates the `registrar_credential` field for
-            domains held at an external registrar.
+            `connected_account` populates the `connected_account` field for domains
+            held at an external registrar.
           title: Include
       - $ref: '#/components/parameters/DatetimeFormatHeader'
       responses:
@@ -25664,14 +26259,15 @@ paths:
         and transferred out).
 
 
-        Counts cover your organization and its sub-organizations, like the domain
-        summary; `breakdown=organization` shows how they divide between them. A create
-        is counted on the day OpusDNS took the order and a transfer on the day it
-        completed, so domains that have since been deleted still appear in the window
-        they were acquired in. Imported domains count as creates on the day they were
-        imported. Renewals and restores are counted once per day a domain was renewed
-        or restored, so a domain renewed in two different months counts in both. Domains
-        held at a connected external registrar are not included.
+        Counts cover your organization''s own domains, like the domain summary. With
+        `include_sub_organizations=true` they cover its sub-organizations too, and
+        `breakdown=organization` shows how they divide between them. A create is counted
+        on the day OpusDNS took the order and a transfer on the day it completed,
+        so domains that have since been deleted still appear in the window they were
+        acquired in. Imported domains count as creates on the day they were imported.
+        Renewals and restores are counted once per day a domain was renewed or restored,
+        so a domain renewed in two different months counts in both. Domains held at
+        a connected external registrar are not included.
 
 
         Every bucket the window touches is present, so the series can be charted as
@@ -25728,6 +26324,13 @@ paths:
           minimum: 1
           title: Breakdown Limit
           type: integer
+      - in: query
+        name: include_sub_organizations
+        required: false
+        schema:
+          default: false
+          title: Include Sub Organizations
+          type: boolean
       - $ref: '#/components/parameters/DatetimeFormatHeader'
       responses:
         '200':
@@ -25752,8 +26355,10 @@ paths:
       - domains:read
   /v1/domains/summary:
     get:
-      description: Retrieves a summary of domains including counts by status, TLD,
-        and expiration timeframes
+      description: 'Retrieves a summary of your organization''s domains, with counts
+        by status, status tag, TLD and
+
+        expiration timeframe. Only `by_organization` includes sub-organizations.'
       operationId: get_domain_summary_v1_domains_summary_get
       parameters:
       - $ref: '#/components/parameters/DatetimeFormatHeader'
@@ -27010,7 +27615,7 @@ paths:
           title: Domain Reference
       - description: Extra data to include in the response. `tags` populates the `tags`
           and `status_tags` fields, which are otherwise null. `renewal_price` resolves
-          the domain's renewal price. `registrar_credential` populates the `registrar_credential`
+          the domain's renewal price. `connected_account` populates the `connected_account`
           field for domains held at an external registrar.
         in: query
         name: include
@@ -27023,8 +27628,8 @@ paths:
           - type: 'null'
           description: Extra data to include in the response. `tags` populates the
             `tags` and `status_tags` fields, which are otherwise null. `renewal_price`
-            resolves the domain's renewal price. `registrar_credential` populates
-            the `registrar_credential` field for domains held at an external registrar.
+            resolves the domain's renewal price. `connected_account` populates the
+            `connected_account` field for domains held at an external registrar.
           title: Include
       - $ref: '#/components/parameters/DatetimeFormatHeader'
       responses:
@@ -30996,7 +31601,9 @@ paths:
       x-required-permissions:
       - organization:read
     patch:
-      description: Updates one or more organization attributes for the current organization
+      description: Updates one or more organization attributes for the current organization.
+        Setting a billing, pricing or abuse notification email requires the organization
+        owner or an admin of a parent organization.
       operationId: update_current_organization_attributes_v1_organizations_attributes_patch
       parameters:
       - $ref: '#/components/parameters/DatetimeFormatHeader'
@@ -31368,6 +31975,159 @@ paths:
       summary: Update an IP restriction
       tags:
       - organization
+  /v1/organizations/product-waitlist:
+    get:
+      description: 'Lists the waitlisted products your organization has been invited
+        to, or that you have already applied for, with where your own application
+        stands on each. Any other product is omitted entirely. An API key sees the
+        invited products but has no application of its own: `status` is null and `can_apply`
+        is false.'
+      operationId: list_product_waitlists_v1_organizations_product_waitlist_get
+      parameters:
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WaitlistProductListResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: List product waitlists
+      tags:
+      - organization
+      - product_waitlist
+      x-required-permissions:
+      - organization:read
+  /v1/organizations/product-waitlist/{product}/apply:
+    post:
+      description: 'Applies you for a product''s waitlist, optionally saying what
+        you would use the product for. Any member of an invited organization may apply.
+        The application is recorded as `pending` until OpusDNS decides on it. One
+        application per user per product: a second apply is refused, and a rejection
+        is reconsidered by OpusDNS rather than by applying again. A colleague''s application
+        does not stand in for yours, nor block it.'
+      operationId: apply_for_product_waitlist_v1_organizations_product_waitlist__product__apply_post
+      parameters:
+      - in: path
+        name: product
+        required: true
+        schema:
+          $ref: '#/components/schemas/WaitlistProduct'
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/WaitlistApplyRequest'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WaitlistEntryResponse'
+          description: Successful Response
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '404':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_WAITLIST_NOT_INVITED
+                detail: No waitlist is available for ai_concierge
+                product: ai_concierge
+                status: 404
+                title: Waitlist Error
+                type: waitlist-not-invited
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Found
+        '409':
+          content:
+            application/problem+json:
+              examples:
+                Waitlist Error:
+                  value:
+                    code: ERROR_WAITLIST_ENTRY_REJECTED
+                    detail: Your application for ai_concierge was rejected
+                    product: ai_concierge
+                    status: 409
+                    title: Waitlist Error
+                    type: waitlist-entry-rejected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Conflict
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - OAuth2PasswordBearer: []
+      summary: Apply for a product waitlist
+      tags:
+      - organization
+      - product_waitlist
+      x-required-permissions:
+      - organization:read
   /v1/organizations/role-permissions:
     get:
       description: Retrieves the catalog of `resource:scope` permissions a custom
@@ -32129,7 +32889,9 @@ paths:
       x-required-permissions:
       - organization:read
     patch:
-      description: Updates one or more organization attributes for the specified organization
+      description: Updates one or more organization attributes for the specified organization.
+        Setting a billing, pricing or abuse notification email requires the organization
+        owner or an admin of a parent organization.
       operationId: update_organization_attributes_v1_organizations__organization_id__attributes_patch
       parameters:
       - in: path
@@ -35884,6 +36646,100 @@ tags:
     '
   name: organization
   x-displayName: Organizations
+- description: 'Endpoints for products that are not generally available yet and are
+    reached through a waitlist.
+
+
+    A waitlisted product is invitation-only: OpusDNS invites an organization, its
+    members apply, and OpusDNS decides on each application. Until your organization
+    is invited, the product does not exist as far as this API is concerned - it is
+    left out of the listing, and applying for it answers `404`. Once you have applied,
+    the product stays in your listing whatever happens to the invite afterwards.
+
+
+    ### Endpoints
+
+
+    | Method | Path | Description |
+
+    |--------|------|-------------|
+
+    | `GET` | `/v1/organizations/product-waitlist` | The waitlisted products you may
+    see, and where your own application stands on each |
+
+    | `POST` | `/v1/organizations/product-waitlist/{product}/apply` | Apply for one
+    product''s waitlist |
+
+
+    Both routes act on your own organization - the one you authenticated as - even
+    when an `X-Organization-Context` header names one of its sub-organizations. Neither
+    takes an organization in the path.
+
+
+    ### Product state
+
+
+    Each entry in the listing describes one product and your own standing with it.
+    Applications are per user, so two members of one organization can see different
+    states for the same product:
+
+
+    | Field | Description |
+
+    |-------|-------------|
+
+    | `product` | The product key, used as `{product}` in the apply path |
+
+    | `display_name` | Human-readable product name |
+
+    | `description` | What the product does |
+
+    | `status` | `pending`, `granted` or `rejected`, or `null` while you have not
+    applied |
+
+    | `applied_on` | When you applied, or `null` |
+
+    | `decided_on` | When OpusDNS decided, or `null` |
+
+    | `can_apply` | Whether an apply from you would be accepted right now |
+
+
+    An API key has no application of its own: it sees the products your organization
+    is invited to, with `status` `null` and `can_apply` `false`.
+
+
+    ### Applying
+
+
+    `POST /v1/organizations/product-waitlist/{product}/apply` records your application
+    as `pending`. Any member of an invited organization may apply. It requires a user
+    token: an API-key token has no user to record.
+
+
+    The body is optional. Send `{"note": "..."}` to say what you would use the product
+    for - it is the one thing OpusDNS has to go on when deciding, so it is worth filling
+    in. A note is trimmed and may be up to 1000 characters; a blank or whitespace-only
+    one is rejected rather than stored. Posting no body at all applies without a note.
+
+
+    One application per user per product. A second apply answers `409`, whatever state
+    the first one reached - a rejection is reconsidered by OpusDNS approving it after
+    all, not by applying again. A colleague''s application neither stands in for yours
+    nor blocks it. `can_apply` in the listing tells you in advance whether an apply
+    would be accepted.
+
+
+    Being granted a product means you, the user who applied, gain access to it. Your
+    colleagues apply on their own, or ask OpusDNS if the whole organization should
+    have it.
+
+
+    A decision is not final: OpusDNS can approve an application it rejected, and can
+    withdraw a product it granted, which puts the application back to `rejected`.
+
+    '
+  name: product_waitlist
+  x-displayName: Product waitlist
 - description: 'Endpoints for retrieving TLD specifications.
 
     '
@@ -36061,6 +36917,7 @@ x-tagGroups:
   - authentication
   - user
   - organization
+  - product_waitlist
   - usage
 - name: Domains
   tags:

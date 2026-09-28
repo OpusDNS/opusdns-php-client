@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace OpusDNS\Client\Enum;
 
-enum DomainIncludeField: string
+enum WaitlistEntryStatus: string
 {
-    case TAGS = 'tags';
-    case RENEWAL_PRICE = 'renewal_price';
-    case CONNECTED_ACCOUNT = 'connected_account';
+    case PENDING = 'pending';
+    case GRANTED = 'granted';
+    case REJECTED = 'rejected';
 }

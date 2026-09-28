@@ -23,6 +23,9 @@ final readonly class DomainResponse implements ApiModel
      * @param string|null $authCode The auth code for the domain
      * @param \DateTimeImmutable|null $authCodeExpiresOn When the auth code expires
      * @param \DateTimeImmutable|null $canceledOn When the domain was deleted
+     * @param DomainRegistrarCredentialResponse|null $connectedAccount The connected account this domain is synced
+     *     from. Null unless `include=connected_account` is requested, and null even then for natively registered
+     *     domains, for domains on operator-managed registry accounts, and when the connected account was deleted.
      * @param list<DomainContactResponse>|null $contacts The contacts of the domain
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
      * @param \DateTimeImmutable|null $deletedOn When the domain will be deleted
@@ -40,10 +43,6 @@ final readonly class DomainResponse implements ApiModel
      *     or is managed at an external registrar. The flag is set and removed by OpusDNS; it cannot be changed
      *     through the API.
      * @param \DateTimeImmutable|null $registeredOn When the domain was registered
-     * @param DomainRegistrarCredentialResponse|null $registrarCredential The connected registrar credential this
-     *     domain is synced from. Null unless `include=registrar_credential` is requested, and null even then for
-     *     natively registered domains, for domains on operator-managed registry accounts, and when the credential
-     *     was deleted.
      * @param string|null $registryAccountId TypeID prefix: registry_account.
      * @param list<string>|null $registryStatuses All the domain statuses
      * @param RenewalMode|string|null $renewalMode The renewal mode of the domain
@@ -69,6 +68,7 @@ final readonly class DomainResponse implements ApiModel
         public ?string $authCode = null,
         public ?\DateTimeImmutable $authCodeExpiresOn = null,
         public ?\DateTimeImmutable $canceledOn = null,
+        public ?DomainRegistrarCredentialResponse $connectedAccount = null,
         public ?array $contacts = null,
         public ?\DateTimeImmutable $createdOn = null,
         public ?\DateTimeImmutable $deletedOn = null,
@@ -80,7 +80,6 @@ final readonly class DomainResponse implements ApiModel
         public ?string $ownerId = null,
         public bool $readOnly = false,
         public ?\DateTimeImmutable $registeredOn = null,
-        public ?DomainRegistrarCredentialResponse $registrarCredential = null,
         public ?string $registryAccountId = null,
         public ?array $registryStatuses = null,
         public RenewalMode|string|null $renewalMode = null,
@@ -108,6 +107,7 @@ final readonly class DomainResponse implements ApiModel
             authCode: $data['auth_code'] ?? null,
             authCodeExpiresOn: isset($data['auth_code_expires_on']) ? new \DateTimeImmutable($data['auth_code_expires_on']) : null,
             canceledOn: isset($data['canceled_on']) ? new \DateTimeImmutable($data['canceled_on']) : null,
+            connectedAccount: isset($data['connected_account']) ? DomainRegistrarCredentialResponse::fromArray($data['connected_account']) : null,
             contacts: isset($data['contacts']) ? array_map(static fn (array $item): DomainContactResponse => DomainContactResponse::fromArray($item), $data['contacts']) : null,
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
             deletedOn: isset($data['deleted_on']) ? new \DateTimeImmutable($data['deleted_on']) : null,
@@ -119,7 +119,6 @@ final readonly class DomainResponse implements ApiModel
             ownerId: $data['owner_id'] ?? null,
             readOnly: $data['read_only'] ?? false,
             registeredOn: isset($data['registered_on']) ? new \DateTimeImmutable($data['registered_on']) : null,
-            registrarCredential: isset($data['registrar_credential']) ? DomainRegistrarCredentialResponse::fromArray($data['registrar_credential']) : null,
             registryAccountId: $data['registry_account_id'] ?? null,
             registryStatuses: $data['registry_statuses'] ?? null,
             renewalMode: isset($data['renewal_mode']) ? RenewalMode::tryFrom($data['renewal_mode']) ?? $data['renewal_mode'] : null,
@@ -147,6 +146,7 @@ final readonly class DomainResponse implements ApiModel
             'auth_code' => $this->authCode,
             'auth_code_expires_on' => $this->authCodeExpiresOn,
             'canceled_on' => $this->canceledOn,
+            'connected_account' => $this->connectedAccount,
             'contacts' => $this->contacts,
             'created_on' => $this->createdOn,
             'deleted_on' => $this->deletedOn,
@@ -158,7 +158,6 @@ final readonly class DomainResponse implements ApiModel
             'owner_id' => $this->ownerId,
             'read_only' => $this->readOnly,
             'registered_on' => $this->registeredOn,
-            'registrar_credential' => $this->registrarCredential,
             'registry_account_id' => $this->registryAccountId,
             'registry_statuses' => $this->registryStatuses,
             'renewal_mode' => $this->renewalMode,
