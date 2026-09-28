@@ -173,6 +173,8 @@ final class Permission
         '/v1/organizations/attributes' => ['GET' => ['organization:read']],
         '/v1/organizations/ip-restrictions' => ['GET' => ['organization:read']],
         '/v1/organizations/ip-restrictions/{ip_restriction_id}' => ['GET' => ['organization:read']],
+        '/v1/organizations/product-waitlist' => ['GET' => ['organization:read']],
+        '/v1/organizations/product-waitlist/{product}/apply' => ['POST' => ['organization:read']],
         '/v1/organizations/role-permissions' => ['GET' => ['organization:read']],
         '/v1/organizations/roles' => ['GET' => ['organization:read']],
         '/v1/organizations/roles/{label}' => ['GET' => ['organization:read']],

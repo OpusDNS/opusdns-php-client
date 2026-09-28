@@ -87,16 +87,16 @@ final class DomainService
      *     (union of all provided values).
      * @param list<string>|null $registrarCredentialId Filter domains held at an external registrar by the connected
      *     registrar credential they were synced from. Can be specified multiple times (union of all provided
-     *     values); combined with `registrar`, both must match. Matches exactly the domains whose
-     *     `registrar_credential` field carries the id, so domains OpusDNS sponsors never match.
+     *     values); combined with `registrar`, both must match. Matches exactly the domains whose `connected_account`
+     *     field carries the id, so domains OpusDNS sponsors never match.
      * @param list<Registrar|string>|null $registrar Filter domains held at an external registrar by that registrar.
      *     Can be specified multiple times (union of all provided values); combined with `registrar_credential_id`,
-     *     both must match. Matches exactly the domains whose `registrar_credential` field carries the registrar, so
+     *     both must match. Matches exactly the domains whose `connected_account` field carries the registrar, so
      *     domains OpusDNS sponsors never match.
      * @param list<DomainListIncludeField|string>|null $include Extra data to include in each result. `tags`
      *     populates the `tags` (user tags) and `status_tags` fields, which are otherwise null; filtering by
-     *     `tag_ids` or `status_tags` alone does not populate them. `registrar_credential` populates the
-     *     `registrar_credential` field for domains held at an external registrar.
+     *     `tag_ids` or `status_tags` alone does not populate them. `connected_account` populates the
+     *     `connected_account` field for domains held at an external registrar.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -255,13 +255,13 @@ final class DomainService
      * outbound transfers, renewals and restores, plus `net` (created and transferred in, minus deleted and
      * transferred out).
      *
-     * Counts cover your organization and its sub-organizations, like the domain summary;
-     * `breakdown=organization` shows how they divide between them. A create is counted on the day OpusDNS
-     * took the order and a transfer on the day it completed, so domains that have since been deleted still
-     * appear in the window they were acquired in. Imported domains count as creates on the day they were
-     * imported. Renewals and restores are counted once per day a domain was renewed or restored, so a
-     * domain renewed in two different months counts in both. Domains held at a connected external
-     * registrar are not included.
+     * Counts cover your organization's own domains, like the domain summary. With
+     * `include_sub_organizations=true` they cover its sub-organizations too, and `breakdown=organization`
+     * shows how they divide between them. A create is counted on the day OpusDNS took the order and a
+     * transfer on the day it completed, so domains that have since been deleted still appear in the window
+     * they were acquired in. Imported domains count as creates on the day they were imported. Renewals and
+     * restores are counted once per day a domain was renewed or restored, so a domain renewed in two
+     * different months counts in both. Domains held at a connected external registrar are not included.
      *
      * Every bucket the window touches is present, so the series can be charted as is. A bucket marked
      * `partial` reaches outside the window and covers only part of its span.
@@ -275,6 +275,7 @@ final class DomainService
      * @param UsageGranularity|string|null $granularity Server default: day.
      * @param DomainStatisticsBreakdown|string|null $breakdown Server default: none.
      * @param int|null $breakdownLimit Server default: 10.
+     * @param bool|null $includeSubOrganizations Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -286,12 +287,13 @@ final class DomainService
         ?string $tld = null,
         DomainStatisticsBreakdown|string|null $breakdown = null,
         ?int $breakdownLimit = null,
+        ?bool $includeSubOrganizations = null,
         ?string $xDatetimeFormat = null,
     ): DomainStatisticsResponse {
         $response = $this->client->request(
             'GET',
             Endpoint::DOMAINS_STATISTICS,
-            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'granularity' => $granularity, 'tld' => $tld, 'breakdown' => $breakdown, 'breakdown_limit' => $breakdownLimit],
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'granularity' => $granularity, 'tld' => $tld, 'breakdown' => $breakdown, 'breakdown_limit' => $breakdownLimit, 'include_sub_organizations' => $includeSubOrganizations],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -301,7 +303,8 @@ final class DomainService
     /**
      * Get domain summary
      *
-     * Retrieves a summary of domains including counts by status, TLD, and expiration timeframes
+     * Retrieves a summary of your organization's domains, with counts by status, status tag, TLD and
+     * expiration timeframe. Only `by_organization` includes sub-organizations.
      *
      * Required permissions: domains:read
      *
@@ -725,8 +728,8 @@ final class DomainService
      *
      * @param list<DomainIncludeField|string>|null $include Extra data to include in the response. `tags` populates
      *     the `tags` and `status_tags` fields, which are otherwise null. `renewal_price` resolves the domain's
-     *     renewal price. `registrar_credential` populates the `registrar_credential` field for domains held at an
-     *     external registrar.
+     *     renewal price. `connected_account` populates the `connected_account` field for domains held at an external
+     *     registrar.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.

@@ -339,6 +339,12 @@ final class Endpoint
     public const ORGANIZATIONS_IP_RESTRICTIONS_BY_IP_RESTRICTION_ID = '/v1/organizations/ip-restrictions/{ip_restriction_id}';
 
     /** GET */
+    public const ORGANIZATIONS_PRODUCT_WAITLIST = '/v1/organizations/product-waitlist';
+
+    /** POST */
+    public const ORGANIZATIONS_PRODUCT_WAITLIST_BY_PRODUCT_APPLY = '/v1/organizations/product-waitlist/{product}/apply';
+
+    /** GET */
     public const ORGANIZATIONS_ROLE_PERMISSIONS = '/v1/organizations/role-permissions';
 
     /** GET, POST */

@@ -31,4 +31,5 @@ enum PublicResource: string
     case VANITY_NS = 'vanity_ns';
     case WHITELABEL_BRANDING = 'whitelabel_branding';
     case AI_CONCIERGE = 'ai_concierge';
+    case AI_CONCIERGE_WAITLIST = 'ai_concierge_waitlist';
 }

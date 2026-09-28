@@ -15,13 +15,14 @@ use OpusDNS\Client\Serializer;
 final readonly class DomainSummaryData implements ApiModel
 {
     /**
-     * @param array<string, int> $byOrganization Domain counts by organization name (name: count)
-     * @param array<string, int> $byStatus Domain counts by status (status: count)
-     * @param array<string, int> $byStatusTag Domain counts by status tag (status_tag: count), only status tags with
-     *     at least one domain
-     * @param array<string, int> $byTld Domain counts by TLD (tld: count)
-     * @param DomainsExpiringSoon $expiringSoon Domains expiring soon
-     * @param int $totalCount Total number of domains including sub-organizations
+     * @param array<string, int> $byOrganization Domain counts for the organization and its sub-organizations, by
+     *     name (name: count), only organizations with at least one domain
+     * @param array<string, int> $byStatus The organization's domain counts by status (status: count)
+     * @param array<string, int> $byStatusTag The organization's domain counts by status tag (status_tag: count),
+     *     only status tags with at least one domain
+     * @param array<string, int> $byTld The organization's domain counts by TLD (tld: count)
+     * @param DomainsExpiringSoon $expiringSoon The organization's domains expiring soon
+     * @param int $totalCount Total number of domains owned by the organization
      */
     public function __construct(
         public array $byOrganization,
