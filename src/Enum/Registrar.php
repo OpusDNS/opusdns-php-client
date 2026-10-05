@@ -20,4 +20,5 @@ enum Registrar: string
     case ENOM = 'ENOM';
     case OPENSRS = 'OPENSRS';
     case NIC_DIRECT = 'NIC_DIRECT';
+    case OPENPROVIDER = 'OPENPROVIDER';
 }

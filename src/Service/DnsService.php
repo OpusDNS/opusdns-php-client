@@ -50,10 +50,24 @@ final class DnsService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param ZoneSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param ZoneSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
-     * @param TagFilterMode|string|null $tagMode Server default: match_any.
+     * @param TagFilterMode|string|null $tagMode How to combine tag_ids: 'match_any' returns objects with at least
+     *     one of the tags, 'match_all' returns objects with every tag, 'match_none' returns objects with none of the
+     *     tags, including objects that carry no user tags at all. Has no effect unless one or more tag_ids are
+     *     supplied; to filter on whether an object has any user tag, use has_tags. Server default: match_any.
+     * @param bool|null $hasTags true returns only objects that carry at least one user tag, false only objects that
+     *     carry none. Status tags are not counted. Combines with tag_ids and the other filters.
+     * @param DnssecStatus|string|null $dnssecStatus Filter by DNSSEC status
+     * @param string|null $name Filter by exact zone name
+     * @param string|null $search Search zones by name (contains)
+     * @param string|null $suffix Filter zones by TLD/suffix (e.g., 'com', 'io', 'co.uk')
+     * @param string|null $vanityNameserverSetId Filter zones by the vanity nameserver set branding them
+     * @param \DateTimeImmutable|null $createdAfter Filter zones created after this date
+     * @param \DateTimeImmutable|null $createdBefore Filter zones created before this date
+     * @param \DateTimeImmutable|null $updatedAfter Filter zones updated after this date
+     * @param \DateTimeImmutable|null $updatedBefore Filter zones updated before this date
      * @param list<ZoneIncludeField|string>|null $include Include additional data in the response. Can be specified
      *     multiple times.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -67,6 +81,7 @@ final class DnsService
         SortOrder|string|null $sortOrder = null,
         ?array $tagIds = null,
         TagFilterMode|string|null $tagMode = null,
+        ?bool $hasTags = null,
         DnssecStatus|string|null $dnssecStatus = null,
         ?string $name = null,
         ?string $search = null,
@@ -82,7 +97,7 @@ final class DnsService
         $response = $this->client->request(
             'GET',
             Endpoint::DNS,
-            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'dnssec_status' => $dnssecStatus, 'name' => $name, 'search' => $search, 'suffix' => $suffix, 'vanity_nameserver_set_id' => $vanityNameserverSetId, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'updated_after' => $updatedAfter, 'updated_before' => $updatedBefore, 'include' => $include],
+            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'dnssec_status' => $dnssecStatus, 'name' => $name, 'search' => $search, 'suffix' => $suffix, 'vanity_nameserver_set_id' => $vanityNameserverSetId, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'updated_after' => $updatedAfter, 'updated_before' => $updatedBefore, 'include' => $include],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -120,8 +135,9 @@ final class DnsService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param DomainForwardZoneSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param string|null $search Search by zone name
+     * @param DomainForwardZoneSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -153,8 +169,9 @@ final class DnsService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param EmailForwardZoneSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param string|null $search Search by zone name
+     * @param EmailForwardZoneSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.

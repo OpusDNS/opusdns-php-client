@@ -74,15 +74,48 @@ final class DomainService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param DomainSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param DomainSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
      * @param list<StatusTagType|string>|null $statusTags Filter by status tag types. Can be specified multiple
      *     times.
-     * @param TagFilterMode|string|null $statusTagMode Server default: match_any.
+     * @param TagFilterMode|string|null $statusTagMode How to combine status_tags: 'match_any' returns objects with
+     *     at least one of the tags, 'match_all' returns objects with every tag, 'match_none' returns objects with
+     *     none of the tags, including objects that carry no status tags at all. Has no effect unless one or more
+     *     status_tags are supplied. Server default: match_any.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
-     * @param TagFilterMode|string|null $tagMode Server default: match_any.
+     * @param TagFilterMode|string|null $tagMode How to combine tag_ids: 'match_any' returns objects with at least
+     *     one of the tags, 'match_all' returns objects with every tag, 'match_none' returns objects with none of the
+     *     tags, including objects that carry no user tags at all. Has no effect unless one or more tag_ids are
+     *     supplied; to filter on whether an object has any user tag, use has_tags. Server default: match_any.
+     * @param bool|null $hasTags true returns only objects that carry at least one user tag, false only objects that
+     *     carry none. Status tags are not counted. Combines with tag_ids and the other filters.
+     * @param string|null $name Filter by exact domain name
+     * @param string|null $search Search domains by name (contains) or domain ID (exact match)
      * @param list<string>|null $tld Filter by top-level domain (e.g., 'com', 'org'). Can be specified multiple times
      *     (union of all provided values).
+     * @param string|null $sld Filter by second-level domain
+     * @param string|null $nameserver Filter domains whose nameserver hostnames contain this text, e.g. `cloudflare`
+     *     or `ns1.example.com`. Matches the nameservers the domain currently delegates to. The text is matched
+     *     literally, so `%` and `_` are not wildcards; a trailing dot on a single label anchors at a label boundary,
+     *     so `ns1.` matches `ns1.example.com` but not `ns10.example.com`. Unlike the other filters this one reads
+     *     the nameservers of every domain in scope, so expect a slower response, the more so the larger the
+     *     portfolio.
+     * @param bool|null $transferLock Filter by transfer lock status
+     * @param bool|null $readOnly Filter by read-only status
+     * @param bool|null $isPremium Filter by premium domain status
+     * @param \DateTimeImmutable|null $createdAfter Filter domains created after this date
+     * @param \DateTimeImmutable|null $createdBefore Filter domains created before this date
+     * @param \DateTimeImmutable|null $updatedAfter Filter domains updated after this date
+     * @param \DateTimeImmutable|null $updatedBefore Filter domains updated before this date
+     * @param \DateTimeImmutable|null $expiresAfter Filter domains expiring after this date
+     * @param \DateTimeImmutable|null $expiresBefore Filter domains expiring before this date
+     * @param bool|null $expiresIn30Days Filter domains expiring within the next 30 days
+     * @param bool|null $expiresIn60Days Filter domains expiring within the next 60 days
+     * @param bool|null $expiresIn90Days Filter domains expiring within the next 90 days
+     * @param \DateTimeImmutable|null $registeredAfter Filter domains registered after this date
+     * @param \DateTimeImmutable|null $registeredBefore Filter domains registered before this date
+     * @param \DateTimeImmutable|null $transferredAfter Filter domains transferred in after this date
+     * @param \DateTimeImmutable|null $transferredBefore Filter domains transferred in before this date
      * @param list<string>|null $registryStatuses Filter domains by registry status. Can be specified multiple times
      *     (union of all provided values).
      * @param list<string>|null $registrarCredentialId Filter domains held at an external registrar by the connected
@@ -110,6 +143,7 @@ final class DomainService
         TagFilterMode|string|null $statusTagMode = null,
         ?array $tagIds = null,
         TagFilterMode|string|null $tagMode = null,
+        ?bool $hasTags = null,
         ?string $name = null,
         ?string $search = null,
         ?array $tld = null,
@@ -140,7 +174,7 @@ final class DomainService
         $response = $this->client->request(
             'GET',
             Endpoint::DOMAINS,
-            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'name' => $name, 'search' => $search, 'tld' => $tld, 'sld' => $sld, 'nameserver' => $nameserver, 'transfer_lock' => $transferLock, 'read_only' => $readOnly, 'is_premium' => $isPremium, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'updated_after' => $updatedAfter, 'updated_before' => $updatedBefore, 'expires_after' => $expiresAfter, 'expires_before' => $expiresBefore, 'expires_in_30_days' => $expiresIn30Days, 'expires_in_60_days' => $expiresIn60Days, 'expires_in_90_days' => $expiresIn90Days, 'registered_after' => $registeredAfter, 'registered_before' => $registeredBefore, 'transferred_after' => $transferredAfter, 'transferred_before' => $transferredBefore, 'registry_statuses' => $registryStatuses, 'registrar_credential_id' => $registrarCredentialId, 'registrar' => $registrar, 'include' => $include],
+            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'name' => $name, 'search' => $search, 'tld' => $tld, 'sld' => $sld, 'nameserver' => $nameserver, 'transfer_lock' => $transferLock, 'read_only' => $readOnly, 'is_premium' => $isPremium, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'updated_after' => $updatedAfter, 'updated_before' => $updatedBefore, 'expires_after' => $expiresAfter, 'expires_before' => $expiresBefore, 'expires_in_30_days' => $expiresIn30Days, 'expires_in_60_days' => $expiresIn60Days, 'expires_in_90_days' => $expiresIn90Days, 'registered_after' => $registeredAfter, 'registered_before' => $registeredBefore, 'transferred_after' => $transferredAfter, 'transferred_before' => $transferredBefore, 'registry_statuses' => $registryStatuses, 'registrar_credential_id' => $registrarCredentialId, 'registrar' => $registrar, 'include' => $include],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -272,10 +306,18 @@ final class DomainService
      *
      * Required permissions: domains:read
      *
-     * @param UsageGranularity|string|null $granularity Server default: day.
-     * @param DomainStatisticsBreakdown|string|null $breakdown Server default: none.
-     * @param int|null $breakdownLimit Server default: 10.
-     * @param bool|null $includeSubOrganizations Server default: false.
+     * @param \DateTimeImmutable $startDate First day of the window, inclusive (YYYY-MM-DD, UTC)
+     * @param \DateTimeImmutable $endDate Last day of the window, inclusive (YYYY-MM-DD, UTC). How far it may reach
+     *     depends on `granularity`: at most 92 days for `day`, 371 days for `week`, 396 days for `month`.
+     * @param UsageGranularity|string|null $granularity Time-bucket size. Weeks start on Monday and months on the
+     *     1st, in UTC. Server default: day.
+     * @param string|null $tld Restrict the counts to one top-level domain, e.g. `com`.
+     * @param DomainStatisticsBreakdown|string|null $breakdown Adds a top-N list to the response: `organization`
+     *     ranks your organization and its sub-organizations (so it needs `include_sub_organizations=true`), `tld`
+     *     ranks the top-level domains. Server default: none.
+     * @param int|null $breakdownLimit How many rows the breakdown lists. Server default: 10.
+     * @param bool|null $includeSubOrganizations Count your sub-organizations' domains too. By default only your own
+     *     organization's domains are counted, as in the domain summary. Server default: false.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.

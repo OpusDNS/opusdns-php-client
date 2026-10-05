@@ -16,7 +16,7 @@ use OpusDNS\Client\Union;
 final readonly class ContextListResponse implements ApiModel
 {
     /**
-     * @param list<ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext> $results
+     * @param list<ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext> $results
      */
     public function __construct(
         public PaginationMetadata $pagination,
@@ -34,6 +34,7 @@ final readonly class ContextListResponse implements ApiModel
             results: array_map(static fn (array $item) => Union::discriminate($item, 'kind', [
                 'aggregations' => AggregationsContext::class,
                 'branding_design' => BrandingDesignContext::class,
+                'call_operation_result' => CallOperationResultContext::class,
                 'contacts' => ContactsContext::class,
                 'domain_forwards' => DomainForwardsContext::class,
                 'domain_recommendations' => DomainRecommendationsContext::class,

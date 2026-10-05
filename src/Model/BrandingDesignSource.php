@@ -18,7 +18,6 @@ final readonly class BrandingDesignSource implements ApiModel
      * @param list<string>|null $signals
      */
     public function __construct(
-        public ?string $confidence = null,
         public ?string $kind = null,
         public ?string $logoAssetUrl = null,
         public ?string $presetId = null,
@@ -33,7 +32,6 @@ final readonly class BrandingDesignSource implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            confidence: $data['confidence'] ?? null,
             kind: $data['kind'] ?? null,
             logoAssetUrl: $data['logo_asset_url'] ?? null,
             presetId: $data['preset_id'] ?? null,
@@ -48,7 +46,6 @@ final readonly class BrandingDesignSource implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'confidence' => $this->confidence,
             'kind' => $this->kind,
             'logo_asset_url' => $this->logoAssetUrl,
             'preset_id' => $this->presetId,

@@ -33,8 +33,8 @@ final readonly class ContactResponse implements ApiModel
      * @param string|null $org The organization of the contact
      * @param string|null $organizationId The organization that owns the domain TypeID prefix: organization.
      * @param string|null $state The state of the contact
-     * @param list<StatusTagResponse>|null $statusTags Status tags assigned to this contact. Only included when
-     *     ?include=tags is specified.
+     * @param list<ContactStatusTagResponse>|null $statusTags Status tags assigned to this contact. Only included
+     *     when ?include=tags is specified.
      * @param list<TagEnrichedResponse>|null $tags Tags assigned to this contact
      * @param string|null $title The title of the contact
      */
@@ -83,7 +83,7 @@ final readonly class ContactResponse implements ApiModel
             org: $data['org'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             state: $data['state'] ?? null,
-            statusTags: isset($data['status_tags']) ? array_map(static fn (array $item): StatusTagResponse => StatusTagResponse::fromArray($item), $data['status_tags']) : null,
+            statusTags: isset($data['status_tags']) ? array_map(static fn (array $item): ContactStatusTagResponse => ContactStatusTagResponse::fromArray($item), $data['status_tags']) : null,
             tags: isset($data['tags']) ? array_map(static fn (array $item): TagEnrichedResponse => TagEnrichedResponse::fromArray($item), $data['tags']) : null,
             title: $data['title'] ?? null,
         );

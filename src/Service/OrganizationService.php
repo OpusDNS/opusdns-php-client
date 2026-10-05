@@ -65,8 +65,10 @@ final class OrganizationService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param OrganizationSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param OrganizationSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
+     * @param string|null $search Search across organization name, address, and city
+     * @param string|null $countryCode Filter by country code
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -495,8 +497,9 @@ final class OrganizationService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param UserSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param UserSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
+     * @param string|null $search Search across username, email, first name, and last name
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
@@ -746,8 +749,16 @@ final class OrganizationService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param BillingTransactionSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param BillingTransactionSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
+     * @param string|null $productReference Filter by product reference
+     * @param BillingTransactionProductType|string|null $productType Filter by product type
+     * @param BillingTransactionAction|string|null $action Filter by action
+     * @param BillingTransactionStatus|string|null $status Filter by status
+     * @param \DateTimeImmutable|null $createdAfter Filter by transactions created after this date
+     * @param \DateTimeImmutable|null $createdBefore Filter by transactions created before this date
+     * @param \DateTimeImmutable|null $completedAfter Filter by transactions completed after this date
+     * @param \DateTimeImmutable|null $completedBefore Filter by transactions completed before this date
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
