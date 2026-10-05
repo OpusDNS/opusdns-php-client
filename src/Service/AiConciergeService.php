@@ -14,6 +14,7 @@ use OpusDNS\Client\Endpoint;
 use OpusDNS\Client\Model\AggregationsContext;
 use OpusDNS\Client\Model\AggregationsContextCreate;
 use OpusDNS\Client\Model\BrandingDesignContext;
+use OpusDNS\Client\Model\CallOperationResultContext;
 use OpusDNS\Client\Model\ContactsContext;
 use OpusDNS\Client\Model\ContactsContextCreate;
 use OpusDNS\Client\Model\ContextListResponse;
@@ -58,12 +59,12 @@ final class AiConciergeService
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
-     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext
+     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext
      */
     public function getContext(
         string $contextId,
         ?string $xDatetimeFormat = null,
-    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext {
+    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext {
         $response = $this->client->request(
             'GET',
             Endpoint::AI_CONCIERGE_CONTEXTS_BY_CONTEXT_ID,
@@ -71,9 +72,10 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext => Union::discriminate($data, 'kind', [
+        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext => Union::discriminate($data, 'kind', [
             'aggregations' => AggregationsContext::class,
             'branding_design' => BrandingDesignContext::class,
+            'call_operation_result' => CallOperationResultContext::class,
             'contacts' => ContactsContext::class,
             'domain_forwards' => DomainForwardsContext::class,
             'domain_recommendations' => DomainRecommendationsContext::class,
@@ -247,13 +249,13 @@ final class AiConciergeService
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
-     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext
+     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext
      */
     public function createContext(
         string $conversationId,
         ZonesContextCreate|ContactsContextCreate|DomainsContextCreate|DomainForwardsContextCreate|EmailForwardsContextCreate|DomainRecommendationsContextCreate|AggregationsContextCreate|array $body,
         ?string $xDatetimeFormat = null,
-    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext {
+    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext {
         $response = $this->client->request(
             'POST',
             Endpoint::AI_CONCIERGE_CONVERSATIONS_BY_CONVERSATION_ID_CONTEXTS,
@@ -262,9 +264,10 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext => Union::discriminate($data, 'kind', [
+        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext => Union::discriminate($data, 'kind', [
             'aggregations' => AggregationsContext::class,
             'branding_design' => BrandingDesignContext::class,
+            'call_operation_result' => CallOperationResultContext::class,
             'contacts' => ContactsContext::class,
             'domain_forwards' => DomainForwardsContext::class,
             'domain_recommendations' => DomainRecommendationsContext::class,

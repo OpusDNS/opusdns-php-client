@@ -14,8 +14,8 @@ use OpusDNS\Client\Endpoint;
 use OpusDNS\Client\Enum\ContactAttributeSetSortField;
 use OpusDNS\Client\Enum\ContactIncludeField;
 use OpusDNS\Client\Enum\ContactSortField;
+use OpusDNS\Client\Enum\ContactStatusTagType;
 use OpusDNS\Client\Enum\SortOrder;
-use OpusDNS\Client\Enum\StatusTagType;
 use OpusDNS\Client\Enum\TagFilterMode;
 use OpusDNS\Client\Enum\VerificationType;
 use OpusDNS\Client\Model\ContactAttestReq;
@@ -52,13 +52,32 @@ final class ContactService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param ContactSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
-     * @param list<StatusTagType|string>|null $statusTags Filter by status tag types. Can be specified multiple
-     *     times.
-     * @param TagFilterMode|string|null $statusTagMode Server default: match_any.
+     * @param ContactSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
+     * @param list<ContactStatusTagType|string>|null $statusTags Filter by contact status tag types. Can be specified
+     *     multiple times.
+     * @param TagFilterMode|string|null $statusTagMode How to combine status_tags: 'match_any' returns objects with
+     *     at least one of the tags, 'match_all' returns objects with every tag, 'match_none' returns objects with
+     *     none of the tags, including objects that carry no status tags at all. Has no effect unless one or more
+     *     status_tags are supplied. Server default: match_any.
      * @param list<string>|null $tagIds Filter by user tag IDs. Can be specified multiple times.
-     * @param TagFilterMode|string|null $tagMode Server default: match_any.
+     * @param TagFilterMode|string|null $tagMode How to combine tag_ids: 'match_any' returns objects with at least
+     *     one of the tags, 'match_all' returns objects with every tag, 'match_none' returns objects with none of the
+     *     tags, including objects that carry no user tags at all. Has no effect unless one or more tag_ids are
+     *     supplied; to filter on whether an object has any user tag, use has_tags. Server default: match_any.
+     * @param bool|null $hasTags true returns only objects that carry at least one user tag, false only objects that
+     *     carry none. Status tags are not counted. Combines with tag_ids and the other filters.
+     * @param string|null $firstName Filter by exact first name
+     * @param string|null $lastName Filter by exact last name
+     * @param string|null $email Filter by exact email address
+     * @param string|null $search Search contacts by name, email, organization, or contact ID. Multiple
+     *     whitespace-separated terms must all match (as substrings), so a full "First Last" name matches across the
+     *     separate first- and last-name columns. A contact ID is matched exactly.
+     * @param string|null $country Filter by country
+     * @param bool|null $inUse Filter by whether the contact is in use by any domain (true = has domains, false =
+     *     none)
+     * @param \DateTimeImmutable|null $createdAfter Filter contacts created after this date
+     * @param \DateTimeImmutable|null $createdBefore Filter contacts created before this date
      * @param list<ContactIncludeField|string>|null $include Include additional data in the response. Can be
      *     specified multiple times.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
@@ -74,6 +93,7 @@ final class ContactService
         TagFilterMode|string|null $statusTagMode = null,
         ?array $tagIds = null,
         TagFilterMode|string|null $tagMode = null,
+        ?bool $hasTags = null,
         ?string $firstName = null,
         ?string $lastName = null,
         ?string $email = null,
@@ -88,7 +108,7 @@ final class ContactService
         $response = $this->client->request(
             'GET',
             Endpoint::CONTACTS,
-            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'first_name' => $firstName, 'last_name' => $lastName, 'email' => $email, 'search' => $search, 'country' => $country, 'in_use' => $inUse, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'include' => $include],
+            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'first_name' => $firstName, 'last_name' => $lastName, 'email' => $email, 'search' => $search, 'country' => $country, 'in_use' => $inUse, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'include' => $include],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -126,8 +146,10 @@ final class ContactService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param ContactAttributeSetSortField|string|null $sortBy Server default: created_on.
-     * @param SortOrder|string|null $sortOrder Server default: desc.
+     * @param ContactAttributeSetSortField|string|null $sortBy Field to sort by Server default: created_on.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
+     * @param string|null $tld Filter by exact TLD (e.g. 'de', '.de', 'DE')
+     * @param string|null $label Filter by label (contains, case-insensitive)
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.

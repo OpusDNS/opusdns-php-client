@@ -41,9 +41,10 @@ final class TagService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param TagSortField|string|null $sortBy Server default: label.
-     * @param SortOrder|string|null $sortOrder Server default: asc.
+     * @param TagSortField|string|null $sortBy Field to sort by Server default: label.
+     * @param SortOrder|string|null $sortOrder Sort order direction Server default: asc.
      * @param list<TagType|string>|null $tagTypes Filter by tag types (OR semantics)
+     * @param string|null $search Search tags by label (contains)
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.

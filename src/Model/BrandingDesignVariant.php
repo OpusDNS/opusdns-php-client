@@ -16,18 +16,11 @@ final readonly class BrandingDesignVariant implements ApiModel
 {
     /**
      * @param array<string, mixed> $document
-     * @param list<string>|null $changedSeeds
-     * @param list<BrandingDesignPhrase>|null $rationaleParts
      */
     public function __construct(
         public array $document,
         public string $variantId,
-        public ?array $changedSeeds = null,
-        public ?BrandingDesignContrast $contrast = null,
-        public string $label = '',
         public ?BrandingDesignPreview $preview = null,
-        public string $rationale = '',
-        public ?array $rationaleParts = null,
     ) {
     }
 
@@ -39,12 +32,7 @@ final readonly class BrandingDesignVariant implements ApiModel
         return new self(
             document: (array) $data['document'],
             variantId: $data['variant_id'],
-            changedSeeds: $data['changed_seeds'] ?? null,
-            contrast: isset($data['contrast']) ? BrandingDesignContrast::fromArray($data['contrast']) : null,
-            label: $data['label'] ?? '',
             preview: isset($data['preview']) ? BrandingDesignPreview::fromArray($data['preview']) : null,
-            rationale: $data['rationale'] ?? '',
-            rationaleParts: isset($data['rationale_parts']) ? array_map(static fn (array $item): BrandingDesignPhrase => BrandingDesignPhrase::fromArray($item), $data['rationale_parts']) : null,
         );
     }
 
@@ -56,12 +44,7 @@ final readonly class BrandingDesignVariant implements ApiModel
         return Serializer::normalize([
             'document' => ($this->document === [] ? new \stdClass() : $this->document),
             'variant_id' => $this->variantId,
-            'changed_seeds' => $this->changedSeeds,
-            'contrast' => $this->contrast,
-            'label' => $this->label,
             'preview' => $this->preview,
-            'rationale' => $this->rationale,
-            'rationale_parts' => $this->rationaleParts,
         ]);
     }
 
