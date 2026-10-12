@@ -121,6 +121,7 @@ final class Permission
             'PATCH' => ['domains:manage'],
             'DELETE' => ['domains:delete'],
         ],
+        '/v1/domains/{domain_reference}/auth-code' => ['POST' => ['domains:manage']],
         '/v1/domains/{domain_reference}/dnssec' => [
             'GET' => ['domains:read'],
             'PUT' => ['domains:manage'],
