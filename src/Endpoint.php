@@ -242,6 +242,9 @@ final class Endpoint
     /** GET, PATCH, DELETE */
     public const DOMAINS_BY_DOMAIN_REFERENCE = '/v1/domains/{domain_reference}';
 
+    /** POST */
+    public const DOMAINS_BY_DOMAIN_REFERENCE_AUTH_CODE = '/v1/domains/{domain_reference}/auth-code';
+
     /** GET, PUT, DELETE */
     public const DOMAINS_BY_DOMAIN_REFERENCE_DNSSEC = '/v1/domains/{domain_reference}/dnssec';
 

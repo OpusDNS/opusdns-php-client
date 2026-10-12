@@ -11,6 +11,8 @@ namespace OpusDNS\Client\Service;
 
 use OpusDNS\Client\Client;
 use OpusDNS\Client\Endpoint;
+use OpusDNS\Client\Enum\AccountTypeFilterMode;
+use OpusDNS\Client\Enum\ConnectedAccountType;
 use OpusDNS\Client\Enum\DomainIncludeField;
 use OpusDNS\Client\Enum\DomainListIncludeField;
 use OpusDNS\Client\Enum\DomainSortField;
@@ -31,6 +33,7 @@ use OpusDNS\Client\Model\ApiDomainTldSpecificSeModelsRequestAuthcodeResponse;
 use OpusDNS\Client\Model\ApiDomainTldSpecificWalesModelsRequestAuthcodeResponse;
 use OpusDNS\Client\Model\ClaimsNoticesRequest;
 use OpusDNS\Client\Model\ClaimsNoticesResponse;
+use OpusDNS\Client\Model\DomainAuthCodeResponse;
 use OpusDNS\Client\Model\DomainCheckResponse;
 use OpusDNS\Client\Model\DomainCreate;
 use OpusDNS\Client\Model\DomainDnssecDataCreate;
@@ -126,6 +129,15 @@ final class DomainService
      *     Can be specified multiple times (union of all provided values); combined with `registrar_credential_id`,
      *     both must match. Matches exactly the domains whose `connected_account` field carries the registrar, so
      *     domains OpusDNS sponsors never match.
+     * @param list<ConnectedAccountType|string>|null $accountType Filter domains by the type of the registry account
+     *     they are held on: `ras` for domains on a registrar-abstraction (RAS) account synced from a connected
+     *     external registrar, including those whose credential has since been deleted; `ams` for domains managed on
+     *     a customer's own registry accreditation; `default` for all others, manually managed domains included
+     *     (their accounts are typed `default`). Can be specified multiple times (union of all provided values).
+     * @param AccountTypeFilterMode|string|null $accountTypeMode How to apply `account_type`: `match_any` keeps the
+     *     domains on any of the listed types, `match_none` the domains on none of them (so
+     *     `account_type=ras&account_type_mode=match_none` keeps every domain not on a RAS account, and naming every
+     *     type keeps none). Has no effect without `account_type`. Server default: match_any.
      * @param list<DomainListIncludeField|string>|null $include Extra data to include in each result. `tags`
      *     populates the `tags` (user tags) and `status_tags` fields, which are otherwise null; filtering by
      *     `tag_ids` or `status_tags` alone does not populate them. `connected_account` populates the
@@ -168,13 +180,15 @@ final class DomainService
         ?array $registryStatuses = null,
         ?array $registrarCredentialId = null,
         ?array $registrar = null,
+        ?array $accountType = null,
+        AccountTypeFilterMode|string|null $accountTypeMode = null,
         ?array $include = null,
         ?string $xDatetimeFormat = null,
     ): PaginationDomainResponse {
         $response = $this->client->request(
             'GET',
             Endpoint::DOMAINS,
-            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'name' => $name, 'search' => $search, 'tld' => $tld, 'sld' => $sld, 'nameserver' => $nameserver, 'transfer_lock' => $transferLock, 'read_only' => $readOnly, 'is_premium' => $isPremium, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'updated_after' => $updatedAfter, 'updated_before' => $updatedBefore, 'expires_after' => $expiresAfter, 'expires_before' => $expiresBefore, 'expires_in_30_days' => $expiresIn30Days, 'expires_in_60_days' => $expiresIn60Days, 'expires_in_90_days' => $expiresIn90Days, 'registered_after' => $registeredAfter, 'registered_before' => $registeredBefore, 'transferred_after' => $transferredAfter, 'transferred_before' => $transferredBefore, 'registry_statuses' => $registryStatuses, 'registrar_credential_id' => $registrarCredentialId, 'registrar' => $registrar, 'include' => $include],
+            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'name' => $name, 'search' => $search, 'tld' => $tld, 'sld' => $sld, 'nameserver' => $nameserver, 'transfer_lock' => $transferLock, 'read_only' => $readOnly, 'is_premium' => $isPremium, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'updated_after' => $updatedAfter, 'updated_before' => $updatedBefore, 'expires_after' => $expiresAfter, 'expires_before' => $expiresBefore, 'expires_in_30_days' => $expiresIn30Days, 'expires_in_60_days' => $expiresIn60Days, 'expires_in_90_days' => $expiresIn90Days, 'registered_after' => $registeredAfter, 'registered_before' => $registeredBefore, 'transferred_after' => $transferredAfter, 'transferred_before' => $transferredBefore, 'registry_statuses' => $registryStatuses, 'registrar_credential_id' => $registrarCredentialId, 'registrar' => $registrar, 'account_type' => $accountType, 'account_type_mode' => $accountTypeMode, 'include' => $include],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -345,20 +359,35 @@ final class DomainService
     /**
      * Get domain summary
      *
-     * Retrieves a summary of your organization's domains, with counts by status, status tag, TLD and
-     * expiration timeframe. Only `by_organization` includes sub-organizations.
+     * Retrieves a summary of your organization's domains, with counts by status, status tag, TLD, registry
+     * account type and expiration timeframe. Only `by_organization` includes sub-organizations. With
+     * `account_type`, every count covers only the domains that filter keeps, so a sub-organization whose
+     * domains all fall outside it is left out of `by_organization`, as one without domains always is.
      *
      * Required permissions: domains:read
      *
+     * @param list<ConnectedAccountType|string>|null $accountType Filter domains by the type of the registry account
+     *     they are held on: `ras` for domains on a registrar-abstraction (RAS) account synced from a connected
+     *     external registrar, including those whose credential has since been deleted; `ams` for domains managed on
+     *     a customer's own registry accreditation; `default` for all others, manually managed domains included
+     *     (their accounts are typed `default`). Can be specified multiple times (union of all provided values).
+     * @param AccountTypeFilterMode|string|null $accountTypeMode How to apply `account_type`: `match_any` keeps the
+     *     domains on any of the listed types, `match_none` the domains on none of them (so
+     *     `account_type=ras&account_type_mode=match_none` keeps every domain not on a RAS account, and naming every
+     *     type keeps none). Has no effect without `account_type`. Server default: match_any.
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
      */
-    public function getDomainSummary(?string $xDatetimeFormat = null): DomainSummaryResponse
-    {
+    public function getDomainSummary(
+        ?array $accountType = null,
+        AccountTypeFilterMode|string|null $accountTypeMode = null,
+        ?string $xDatetimeFormat = null,
+    ): DomainSummaryResponse {
         $response = $this->client->request(
             'GET',
             Endpoint::DOMAINS_SUMMARY,
+            query: ['account_type' => $accountType, 'account_type_mode' => $accountTypeMode],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -394,11 +423,14 @@ final class DomainService
     /**
      * Requests your auth code directly from DNS Belgium (registry)
      *
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD.
+     *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeBe(
         string $domainReference,
@@ -417,16 +449,17 @@ final class DomainService
     /**
      * Generates a fresh auth code at Nominet (.cymru)
      *
-     * Nominet expires a Transfer Authorisation Code after 14 days or on use in a transfer, and enforces
-     * complexity requirements on it. This endpoint mints a compliant code, sets it through a
-     * `domain:update` and returns it, invalidating any previous one. It is the only way to change a
-     * `.cymru` auth code.
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD. Nominet
+     * expires a Transfer Authorisation Code after 14 days or on use in a transfer, and enforces complexity
+     * requirements on it. This endpoint mints a compliant code, sets it through a `domain:update` and
+     * returns it, invalidating any previous one. It is the only way to change a `.cymru` auth code.
      *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeCymru(
         string $domainReference,
@@ -445,11 +478,14 @@ final class DomainService
     /**
      * Requests your auth code directly from CZ.NIC (registry)
      *
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD.
+     *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeCz(
         string $domainReference,
@@ -494,11 +530,14 @@ final class DomainService
     /**
      * Requests your auth code directly from Punktum dk (registry)
      *
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD.
+     *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeDk(
         string $domainReference,
@@ -517,11 +556,14 @@ final class DomainService
     /**
      * Requests your auth code directly from EURid (registry)
      *
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD.
+     *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeEu(
         string $domainReference,
@@ -540,11 +582,14 @@ final class DomainService
     /**
      * Requests your auth code directly from DOMREG (registry)
      *
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD.
+     *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeLt(
         string $domainReference,
@@ -657,15 +702,17 @@ final class DomainService
     /**
      * Generates a fresh auth code at Internetstiftelsen (.nu)
      *
-     * `.nu` auth codes are owned by the registry: registrars can only send the literal `auto`, and the
-     * generated code is returned in the `iis:updData` extension of a `domain:update`. This endpoint runs
-     * that update and stores the fresh code, invalidating any previous one.
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD. `.nu` auth
+     * codes are owned by the registry: registrars can only send the literal `auto`, and the generated code
+     * is returned in the `iis:updData` extension of a `domain:update`. This endpoint runs that update and
+     * stores the fresh code, invalidating any previous one.
      *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeNu(
         string $domainReference,
@@ -684,15 +731,17 @@ final class DomainService
     /**
      * Generates a fresh auth code at Internetstiftelsen (.se)
      *
-     * `.se` auth codes are owned by the registry: registrars can only send the literal `auto`, and the
-     * generated code is returned in the `iis:updData` extension of a `domain:update`. This endpoint runs
-     * that update and stores the fresh code, invalidating any previous one.
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD. `.se` auth
+     * codes are owned by the registry: registrars can only send the literal `auto`, and the generated code
+     * is returned in the `iis:updData` extension of a `domain:update`. This endpoint runs that update and
+     * stores the fresh code, invalidating any previous one.
      *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeSe(
         string $domainReference,
@@ -711,16 +760,17 @@ final class DomainService
     /**
      * Generates a fresh auth code at Nominet (.wales)
      *
-     * Nominet expires a Transfer Authorisation Code after 14 days or on use in a transfer, and enforces
-     * complexity requirements on it. This endpoint mints a compliant code, sets it through a
-     * `domain:update` and returns it, invalidating any previous one. It is the only way to change a
-     * `.wales` auth code.
+     * Deprecated: use `POST /v1/domains/{domain_reference}/auth-code`, which handles every TLD. Nominet
+     * expires a Transfer Authorisation Code after 14 days or on use in a transfer, and enforces complexity
+     * requirements on it. This endpoint mints a compliant code, sets it through a `domain:update` and
+     * returns it, invalidating any previous one. It is the only way to change a `.wales` auth code.
      *
      * Required permissions: domains:manage
      *
      * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
      *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
      *     sent.
+     * @deprecated
      */
     public function requestAuthCodeWales(
         string $domainReference,
@@ -848,6 +898,37 @@ final class DomainService
     }
 
     /**
+     * Request an auth code
+     *
+     * Gets an auth code for the domain, following the registry's model. Where the registrar sets the code,
+     * a new one is generated, set at the registry and returned, invalidating the previous one. Where the
+     * registry generates it, it is requested there: `.eu` and `.lt` return the code already issued while
+     * it is still valid, and `.nl` domains on SIDN DRS return the current token, which only SIDN can
+     * reset. Registries that only send the code to the registrant (`.be`, `.cz`) answer with `delivery`
+     * `registrant_email` and no code. TLDs without auth codes answer 422. `auth_code` is hidden when the
+     * caller cannot view the domain's auth codes.
+     *
+     * Required permissions: domains:manage
+     *
+     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
+     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
+     *     sent.
+     */
+    public function requestDomainAuthCode(
+        string $domainReference,
+        ?string $xDatetimeFormat = null,
+    ): DomainAuthCodeResponse {
+        $response = $this->client->request(
+            'POST',
+            Endpoint::DOMAINS_BY_DOMAIN_REFERENCE_AUTH_CODE,
+            path: ['domain_reference' => $domainReference],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): DomainAuthCodeResponse => DomainAuthCodeResponse::fromArray($data));
+    }
+
+    /**
      * Retrieve DNSSEC data
      *
      * Fetches all DNSSEC records associated with the specified domain.
@@ -964,6 +1045,9 @@ final class DomainService
      *
      * Extends the registration period of an existing domain. The renewal period is added to the current
      * expiration date of the domain.
+     *
+     * For a domain held at another registrar, the renewal transfers the domain into OpusDNS and answers
+     * 202 before the transfer starts.
      *
      * Required permissions: domains:manage
      *
