@@ -22,12 +22,12 @@ final readonly class RegistrantChangeDetails implements ApiModel
      * @param string $registrantChangeId TypeID prefix: registrant_change.
      */
     public function __construct(
-        public RegistrantChangeConfirmationMethod|string $confirmationMethod,
         public string $newRegistrantId,
         public string $priorRegistrantId,
         public string $registrantChangeId,
         public RegistrantChangeStatus|string $status,
         public ?\DateTimeImmutable $confirmationDeadline = null,
+        public RegistrantChangeConfirmationMethod|string|null $confirmationMethod = null,
         public string $detailType = 'registrant_change',
         public ?string $notificationType = null,
         public bool $transferLockOptOut = false,
@@ -41,12 +41,12 @@ final readonly class RegistrantChangeDetails implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            confirmationMethod: RegistrantChangeConfirmationMethod::tryFrom($data['confirmation_method']) ?? $data['confirmation_method'],
             newRegistrantId: $data['new_registrant_id'],
             priorRegistrantId: $data['prior_registrant_id'],
             registrantChangeId: $data['registrant_change_id'],
             status: RegistrantChangeStatus::tryFrom($data['status']) ?? $data['status'],
             confirmationDeadline: isset($data['confirmation_deadline']) ? new \DateTimeImmutable($data['confirmation_deadline']) : null,
+            confirmationMethod: isset($data['confirmation_method']) ? RegistrantChangeConfirmationMethod::tryFrom($data['confirmation_method']) ?? $data['confirmation_method'] : null,
             detailType: $data['detail_type'] ?? 'registrant_change',
             notificationType: $data['notification_type'] ?? null,
             transferLockOptOut: $data['transfer_lock_opt_out'] ?? false,
@@ -60,12 +60,12 @@ final readonly class RegistrantChangeDetails implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'confirmation_method' => $this->confirmationMethod,
             'new_registrant_id' => $this->newRegistrantId,
             'prior_registrant_id' => $this->priorRegistrantId,
             'registrant_change_id' => $this->registrantChangeId,
             'status' => $this->status,
             'confirmation_deadline' => $this->confirmationDeadline,
+            'confirmation_method' => $this->confirmationMethod,
             'detail_type' => $this->detailType,
             'notification_type' => $this->notificationType,
             'transfer_lock_opt_out' => $this->transferLockOptOut,

@@ -45,9 +45,9 @@ final class EventService
      * @param EventType|string|null $type Filter by event type
      * @param EventSubtype|string|null $subtype Filter by subtype
      * @param bool|null $acknowledged Filter by acknowledgment status Server default: false.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getEvents(
         ?int $page = null,
@@ -78,9 +78,9 @@ final class EventService
      *
      * Required permissions: events:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getEvent(string $eventId, ?string $xDatetimeFormat = null): EventResponse
     {
@@ -101,9 +101,9 @@ final class EventService
      *
      * Required permissions: events:manage
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function acknowledgeEvent(string $eventId, ?string $xDatetimeFormat = null): void
     {

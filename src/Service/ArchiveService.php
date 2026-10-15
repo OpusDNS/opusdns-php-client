@@ -50,9 +50,9 @@ final class ArchiveService
      *     SOFT-BOUNCE, HARD-BOUNCE)
      * @param \DateTimeImmutable|null $startTime Filter logs after (RFC3339)
      * @param \DateTimeImmutable|null $endTime Filter logs before (RFC3339)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getEmailForwardLogsByAlias(
         string $emailForwardAliasId,
@@ -94,9 +94,9 @@ final class ArchiveService
      *     SOFT-BOUNCE, HARD-BOUNCE)
      * @param \DateTimeImmutable|null $startTime Filter logs after (RFC3339)
      * @param \DateTimeImmutable|null $endTime Filter logs before (RFC3339)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getEmailForwardLogs(
         string $emailForwardId,
@@ -125,7 +125,7 @@ final class ArchiveService
      *
      * Retrieve all paginated audit logs with optional filtering and sorting
      *
-     * Required permissions: organization:read
+     * Required permissions: audit_logs:read
      *
      * @param ObjectLogSortField|string|null $sortBy Sort field (object_log_id, object_id, object_type, action,
      *     created_on, organization_id, server_request_id, performed_by_type, performed_by_id) Server default:
@@ -142,9 +142,9 @@ final class ArchiveService
      * @param \DateTimeImmutable|null $createdBefore Upper bound: created_on <= value (RFC3339)
      * @param \DateTimeImmutable|null $createdAfter Lower bound: created_on >= value (RFC3339)
      * @param string|null $objectId Filter by object ID (TypeID)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getObjectLogs(
         ObjectLogSortField|string|null $sortBy = null,
@@ -177,7 +177,7 @@ final class ArchiveService
      *
      * Retrieve paginated audit logs for a specific object with optional filtering and sorting
      *
-     * Required permissions: organization:read
+     * Required permissions: audit_logs:read
      *
      * @param ObjectLogSortField|string|null $sortBy Sort field (object_log_id, object_id, object_type, action,
      *     created_on, organization_id, server_request_id, performed_by_type, performed_by_id) Server default:
@@ -193,9 +193,9 @@ final class ArchiveService
      * @param string|null $performedById Filter by performer ID (TypeID)
      * @param \DateTimeImmutable|null $createdBefore Upper bound: created_on <= value (RFC3339)
      * @param \DateTimeImmutable|null $createdAfter Lower bound: created_on >= value (RFC3339)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getObjectLogsByObjectId(
         string $objectId,
@@ -229,7 +229,7 @@ final class ArchiveService
      *
      * Retrieves a paginated list of request history logs
      *
-     * Required permissions: organization:read
+     * Required permissions: audit_logs:read
      *
      * @param RequestHistorySortField|string|null $sortBy Sort field (request_history_id, method, path, status_code,
      *     duration, client_ip, server_request_id, performed_by_type, performed_by_id, created_on,
@@ -250,9 +250,9 @@ final class ArchiveService
      * @param string|null $performedById Performed by ID filter
      * @param \DateTimeImmutable|null $requestStartedBefore Upper bound: request_started_at <= value (RFC3339)
      * @param \DateTimeImmutable|null $requestStartedAfter Lower bound: request_started_at >= value (RFC3339)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getRequestHistory(
         RequestHistorySortField|string|null $sortBy = null,

@@ -1,9 +1,10 @@
 components:
   parameters:
     DatetimeFormatHeader:
-      description: Accepted for backwards compatibility; has no effect. Response datetimes
-        are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix,
-        whether or not this header is sent.
+      deprecated: true
+      description: 'Deprecated: has no effect and will be removed from this specification
+        on 2026-11-12; the API keeps ignoring it if sent. Response datetimes are always
+        normalized to UTC and serialized as RFC 3339 with a `Z` suffix.'
       example: rfc3339
       in: header
       name: X-Datetime-Format
@@ -11409,6 +11410,32 @@ components:
       - disabled
       title: DnssecStatus
       type: string
+    DomainAmsAccountResponse:
+      properties:
+        registry:
+          $ref: '#/components/schemas/RegistryServiceBackend'
+          description: The registry the account is accredited at
+        registry_account_id:
+          description: The registry account the domain is held on
+          examples:
+          - registry_account_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^registry_account_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Registry Account Id
+          type: string
+          x-typeid-prefix: registry_account
+        type:
+          const: ams
+          description: 'Kind of connected account. `ams`: the organization''s own
+            registry accreditation, on which OpusDNS manages the domain.'
+          title: Type
+          type: string
+      required:
+      - type
+      - registry_account_id
+      - registry
+      title: DomainAmsAccountResponse
+      type: object
     DomainAttributeKey:
       enum:
       - auto_renew_period
@@ -12980,6 +13007,7 @@ components:
       - tags
       - renewal_price
       - connected_account
+      - registrant_change
       title: DomainIncludeField
       type: string
     DomainLifecycleBase:
@@ -13246,6 +13274,92 @@ components:
       - payload
       title: DomainRecommendationsContextCreate
       type: object
+    DomainRegistrantChangeResponse:
+      properties:
+        confirmation_deadline:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: When the request expires if not confirmed
+          title: Confirmation Deadline
+        confirmation_method:
+          anyOf:
+          - $ref: '#/components/schemas/RegistrantChangeConfirmationMethod'
+          - type: 'null'
+          description: How the change was confirmed, null when no confirmation applies
+        created_on:
+          description: When the request was created
+          format: date-time
+          title: Created On
+          type: string
+        domain_id:
+          description: The ID of the domain
+          examples:
+          - domain_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^domain_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Domain Id
+          type: string
+          x-typeid-prefix: domain
+        failure_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Why the registrant change failed
+          title: Failure Reason
+        material:
+          description: Whether the name, organization or email of the registrant changes
+          title: Material
+          type: boolean
+        new_registrant:
+          description: The registrant after the change
+          examples:
+          - contact_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^contact_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: New Registrant
+          type: string
+          x-typeid-prefix: contact
+        previous_registrant:
+          description: The registrant before the change
+          examples:
+          - contact_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^contact_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Previous Registrant
+          type: string
+          x-typeid-prefix: contact
+        registrant_change_id:
+          description: The ID of the registrant change
+          examples:
+          - registrant_change_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^registrant_change_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Registrant Change Id
+          type: string
+          x-typeid-prefix: registrant_change
+        status:
+          $ref: '#/components/schemas/RegistrantChangeStatus'
+          description: The status of the registrant change
+        transfer_lock_opt_out:
+          description: Whether the transfer lock after the change was opted out of
+          title: Transfer Lock Opt Out
+          type: boolean
+      required:
+      - registrant_change_id
+      - domain_id
+      - status
+      - material
+      - previous_registrant
+      - new_registrant
+      - confirmation_method
+      - transfer_lock_opt_out
+      - confirmation_deadline
+      - failure_reason
+      - created_on
+      title: DomainRegistrantChangeResponse
+      type: object
     DomainRegistrarCredentialResponse:
       properties:
         name:
@@ -13414,15 +13528,18 @@ components:
           anyOf:
           - discriminator:
               mapping:
+                ams: '#/components/schemas/DomainAmsAccountResponse'
                 ras: '#/components/schemas/DomainRegistrarCredentialResponse'
               propertyName: type
             oneOf:
             - $ref: '#/components/schemas/DomainRegistrarCredentialResponse'
+            - $ref: '#/components/schemas/DomainAmsAccountResponse'
           - type: 'null'
-          description: The connected account this domain is synced from. Null unless
-            `include=connected_account` is requested, and null even then for natively
-            registered domains, for domains on operator-managed registry accounts,
-            and when the connected account was deleted.
+          description: 'The connected account this domain is synced from or managed
+            on: a registrar credential (`ras`) or the organization''s own registry
+            accreditation (`ams`). Null unless `include=connected_account` is requested,
+            and null even then for natively registered domains, for domains on operator-managed
+            registry accounts, and when the connected account was deleted.'
           title: Connected Account
         contacts:
           description: The contacts of the domain
@@ -13511,6 +13628,12 @@ components:
           - type: 'null'
           description: When the domain was registered
           title: Registered On
+        registrant_change:
+          anyOf:
+          - $ref: '#/components/schemas/DomainRegistrantChangeResponse'
+          - type: 'null'
+          description: The change of registrant in progress. Null unless `include=registrant_change`
+            is requested, and null even then when no change of registrant is in progress.
         registry_account_id:
           default: None
           examples:
@@ -18263,10 +18386,16 @@ components:
       - DELETED
       - IMPORTED
       - SYNCED_AFTER_IMPORT
+      - SYNCED
       - TRANSFER_STARTED
       - TRANSFER_COMPLETED
+      - TRANSFER_CANCELLED
+      - TRANSFER_FAILED
       - TRANSFER_OUT_STARTED
       - TRANSFER_OUT_COMPLETED
+      - TRANSFER_OUT_CANCELLED
+      - TRANSFER_OUT_FAILED
+      - TRANSFER_OUT_REJECTED
       - RENEWED
       - RESTORED
       - BILLING_TRANSACTION_RESERVED
@@ -18280,6 +18409,19 @@ components:
         action:
           $ref: '#/components/schemas/ObjectEventType'
           description: Action performed
+        changes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ObjectLogChange'
+            type: array
+          - type: 'null'
+          description: 'Fields that differ from the object''s previous log in the
+            same organization. Empty when nothing changed; `null` when there was no
+            previous log to compare with: the object''s first log in the organization,
+            or a log written before changes were recorded. `updated_on` is not compared,
+            arrays are compared regardless of order and reported whole, and sensitive
+            values such as `auth_code` read `***REDACTED***`.'
+          title: Changes
         created_on:
           description: Timestamp when the log was created
           format: date-time
@@ -18290,7 +18432,8 @@ components:
           - additionalProperties: true
             type: object
           - type: 'null'
-          description: Changes made to the object
+          description: Snapshot of the whole object after the action; its shape depends
+            on `object_type`
           title: Details
         object_id:
           description: ID of the object
@@ -18328,6 +18471,26 @@ components:
       - action
       - created_on
       title: ObjectLog
+      type: object
+    ObjectLogChange:
+      properties:
+        field:
+          description: Dot-separated path of the field in the object, for example
+            `renewal_mode` or `contacts.registrant`
+          title: Field
+          type: string
+        new_value:
+          description: Value of the field in this log; `null` when the field was absent
+          title: New Value
+        old_value:
+          description: Value of the field in the object's previous log; `null` when
+            the field was absent
+          title: Old Value
+      required:
+      - field
+      - old_value
+      - new_value
+      title: ObjectLogChange
       type: object
     ObjectLogSortField:
       enum:
@@ -18884,6 +19047,8 @@ components:
           - $ref: '#/components/schemas/PublicRole'
           - $ref: '#/components/schemas/CustomRoleLabel'
           - type: 'null'
+          description: 'Role bound to the API key: a built-in role name or the label
+            of a custom role. null when the key holds no role, which grants no permissions.'
           title: Role
         status:
           $ref: '#/components/schemas/OrganizationCredentialStatus'
@@ -20947,7 +21112,9 @@ components:
           - type: 'null'
           title: Confirmation Deadline
         confirmation_method:
-          $ref: '#/components/schemas/RegistrantChangeConfirmationMethod'
+          anyOf:
+          - $ref: '#/components/schemas/RegistrantChangeConfirmationMethod'
+          - type: 'null'
         detail_type:
           const: registrant_change
           default: registrant_change
@@ -20999,7 +21166,6 @@ components:
       - status
       - prior_registrant_id
       - new_registrant_id
-      - confirmation_method
       title: RegistrantChangeDetails
       type: object
     RegistrantChangeFeeType:
@@ -21090,6 +21256,7 @@ components:
       - OPENSRS
       - NIC_DIRECT
       - OPENPROVIDER
+      - REALTIMEREGISTER
       title: Registrar
       type: string
     RegistrarContact:
@@ -24968,7 +25135,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-10-09-225956
+  version: 2026-10-15-162027
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg
@@ -26648,7 +26815,7 @@ paths:
       tags:
       - archive
       x-required-permissions:
-      - organization:read
+      - audit_logs:read
   /v1/archive/object-logs/{object_id}:
     get:
       description: Retrieve paginated audit logs for a specific object with optional
@@ -26803,7 +26970,7 @@ paths:
       tags:
       - archive
       x-required-permissions:
-      - organization:read
+      - audit_logs:read
   /v1/archive/request-history:
     get:
       description: Retrieves a paginated list of request history logs
@@ -27000,12 +27167,13 @@ paths:
       tags:
       - archive
       x-required-permissions:
-      - organization:read
+      - audit_logs:read
   /v1/auth/client_credentials/introspect:
     get:
       description: Returns the stored record for the API key (or organization token)
-        used to authenticate the request, including its organization. Requires API-key
-        or organization-token authentication; user tokens are rejected.
+        used to authenticate the request, including its organization and the role
+        bound to the key. Requires API-key or organization-token authentication; user
+        tokens are rejected.
       operationId: introspect_client_credential_v1_auth_client_credentials_introspect_get
       parameters:
       - $ref: '#/components/parameters/DatetimeFormatHeader'
@@ -27034,6 +27202,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHORIZATION_UNAVAILABLE
+                detail: Additional error context.
+                status: 503
+                title: Authorization service unavailable.
+                type: authorization-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -33649,7 +33829,7 @@ paths:
           (user tags) and `status_tags` fields, which are otherwise null; filtering
           by `tag_ids` or `status_tags` alone does not populate them. `connected_account`
           populates the `connected_account` field for domains held at an external
-          registrar.
+          registrar or on the organization's own registry accreditation (AMS).
         in: query
         name: include
         required: false
@@ -33663,7 +33843,8 @@ paths:
             `tags` (user tags) and `status_tags` fields, which are otherwise null;
             filtering by `tag_ids` or `status_tags` alone does not populate them.
             `connected_account` populates the `connected_account` field for domains
-            held at an external registrar.
+            held at an external registrar or on the organization's own registry accreditation
+            (AMS).
           title: Include
       - $ref: '#/components/parameters/DatetimeFormatHeader'
       responses:
@@ -35424,7 +35605,9 @@ paths:
       - description: Extra data to include in the response. `tags` populates the `tags`
           and `status_tags` fields, which are otherwise null. `renewal_price` resolves
           the domain's renewal price. `connected_account` populates the `connected_account`
-          field for domains held at an external registrar.
+          field for domains held at an external registrar or on the organization's
+          own registry accreditation (AMS). `registrant_change` populates the `registrant_change`
+          field with the change of registrant in progress.
         in: query
         name: include
         required: false
@@ -35437,7 +35620,10 @@ paths:
           description: Extra data to include in the response. `tags` populates the
             `tags` and `status_tags` fields, which are otherwise null. `renewal_price`
             resolves the domain's renewal price. `connected_account` populates the
-            `connected_account` field for domains held at an external registrar.
+            `connected_account` field for domains held at an external registrar or
+            on the organization's own registry accreditation (AMS). `registrant_change`
+            populates the `registrant_change` field with the change of registrant
+            in progress.
           title: Include
       - $ref: '#/components/parameters/DatetimeFormatHeader'
       responses:

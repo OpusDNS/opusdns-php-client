@@ -14,4 +14,5 @@ enum DomainIncludeField: string
     case TAGS = 'tags';
     case RENEWAL_PRICE = 'renewal_price';
     case CONNECTED_ACCOUNT = 'connected_account';
+    case REGISTRANT_CHANGE = 'registrant_change';
 }

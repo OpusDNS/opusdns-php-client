@@ -69,9 +69,9 @@ final class OrganizationService
      * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
      * @param string|null $search Search across organization name, address, and city
      * @param string|null $countryCode Filter by country code
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listOrganizations(
         ?int $page = null,
@@ -98,9 +98,9 @@ final class OrganizationService
      * Create a new organization under the current organization
      *
      * @param OrganizationCreate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function createOrganization(OrganizationCreate|array $body, ?string $xDatetimeFormat = null): Organization
     {
@@ -122,9 +122,9 @@ final class OrganizationService
      * Required permissions: organization:read
      *
      * @param list<string>|null $keys Optional list of attribute keys to filter
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      * @return list<OrganizationAttributeResponse>
      */
     public function getCurrentOrganizationAttributes(?array $keys = null, ?string $xDatetimeFormat = null): array
@@ -146,9 +146,9 @@ final class OrganizationService
      * or abuse notification email requires the organization owner or an admin of a parent organization.
      *
      * @param list<OrganizationAttributeUpdate>|list<array<string, mixed>> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      * @return list<OrganizationAttributeResponse>
      */
     public function updateCurrentOrganizationAttributes(array $body, ?string $xDatetimeFormat = null): array
@@ -173,9 +173,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      * @return list<IpRestrictionResponse>
      */
     public function listIpRestrictions(?string $xDatetimeFormat = null): array
@@ -198,9 +198,9 @@ final class OrganizationService
      * returned with CIDR notation (/32 for IPv4, /128 for IPv6).
      *
      * @param IpRestrictionCreate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function createIpRestriction(
         IpRestrictionCreate|array $body,
@@ -226,9 +226,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getIpRestriction(int $ipRestrictionId, ?string $xDatetimeFormat = null): IpRestrictionResponse
     {
@@ -251,9 +251,9 @@ final class OrganizationService
      * and returned with CIDR notation (/32 for IPv4, /128 for IPv6).
      *
      * @param IpRestrictionUpdate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function updateIpRestriction(
         int $ipRestrictionId,
@@ -278,9 +278,9 @@ final class OrganizationService
      *
      * Permanently removes the specified IP restriction from your organization.
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function deleteIpRestriction(int $ipRestrictionId, ?string $xDatetimeFormat = null): void
     {
@@ -302,9 +302,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listProductWaitlists(?string $xDatetimeFormat = null): WaitlistProductListResponse
     {
@@ -329,9 +329,9 @@ final class OrganizationService
      * Required permissions: organization:read
      *
      * @param WaitlistApplyRequest|array<string, mixed>|null $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function applyForProductWaitlist(
         WaitlistProduct|string $product,
@@ -356,9 +356,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listRolePermissions(?string $xDatetimeFormat = null): PublicPermissionSet
     {
@@ -379,9 +379,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      * @return list<PublicRoleDefinition>
      */
     public function listRoles(?string $xDatetimeFormat = null): array
@@ -402,9 +402,9 @@ final class OrganizationService
      * admin/owner permissions cannot be granted.
      *
      * @param CustomRoleCreate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function createRole(CustomRoleCreate|array $body, ?string $xDatetimeFormat = null): PublicRoleDefinition
     {
@@ -425,9 +425,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getRole(string $label, ?string $xDatetimeFormat = null): PublicRoleDefinition
     {
@@ -448,9 +448,9 @@ final class OrganizationService
      * subject holding the role instantly. Built-in roles are immutable.
      *
      * @param CustomRoleUpdate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function updateRole(
         string $label,
@@ -474,9 +474,9 @@ final class OrganizationService
      * Deletes a custom role. Refused while the role is still assigned to any subject, and for built-in
      * roles.
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function deleteRole(string $label, ?string $xDatetimeFormat = null): void
     {
@@ -500,9 +500,9 @@ final class OrganizationService
      * @param UserSortField|string|null $sortBy Field to sort by Server default: created_on.
      * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
      * @param string|null $search Search across username, email, first name, and last name
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listUsers(
         ?int $page = null,
@@ -529,9 +529,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getOrganization(
         string $organizationId,
@@ -553,9 +553,9 @@ final class OrganizationService
      * Updates details for a specific organization
      *
      * @param OrganizationUpdate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function updateOrganization(
         string $organizationId,
@@ -578,9 +578,9 @@ final class OrganizationService
      *
      * Permanently deletes an organization
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function deleteOrganization(string $organizationId, ?string $xDatetimeFormat = null): void
     {
@@ -600,9 +600,9 @@ final class OrganizationService
      * Required permissions: organization:read
      *
      * @param list<string>|null $keys Optional list of attribute keys to filter
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      * @return list<OrganizationAttributeResponse>
      */
     public function getOrganizationAttributes(
@@ -629,9 +629,9 @@ final class OrganizationService
      * organization.
      *
      * @param list<OrganizationAttributeUpdate>|list<array<string, mixed>> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      * @return list<OrganizationAttributeResponse>
      */
     public function updateOrganizationAttributes(
@@ -659,9 +659,9 @@ final class OrganizationService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listInvoices(
         string $organizationId,
@@ -689,9 +689,9 @@ final class OrganizationService
      *
      * @param int|null $page Server default: 1.
      * @param int|null $pageSize Server default: 10.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listReceipts(
         string $organizationId,
@@ -718,9 +718,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getPricingPlans(
         string $organizationId,
@@ -759,9 +759,9 @@ final class OrganizationService
      * @param \DateTimeImmutable|null $createdBefore Filter by transactions created before this date
      * @param \DateTimeImmutable|null $completedAfter Filter by transactions completed after this date
      * @param \DateTimeImmutable|null $completedBefore Filter by transactions completed before this date
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getTransactions(
         string $organizationId,
@@ -797,9 +797,9 @@ final class OrganizationService
      *
      * Required permissions: organization:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getTransaction(
         string $organizationId,
@@ -827,9 +827,9 @@ final class OrganizationService
      * @param \DateTimeImmutable $startDate Inclusive start date (YYYY-MM-DD)
      * @param \DateTimeImmutable $endDate Inclusive end date (YYYY-MM-DD)
      * @param UsageGranularity|string|null $granularity Time-bucket size Server default: day.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getUsageSeries(
         string $organizationId,
@@ -860,9 +860,9 @@ final class OrganizationService
      *
      * @param \DateTimeImmutable $startDate Inclusive start date (YYYY-MM-DD)
      * @param \DateTimeImmutable $endDate Inclusive end date (YYYY-MM-DD)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getUsageSummary(
         string $organizationId,
