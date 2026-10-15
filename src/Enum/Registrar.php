@@ -21,4 +21,5 @@ enum Registrar: string
     case OPENSRS = 'OPENSRS';
     case NIC_DIRECT = 'NIC_DIRECT';
     case OPENPROVIDER = 'OPENPROVIDER';
+    case REALTIMEREGISTER = 'REALTIMEREGISTER';
 }

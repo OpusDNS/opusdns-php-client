@@ -70,9 +70,9 @@ final class DnsService
      * @param \DateTimeImmutable|null $updatedBefore Filter zones updated before this date
      * @param list<ZoneIncludeField|string>|null $include Include additional data in the response. Can be specified
      *     multiple times.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listZones(
         ?int $page = null,
@@ -110,9 +110,9 @@ final class DnsService
      * Required permissions: dns:manage
      *
      * @param DnsZoneCreate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function createZone(DnsZoneCreate|array $body, ?string $xDatetimeFormat = null): ?DnsChangesResponse
     {
@@ -138,9 +138,9 @@ final class DnsService
      * @param string|null $search Search by zone name
      * @param DomainForwardZoneSortField|string|null $sortBy Field to sort by Server default: created_on.
      * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listDomainForwardsByZone(
         ?int $page = null,
@@ -172,9 +172,9 @@ final class DnsService
      * @param string|null $search Search by zone name
      * @param EmailForwardZoneSortField|string|null $sortBy Field to sort by Server default: created_on.
      * @param SortOrder|string|null $sortOrder Sort order direction Server default: desc.
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listEmailForwardsByZone(
         ?int $page = null,
@@ -199,9 +199,9 @@ final class DnsService
      *
      * Required permissions: dns:read
      *
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getZonesSummary(?string $xDatetimeFormat = null): DnsZoneSummary
     {
@@ -221,9 +221,9 @@ final class DnsService
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
      * @param list<ZoneIncludeField|string>|null $include
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function getZone(
         string $zoneName,
@@ -247,9 +247,9 @@ final class DnsService
      * Required permissions: dns:delete
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function deleteZone(string $zoneName, ?string $xDatetimeFormat = null): void
     {
@@ -267,9 +267,9 @@ final class DnsService
      * Required permissions: dns:manage
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function disableDnssec(string $zoneName, ?string $xDatetimeFormat = null): DnsChangesResponse
     {
@@ -289,9 +289,9 @@ final class DnsService
      * Required permissions: dns:manage
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function enableDnssec(string $zoneName, ?string $xDatetimeFormat = null): DnsChangesResponse
     {
@@ -313,9 +313,9 @@ final class DnsService
      * Required permissions: dns:read
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listZoneDomainForwards(string $zoneName, ?string $xDatetimeFormat = null): DomainForwardZone
     {
@@ -338,9 +338,9 @@ final class DnsService
      * Required permissions: dns:read
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function listZoneEmailForwards(string $zoneName, ?string $xDatetimeFormat = null): EmailForwardZone
     {
@@ -361,9 +361,9 @@ final class DnsService
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
      * @param DnsZoneRecordsPatchOps|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function patchZoneRecords(
         string $zoneName,
@@ -386,9 +386,9 @@ final class DnsService
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
      * @param DnsZoneRrsetsCreate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function updateZoneRrsets(
         string $zoneName,
@@ -411,9 +411,9 @@ final class DnsService
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
      * @param DnsZoneRrsetsPatchOps|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function patchZoneRrsets(
         string $zoneName,
@@ -436,9 +436,9 @@ final class DnsService
      *
      * @param string $zoneName DNS zone name (trailing dot optional)
      * @param ZoneVanitySetUpdate|array<string, mixed> $body
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function updateZoneVanitySet(
         string $zoneName,

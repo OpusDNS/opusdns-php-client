@@ -47,9 +47,9 @@ final class DomainSearchService
      *     represented, query it on its own.
      * @param int|null $limit The maximum number of domain suggestions to return
      * @param bool|null $premium Whether to include premium domains in the suggestions
-     * @param string|null $xDatetimeFormat Accepted for backwards compatibility; has no effect. Response datetimes
-     *     are always normalized to UTC and serialized as RFC 3339 with a `Z` suffix, whether or not this header is
-     *     sent.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
      */
     public function suggest(
         string $query,

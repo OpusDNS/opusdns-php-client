@@ -39,9 +39,9 @@ final class Permission
         ],
         '/v1/archive/email-forward-logs/aliases/{email_forward_alias_id}' => ['GET' => ['email_forwards:read']],
         '/v1/archive/email-forward-logs/{email_forward_id}' => ['GET' => ['email_forwards:read']],
-        '/v1/archive/object-logs' => ['GET' => ['organization:read']],
-        '/v1/archive/object-logs/{object_id}' => ['GET' => ['organization:read']],
-        '/v1/archive/request-history' => ['GET' => ['organization:read']],
+        '/v1/archive/object-logs' => ['GET' => ['audit_logs:read']],
+        '/v1/archive/object-logs/{object_id}' => ['GET' => ['audit_logs:read']],
+        '/v1/archive/request-history' => ['GET' => ['audit_logs:read']],
         '/v1/contacts' => ['GET' => ['contacts:read'], 'POST' => ['contacts:manage']],
         '/v1/contacts/attribute-sets' => ['GET' => ['contacts:read'], 'POST' => ['contacts:manage']],
         '/v1/contacts/attribute-sets/{contact_attribute_set_id}' => [
