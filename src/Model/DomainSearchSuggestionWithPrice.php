@@ -14,11 +14,18 @@ use OpusDNS\Client\Serializer;
 
 final readonly class DomainSearchSuggestionWithPrice implements ApiModel
 {
+    /**
+     * @param DomainAmsAccountResponse|null $connectedAccount Set when the organization registers this TLD on its own
+     *     registry accreditation (`ams`). The registry bills the domain to that accreditation, so `price` and
+     *     `renewal_price` are the OpusDNS service fee alone, premium or not. Null for TLDs registered on OpusDNS
+     *     registry accounts.
+     */
     public function __construct(
         public bool $available,
         public string $domain,
         public bool $premium,
         public DomainSearchSuggestionPriceData $price,
+        public ?DomainAmsAccountResponse $connectedAccount = null,
         public ?DomainSearchSuggestionPriceData $renewalPrice = null,
     ) {
     }
@@ -33,6 +40,7 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
             domain: $data['domain'],
             premium: $data['premium'],
             price: DomainSearchSuggestionPriceData::fromArray($data['price']),
+            connectedAccount: isset($data['connected_account']) ? DomainAmsAccountResponse::fromArray($data['connected_account']) : null,
             renewalPrice: isset($data['renewal_price']) ? DomainSearchSuggestionPriceData::fromArray($data['renewal_price']) : null,
         );
     }
@@ -47,6 +55,7 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
             'domain' => $this->domain,
             'premium' => $this->premium,
             'price' => $this->price,
+            'connected_account' => $this->connectedAccount,
             'renewal_price' => $this->renewalPrice,
         ]);
     }

@@ -13346,6 +13346,14 @@ components:
           description: Whether the transfer lock after the change was opted out of
           title: Transfer Lock Opt Out
           type: boolean
+        transfer_lock_until:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Until when the domain cannot be transferred to another registrar
+            because of the change, null when no transfer lock applies
+          title: Transfer Lock Until
       required:
       - registrant_change_id
       - domain_id
@@ -13632,8 +13640,9 @@ components:
           anyOf:
           - $ref: '#/components/schemas/DomainRegistrantChangeResponse'
           - type: 'null'
-          description: The change of registrant in progress. Null unless `include=registrant_change`
-            is requested, and null even then when no change of registrant is in progress.
+          description: The change of registrant in progress, or else the completed
+            one whose transfer lock is still active. Null unless `include=registrant_change`
+            is requested, and null even then when there is neither.
         registry_account_id:
           default: None
           examples:
@@ -13835,6 +13844,14 @@ components:
         available:
           title: Available
           type: boolean
+        connected_account:
+          anyOf:
+          - $ref: '#/components/schemas/DomainAmsAccountResponse'
+          - type: 'null'
+          description: Set when the organization registers this TLD on its own registry
+            accreditation (`ams`). The registry bills the domain to that accreditation,
+            so `price` and `renewal_price` are the OpusDNS service fee alone, premium
+            or not. Null for TLDs registered on OpusDNS registry accounts.
         domain:
           title: Domain
           type: string
@@ -21958,6 +21975,7 @@ components:
       - IMPORT_PENDING
       - DNSSEC_PENDING
       - TRANSFER_ON_RENEW_PENDING
+      - REGISTRANT_CHANGE_LOCKED
       title: StatusTagType
       type: string
     StrictMoneyDecimal:
@@ -25135,7 +25153,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-10-15-162027
+  version: 2026-10-16-144231
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg

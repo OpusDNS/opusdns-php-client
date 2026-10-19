@@ -45,8 +45,9 @@ final readonly class DomainResponse implements ApiModel
      *     or is managed at an external registrar. The flag is set and removed by OpusDNS; it cannot be changed
      *     through the API.
      * @param \DateTimeImmutable|null $registeredOn When the domain was registered
-     * @param DomainRegistrantChangeResponse|null $registrantChange The change of registrant in progress. Null unless
-     *     `include=registrant_change` is requested, and null even then when no change of registrant is in progress.
+     * @param DomainRegistrantChangeResponse|null $registrantChange The change of registrant in progress, or else the
+     *     completed one whose transfer lock is still active. Null unless `include=registrant_change` is requested,
+     *     and null even then when there is neither.
      * @param string|null $registryAccountId TypeID prefix: registry_account.
      * @param list<string>|null $registryStatuses All the domain statuses
      * @param RenewalMode|string|null $renewalMode The renewal mode of the domain

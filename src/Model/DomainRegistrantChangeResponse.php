@@ -29,6 +29,8 @@ final readonly class DomainRegistrantChangeResponse implements ApiModel
      * @param RegistrantChangeConfirmationMethod|string|null $confirmationMethod How the change was confirmed, null when
      *     no confirmation applies
      * @param string|null $failureReason Why the registrant change failed
+     * @param \DateTimeImmutable|null $transferLockUntil Until when the domain cannot be transferred to another
+     *     registrar because of the change, null when no transfer lock applies
      */
     public function __construct(
         public \DateTimeImmutable $createdOn,
@@ -42,6 +44,7 @@ final readonly class DomainRegistrantChangeResponse implements ApiModel
         public ?\DateTimeImmutable $confirmationDeadline = null,
         public RegistrantChangeConfirmationMethod|string|null $confirmationMethod = null,
         public ?string $failureReason = null,
+        public ?\DateTimeImmutable $transferLockUntil = null,
     ) {
     }
 
@@ -62,6 +65,7 @@ final readonly class DomainRegistrantChangeResponse implements ApiModel
             confirmationDeadline: isset($data['confirmation_deadline']) ? new \DateTimeImmutable($data['confirmation_deadline']) : null,
             confirmationMethod: isset($data['confirmation_method']) ? RegistrantChangeConfirmationMethod::tryFrom($data['confirmation_method']) ?? $data['confirmation_method'] : null,
             failureReason: $data['failure_reason'] ?? null,
+            transferLockUntil: isset($data['transfer_lock_until']) ? new \DateTimeImmutable($data['transfer_lock_until']) : null,
         );
     }
 
@@ -82,6 +86,7 @@ final readonly class DomainRegistrantChangeResponse implements ApiModel
             'confirmation_deadline' => $this->confirmationDeadline,
             'confirmation_method' => $this->confirmationMethod,
             'failure_reason' => $this->failureReason,
+            'transfer_lock_until' => $this->transferLockUntil,
         ]);
     }
 
