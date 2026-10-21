@@ -11,15 +11,24 @@ namespace OpusDNS\Client\Service;
 
 use OpusDNS\Client\Client;
 use OpusDNS\Client\Endpoint;
+use OpusDNS\Client\Enum\DnsMoverDirection;
+use OpusDNS\Client\Enum\DnsMoversPeriod;
+use OpusDNS\Client\Enum\DnsStatisticsPeriod;
+use OpusDNS\Client\Enum\DnsZoneRank;
 use OpusDNS\Client\Enum\DnssecStatus;
 use OpusDNS\Client\Enum\DomainForwardZoneSortField;
 use OpusDNS\Client\Enum\EmailForwardZoneSortField;
 use OpusDNS\Client\Enum\SortOrder;
 use OpusDNS\Client\Enum\TagFilterMode;
+use OpusDNS\Client\Enum\UsageGranularity;
 use OpusDNS\Client\Enum\ZoneIncludeField;
 use OpusDNS\Client\Enum\ZoneSortField;
 use OpusDNS\Client\Model\DnsChangesResponse;
+use OpusDNS\Client\Model\DnsInactiveZonesResponse;
+use OpusDNS\Client\Model\DnsStatisticsResponse;
+use OpusDNS\Client\Model\DnsTopZonesResponse;
 use OpusDNS\Client\Model\DnsZoneCreate;
+use OpusDNS\Client\Model\DnsZoneMoversResponse;
 use OpusDNS\Client\Model\DnsZoneRecordsPatchOps;
 use OpusDNS\Client\Model\DnsZoneResponse;
 use OpusDNS\Client\Model\DnsZoneRrsetsCreate;
@@ -31,6 +40,7 @@ use OpusDNS\Client\Model\EmailForwardZone;
 use OpusDNS\Client\Model\PaginationDnsZoneResponse;
 use OpusDNS\Client\Model\PaginationDomainForwardZone;
 use OpusDNS\Client\Model\PaginationEmailForwardZone;
+use OpusDNS\Client\Model\ZoneStatisticsResponse;
 use OpusDNS\Client\Model\ZoneVanitySetUpdate;
 
 /**
@@ -192,6 +202,189 @@ final class DnsService
         );
 
         return $this->client->hydrate($response, static fn (array $data): PaginationEmailForwardZone => PaginationEmailForwardZone::fromArray($data));
+    }
+
+    /**
+     * Get DNS query statistics of the organization
+     *
+     * Counts the DNS queries answered for all zones of your organization, how many of them were NXDOMAIN,
+     * and how many zones had queries, in a window of whole UTC days bucketed by the requested granularity.
+     * The window may span at most 366 days at `granularity=day` or `week` and 120 calendar months at
+     * `granularity=month`.
+     *
+     * The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+     * those of its sub-organizations too. A zone counts for its current owner with its whole history: a
+     * zone moved to your organization brings its earlier queries along, and a deleted zone no longer
+     * counts. They are recomputed after each new day of data and after zones changed owner or were
+     * deleted; `statistics_updated_at` tells when.
+     *
+     * Every bucket the window touches is present, oldest first, so the series can be charted as is; a
+     * bucket without queries counts zero. A bucket marked `partial` covers only part of its span.
+     * Statistics are collected once a day, so the newest day with data is usually yesterday.
+     *
+     * Required permissions: dns:read
+     *
+     * @param \DateTimeImmutable $startDate First day of the window, inclusive (YYYY-MM-DD, UTC)
+     * @param \DateTimeImmutable $endDate Last day of the window, inclusive (YYYY-MM-DD, UTC). How far it may reach
+     *     depends on `granularity`: at most 366 days for `day` and `week`, and 120 calendar months for `month`.
+     * @param UsageGranularity|string|null $granularity Time-bucket size. Weeks start on Monday and months on the
+     *     1st, in UTC. Server default: day.
+     * @param bool|null $includeSubOrganizations Also count the zones of the organization's sub-organizations (up to
+     *     three levels), like the domain statistics do Server default: false.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function getDnsStatistics(
+        \DateTimeImmutable $startDate,
+        \DateTimeImmutable $endDate,
+        UsageGranularity|string|null $granularity = null,
+        ?bool $includeSubOrganizations = null,
+        ?string $xDatetimeFormat = null,
+    ): DnsStatisticsResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DNS_STATISTICS,
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'granularity' => $granularity, 'include_sub_organizations' => $includeSubOrganizations],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): DnsStatisticsResponse => DnsStatisticsResponse::fromArray($data));
+    }
+
+    /**
+     * List the zones without DNS queries
+     *
+     * Lists the zones of your organization that answered no query in a fixed period (7, 30 or 90 days)
+     * ending on the newest day with data, by name. A zone without any query is most likely not delegated
+     * to the OpusDNS nameservers: check the nameservers of its domain. Zones created within the period are
+     * included; `zone_created_on` tells them apart.
+     *
+     * The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+     * those of its sub-organizations too. A zone counts for its current owner with its whole history: a
+     * zone moved to your organization brings its earlier queries along, and a deleted zone no longer
+     * counts. They are recomputed after each new day of data and after zones changed owner or were
+     * deleted; `statistics_updated_at` tells when.
+     *
+     * Required permissions: dns:read
+     *
+     * @param DnsStatisticsPeriod|string|null $period Window without queries Server default: 30d.
+     * @param int|null $page Page number Server default: 1.
+     * @param int|null $pageSize Zones per page Server default: 100.
+     * @param bool|null $includeSubOrganizations Also count the zones of the organization's sub-organizations (up to
+     *     three levels), like the domain statistics do Server default: false.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function listDnsInactiveZones(
+        DnsStatisticsPeriod|string|null $period = null,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ?bool $includeSubOrganizations = null,
+        ?string $xDatetimeFormat = null,
+    ): DnsInactiveZonesResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DNS_STATISTICS_INACTIVE_ZONES,
+            query: ['period' => $period, 'page' => $page, 'page_size' => $pageSize, 'include_sub_organizations' => $includeSubOrganizations],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): DnsInactiveZonesResponse => DnsInactiveZonesResponse::fromArray($data));
+    }
+
+    /**
+     * List the zones whose DNS queries changed most
+     *
+     * Lists the zones of your organization whose queries dropped (or rose) most in a fixed period (7 or 30
+     * days) ending on the newest day with data, against the period of the same length before it. A sharp
+     * drop often means the domain no longer points at the OpusDNS nameservers; a sharp rise can be a
+     * campaign, a migration or an attack. Zones below `min_query_count` in both periods are left out, and
+     * so are zones created after the earlier period began, whose rise is only their creation.
+     *
+     * The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+     * those of its sub-organizations too. A zone counts for its current owner with its whole history: a
+     * zone moved to your organization brings its earlier queries along, and a deleted zone no longer
+     * counts. They are recomputed after each new day of data and after zones changed owner or were
+     * deleted; `statistics_updated_at` tells when.
+     *
+     * Required permissions: dns:read
+     *
+     * @param DnsMoversPeriod|string|null $period Window compared with the window of the same length before it Server
+     *     default: 30d.
+     * @param DnsMoverDirection|string|null $direction `drop` lists the zones that lost the most queries, `rise`
+     *     those that gained the most Server default: drop.
+     * @param int|null $limit Number of zones to return Server default: 20.
+     * @param int|null $minQueryCount Leave out zones with fewer queries than this in both windows Server default:
+     *     100.
+     * @param bool|null $includeSubOrganizations Also count the zones of the organization's sub-organizations (up to
+     *     three levels), like the domain statistics do Server default: false.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function listDnsZoneMovers(
+        DnsMoversPeriod|string|null $period = null,
+        DnsMoverDirection|string|null $direction = null,
+        ?int $limit = null,
+        ?int $minQueryCount = null,
+        ?bool $includeSubOrganizations = null,
+        ?string $xDatetimeFormat = null,
+    ): DnsZoneMoversResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DNS_STATISTICS_MOVERS,
+            query: ['period' => $period, 'direction' => $direction, 'limit' => $limit, 'min_query_count' => $minQueryCount, 'include_sub_organizations' => $includeSubOrganizations],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): DnsZoneMoversResponse => DnsZoneMoversResponse::fromArray($data));
+    }
+
+    /**
+     * List the zones with the most DNS queries
+     *
+     * Ranks the zones of your organization by queries, NXDOMAIN answers or NXDOMAIN share over a fixed
+     * period (7, 30 or 90 days) ending on the newest day with data. Zones without queries in the period
+     * are left out. A high NXDOMAIN share often points at missing records or typos in links.
+     *
+     * The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+     * those of its sub-organizations too. A zone counts for its current owner with its whole history: a
+     * zone moved to your organization brings its earlier queries along, and a deleted zone no longer
+     * counts. They are recomputed after each new day of data and after zones changed owner or were
+     * deleted; `statistics_updated_at` tells when.
+     *
+     * Required permissions: dns:read
+     *
+     * @param DnsStatisticsPeriod|string|null $period Window of the ranking Server default: 30d.
+     * @param DnsZoneRank|string|null $rankBy Order of the zones: by queries, by NXDOMAIN answers, or by the NXDOMAIN
+     *     share of their queries (raise `min_query_count` to leave out zones with a handful of queries) Server
+     *     default: queries.
+     * @param int|null $limit Number of zones to return Server default: 20.
+     * @param int|null $minQueryCount Leave out zones with fewer queries in the period Server default: 0.
+     * @param bool|null $includeSubOrganizations Also count the zones of the organization's sub-organizations (up to
+     *     three levels), like the domain statistics do Server default: false.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function listDnsTopZones(
+        DnsStatisticsPeriod|string|null $period = null,
+        DnsZoneRank|string|null $rankBy = null,
+        ?int $limit = null,
+        ?int $minQueryCount = null,
+        ?bool $includeSubOrganizations = null,
+        ?string $xDatetimeFormat = null,
+    ): DnsTopZonesResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DNS_STATISTICS_TOP_ZONES,
+            query: ['period' => $period, 'rank_by' => $rankBy, 'limit' => $limit, 'min_query_count' => $minQueryCount, 'include_sub_organizations' => $includeSubOrganizations],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): DnsTopZonesResponse => DnsTopZonesResponse::fromArray($data));
     }
 
     /**
@@ -427,6 +620,53 @@ final class DnsService
             body: $body,
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
+    }
+
+    /**
+     * Get zone query statistics
+     *
+     * Counts the DNS queries answered for the zone, and how many of them were NXDOMAIN, in a window of
+     * whole UTC days, bucketed by the requested granularity. The window may span at most 366 days at
+     * `granularity=day` or `week` and 120 calendar months at `granularity=month`.
+     *
+     * Every bucket the window touches is present, oldest first, so the series can be charted as is; a
+     * bucket without queries counts zero. Buckets count only the days inside the window and the zone's
+     * lifetime. A bucket marked `partial` covers only part of its span: it reaches outside the window,
+     * part of it lies outside the stored data, or the zone was created during it.
+     *
+     * Statistics are collected once a day, so the newest day with data is usually yesterday.
+     * `data_available_from` and `data_available_to` report the days the statistics hold data for the zone,
+     * never earlier than the day it was created: a window reaching further back is empty before it rather
+     * than genuinely zero.
+     *
+     * Required permissions: dns:read
+     *
+     * @param string $zoneName DNS zone name (trailing dot optional)
+     * @param \DateTimeImmutable $startDate First day of the window, inclusive (YYYY-MM-DD, UTC)
+     * @param \DateTimeImmutable $endDate Last day of the window, inclusive (YYYY-MM-DD, UTC). How far it may reach
+     *     depends on `granularity`: at most 366 days for `day` and `week`, and 120 calendar months for `month`.
+     * @param UsageGranularity|string|null $granularity Time-bucket size. Weeks start on Monday and months on the
+     *     1st, in UTC. Server default: day.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function getZoneStatistics(
+        string $zoneName,
+        \DateTimeImmutable $startDate,
+        \DateTimeImmutable $endDate,
+        UsageGranularity|string|null $granularity = null,
+        ?string $xDatetimeFormat = null,
+    ): ZoneStatisticsResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DNS_BY_ZONE_NAME_STATISTICS,
+            path: ['zone_name' => $zoneName],
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'granularity' => $granularity],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): ZoneStatisticsResponse => ZoneStatisticsResponse::fromArray($data));
     }
 
     /**

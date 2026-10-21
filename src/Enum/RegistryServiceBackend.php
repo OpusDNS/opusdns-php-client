@@ -56,7 +56,7 @@ enum RegistryServiceBackend: string
     case NOMINET_DRAGON = 'nominet_dragon';
     case RED_ES = 'red_es';
     case INTERNET_NZ = 'internet_nz';
-    case ZACR = 'zacr';
+    case ZARC = 'zarc';
     case TRAFICOM = 'traficom';
     case IE_REGISTRY = 'ie_registry';
     case NIC_IM = 'nic_im';

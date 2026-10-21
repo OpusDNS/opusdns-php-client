@@ -108,6 +108,18 @@ final class Endpoint
     public const DNS_EMAIL_FORWARDS = '/v1/dns/email-forwards';
 
     /** GET */
+    public const DNS_STATISTICS = '/v1/dns/statistics';
+
+    /** GET */
+    public const DNS_STATISTICS_INACTIVE_ZONES = '/v1/dns/statistics/inactive-zones';
+
+    /** GET */
+    public const DNS_STATISTICS_MOVERS = '/v1/dns/statistics/movers';
+
+    /** GET */
+    public const DNS_STATISTICS_TOP_ZONES = '/v1/dns/statistics/top-zones';
+
+    /** GET */
     public const DNS_SUMMARY = '/v1/dns/summary';
 
     /** GET, DELETE */
@@ -130,6 +142,9 @@ final class Endpoint
 
     /** PUT, PATCH */
     public const DNS_BY_ZONE_NAME_RRSETS = '/v1/dns/{zone_name}/rrsets';
+
+    /** GET */
+    public const DNS_BY_ZONE_NAME_STATISTICS = '/v1/dns/{zone_name}/statistics';
 
     /** PATCH */
     public const DNS_BY_ZONE_NAME_VANITY_SET = '/v1/dns/{zone_name}/vanity-set';
@@ -265,6 +280,9 @@ final class Endpoint
 
     /** POST */
     public const DOMAINS_BY_DOMAIN_REFERENCE_TRANSFER_OUTBOUND = '/v1/domains/{domain_reference}/transfer/outbound';
+
+    /** GET */
+    public const DOMAINS_BY_DOMAIN_REFERENCE_VERIFICATIONS = '/v1/domains/{domain_reference}/verifications';
 
     /** GET, POST */
     public const EMAIL_FORWARDS = '/v1/email-forwards';

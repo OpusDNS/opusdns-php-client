@@ -62,8 +62,8 @@ final readonly class DomainResponse implements ApiModel
      * @param bool $transferLock Whether the domain is locked for transfer
      * @param \DateTimeImmutable|null $transferredOn When the domain was last transferred to us
      * @param \DateTimeImmutable|null $updatedOn The date/time the entry was last updated on
-     * @param VerificationResponse|null $verificationRequired Verification data for this domain, including pending
-     *     claims and deadlines.
+     * @param VerificationResponse|null $verificationRequired What the domain's active verification cases still wait
+     *     for: who asks, the claims and the earliest deadline of each type. Null when no case is active.
      */
     public function __construct(
         public string $name,

@@ -62,6 +62,10 @@ final class Permission
         '/v1/dns' => ['GET' => ['dns:read'], 'POST' => ['dns:manage']],
         '/v1/dns/domain-forwards' => ['GET' => ['dns:read']],
         '/v1/dns/email-forwards' => ['GET' => ['dns:read']],
+        '/v1/dns/statistics' => ['GET' => ['dns:read']],
+        '/v1/dns/statistics/inactive-zones' => ['GET' => ['dns:read']],
+        '/v1/dns/statistics/movers' => ['GET' => ['dns:read']],
+        '/v1/dns/statistics/top-zones' => ['GET' => ['dns:read']],
         '/v1/dns/summary' => ['GET' => ['dns:read']],
         '/v1/dns/{zone_name}' => ['GET' => ['dns:read'], 'DELETE' => ['dns:delete']],
         '/v1/dns/{zone_name}/dnssec/disable' => ['POST' => ['dns:manage']],
@@ -70,6 +74,7 @@ final class Permission
         '/v1/dns/{zone_name}/email-forwards' => ['GET' => ['dns:read']],
         '/v1/dns/{zone_name}/records' => ['PATCH' => ['dns:manage']],
         '/v1/dns/{zone_name}/rrsets' => ['PUT' => ['dns:manage'], 'PATCH' => ['dns:manage']],
+        '/v1/dns/{zone_name}/statistics' => ['GET' => ['dns:read']],
         '/v1/dns/{zone_name}/vanity-set' => ['PATCH' => ['dns:manage', 'vanity_ns:manage']],
         '/v1/domain-forwards' => [
             'GET' => ['domain_forwards:read'],
@@ -133,6 +138,7 @@ final class Permission
         '/v1/domains/{domain_reference}/restore' => ['POST' => ['domains:manage']],
         '/v1/domains/{domain_reference}/transfer' => ['DELETE' => ['domains:manage']],
         '/v1/domains/{domain_reference}/transfer/outbound' => ['POST' => ['domains:manage']],
+        '/v1/domains/{domain_reference}/verifications' => ['GET' => ['domains:read']],
         '/v1/email-forwards' => ['GET' => ['email_forwards:read'], 'POST' => ['dns:manage', 'email_forwards:manage']],
         '/v1/email-forwards/{email_forward_id}' => [
             'GET' => ['email_forwards:read'],

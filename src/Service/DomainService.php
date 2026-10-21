@@ -57,6 +57,7 @@ use OpusDNS\Client\Model\NorIdResellerDeclarationRequest;
 use OpusDNS\Client\Model\OutboundTransferRequest;
 use OpusDNS\Client\Model\OutboundTransferResponse;
 use OpusDNS\Client\Model\PaginationDomainResponse;
+use OpusDNS\Client\Model\PaginationDomainVerificationResponse;
 
 /**
  * Operations tagged "domain".
@@ -1145,5 +1146,36 @@ final class DomainService
         );
 
         return $this->client->hydrate($response, static fn (array $data): OutboundTransferResponse => OutboundTransferResponse::fromArray($data));
+    }
+
+    /**
+     * List the verification cases of a domain
+     *
+     * Lists the verification cases of a domain, active and closed, newest first: what ICANN or the
+     * registry asks to verify about the registrant, by when, and how the case ended.
+     *
+     * Required permissions: domains:read
+     *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function listDomainVerifications(
+        string $domainReference,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ?string $xDatetimeFormat = null,
+    ): PaginationDomainVerificationResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DOMAINS_BY_DOMAIN_REFERENCE_VERIFICATIONS,
+            path: ['domain_reference' => $domainReference],
+            query: ['page' => $page, 'page_size' => $pageSize],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): PaginationDomainVerificationResponse => PaginationDomainVerificationResponse::fromArray($data));
     }
 }

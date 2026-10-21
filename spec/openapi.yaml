@@ -3450,6 +3450,37 @@ components:
       - properties:
           data:
             anyOf:
+            - $ref: '#/components/schemas/DnsStatisticsResponse'
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: get_dns_statistics_v1_dns_statistics_get
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: get_dns_statistics_v1_dns_statistics_get
+        type: object
+      - properties:
+          data:
+            anyOf:
             - items:
                 $ref: '#/components/schemas/DomainDnssecDataResponse'
               title: Response Get Dnssec V1 Domains  Domain Reference  Dnssec Get
@@ -4861,6 +4892,37 @@ components:
       - properties:
           data:
             anyOf:
+            - $ref: '#/components/schemas/ZoneStatisticsResponse'
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: get_zone_statistics_v1_dns__zone_name__statistics_get
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: get_zone_statistics_v1_dns__zone_name__statistics_get
+        type: object
+      - properties:
+          data:
+            anyOf:
             - $ref: '#/components/schemas/DnsZoneResponse'
             - type: string
           headers:
@@ -5112,6 +5174,99 @@ components:
       - properties:
           data:
             anyOf:
+            - $ref: '#/components/schemas/DnsInactiveZonesResponse'
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: list_dns_inactive_zones_v1_dns_statistics_inactive_zones_get
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: list_dns_inactive_zones_v1_dns_statistics_inactive_zones_get
+        type: object
+      - properties:
+          data:
+            anyOf:
+            - $ref: '#/components/schemas/DnsTopZonesResponse'
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: list_dns_top_zones_v1_dns_statistics_top_zones_get
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: list_dns_top_zones_v1_dns_statistics_top_zones_get
+        type: object
+      - properties:
+          data:
+            anyOf:
+            - $ref: '#/components/schemas/DnsZoneMoversResponse'
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: list_dns_zone_movers_v1_dns_statistics_movers_get
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: list_dns_zone_movers_v1_dns_statistics_movers_get
+        type: object
+      - properties:
+          data:
+            anyOf:
             - $ref: '#/components/schemas/Pagination_DomainForwardZone_'
             - type: string
           headers:
@@ -5170,6 +5325,37 @@ components:
         - status
         - operationId
         title: list_domain_forwards_v1_domain_forwards_get
+        type: object
+      - properties:
+          data:
+            anyOf:
+            - $ref: '#/components/schemas/Pagination_DomainVerificationResponse_'
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: list_domain_verifications_v1_domains__domain_reference__verifications_get
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: list_domain_verifications_v1_domains__domain_reference__verifications_get
         type: object
       - properties:
           data:
@@ -10333,6 +10519,62 @@ components:
       - host_objects
       title: DnsConfigurationBase
       type: object
+    DnsInactiveZonesResponse:
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetadata'
+        period:
+          $ref: '#/components/schemas/DnsStatisticsPeriod'
+          description: The period without queries
+        period_end:
+          description: 'Last day of the period: the newest day with data'
+          format: date
+          title: Period End
+          type: string
+        period_start:
+          description: First day of the period (UTC)
+          format: date
+          title: Period Start
+          type: string
+        results:
+          items:
+            $ref: '#/components/schemas/DnsZoneActivityResponse'
+          title: Results
+          type: array
+        statistics_updated_at:
+          description: When these numbers were computed. They are recomputed after
+            each new day of data and after zones changed owner or were deleted, so
+            a change can take a few hours to show
+          format: date-time
+          title: Statistics Updated At
+          type: string
+      required:
+      - results
+      - pagination
+      - period
+      - period_start
+      - period_end
+      - statistics_updated_at
+      title: DnsInactiveZonesResponse
+      type: object
+    DnsMoverDirection:
+      description: '`drop`: the zones that lost the most queries against the previous
+        period; `rise`: those that gained
+
+        the most.'
+      enum:
+      - drop
+      - rise
+      title: DnsMoverDirection
+      type: string
+    DnsMoversPeriod:
+      description: The movers compare a period with the one of the same length before
+        it.
+      enum:
+      - 7d
+      - 30d
+      title: DnsMoversPeriod
+      type: string
     DnsProtectedReason:
       enum:
       - SYSTEM_MANAGED_SOA
@@ -10547,6 +10789,216 @@ components:
       - type
       - ttl
       title: DnsRrsetWithOneRecordPatch
+      type: object
+    DnsStatisticsBucketResponse:
+      properties:
+        nxdomain_count:
+          description: Of those, queries answered with NXDOMAIN
+          title: Nxdomain Count
+          type: integer
+        partial:
+          description: 'The bucket counts only part of its span: it reaches outside
+            the window, or part of it lies before `data_available_from` or after `data_available_to`.
+            A partial bucket must not be read as a rise or fall against its neighbours.'
+          title: Partial
+          type: boolean
+        period_start:
+          description: First day of the bucket (UTC)
+          format: date
+          title: Period Start
+          type: string
+        query_count:
+          description: Queries answered for the organization's zones in this bucket
+          title: Query Count
+          type: integer
+        zone_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Zones with at least one query in the bucket. Null for weeks,
+            and for a month the window cuts: those are summed from days, and a zone
+            active on several of them cannot be counted once'
+          title: Zone Count
+      required:
+      - period_start
+      - query_count
+      - nxdomain_count
+      - zone_count
+      - partial
+      title: DnsStatisticsBucketResponse
+      type: object
+    DnsStatisticsPeriod:
+      description: A fixed window of whole UTC days ending on the newest day with
+        data (`period_end`).
+      enum:
+      - 7d
+      - 30d
+      - 90d
+      title: DnsStatisticsPeriod
+      type: string
+    DnsStatisticsResponse:
+      properties:
+        buckets:
+          description: One entry per bucket the window touches, oldest first, including
+            buckets without queries
+          items:
+            $ref: '#/components/schemas/DnsStatisticsBucketResponse'
+          title: Buckets
+          type: array
+        data_available_from:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: First day the statistics hold data for. Null while no statistics
+            have been collected.
+          title: Data Available From
+        data_available_to:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Last day the statistics hold data for. Null while no statistics
+            have been collected.
+          title: Data Available To
+        end_date:
+          description: Last day of the window, inclusive
+          format: date
+          title: End Date
+          type: string
+        granularity:
+          $ref: '#/components/schemas/UsageGranularity'
+          description: Time-bucket size of the series
+        start_date:
+          description: First day of the window, inclusive
+          format: date
+          title: Start Date
+          type: string
+        statistics_updated_at:
+          description: When these numbers were computed. They are recomputed after
+            each new day of data and after zones changed owner or were deleted, so
+            a change can take a few hours to show
+          format: date-time
+          title: Statistics Updated At
+          type: string
+        totals:
+          $ref: '#/components/schemas/DnsStatisticsTotalsResponse'
+      required:
+      - granularity
+      - start_date
+      - end_date
+      - totals
+      - buckets
+      - data_available_from
+      - data_available_to
+      - statistics_updated_at
+      title: DnsStatisticsResponse
+      type: object
+    DnsStatisticsTotalsResponse:
+      properties:
+        nxdomain_count:
+          description: Of those, queries answered with NXDOMAIN
+          title: Nxdomain Count
+          type: integer
+        query_count:
+          description: Queries answered for the organization's zones in the window
+          title: Query Count
+          type: integer
+      required:
+      - query_count
+      - nxdomain_count
+      title: DnsStatisticsTotalsResponse
+      type: object
+    DnsTopZonesResponse:
+      properties:
+        period:
+          $ref: '#/components/schemas/DnsStatisticsPeriod'
+          description: The period the ranking covers
+        period_end:
+          description: 'Last day of the period: the newest day with data'
+          format: date
+          title: Period End
+          type: string
+        period_start:
+          description: First day of the period (UTC)
+          format: date
+          title: Period Start
+          type: string
+        rank_by:
+          $ref: '#/components/schemas/DnsZoneRank'
+          description: Order of the zones
+        results:
+          items:
+            $ref: '#/components/schemas/DnsZoneActivityResponse'
+          title: Results
+          type: array
+        statistics_updated_at:
+          description: When these numbers were computed. They are recomputed after
+            each new day of data and after zones changed owner or were deleted, so
+            a change can take a few hours to show
+          format: date-time
+          title: Statistics Updated At
+          type: string
+      required:
+      - period_start
+      - period_end
+      - statistics_updated_at
+      - period
+      - rank_by
+      - results
+      title: DnsTopZonesResponse
+      type: object
+    DnsZoneActivityResponse:
+      properties:
+        last_query_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Last day with queries within the last 90 days; null when there
+            was none
+          title: Last Query Date
+        nxdomain_count:
+          description: Of those, queries answered with NXDOMAIN
+          title: Nxdomain Count
+          type: integer
+        nxdomain_ratio:
+          description: '`nxdomain_count` / `query_count`; 0 without queries'
+          title: Nxdomain Ratio
+          type: number
+        organization_id:
+          description: The organization the zone belongs to
+          examples:
+          - organization_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^organization_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Organization Id
+          type: string
+          x-typeid-prefix: organization
+        query_count:
+          description: Queries answered for the zone in the period
+          title: Query Count
+          type: integer
+        zone_created_on:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Day the zone was created (UTC); null when unknown
+          title: Zone Created On
+        zone_name:
+          description: The zone, with a trailing dot
+          title: Zone Name
+          type: string
+      required:
+      - zone_name
+      - organization_id
+      - zone_created_on
+      - query_count
+      - nxdomain_count
+      - nxdomain_ratio
+      - last_query_date
+      title: DnsZoneActivityResponse
       type: object
     DnsZoneCreate:
       properties:
@@ -10794,6 +11246,108 @@ components:
       - name
       title: DnsZoneDTO
       type: object
+    DnsZoneMoverResponse:
+      properties:
+        change:
+          description: '`query_count` minus `previous_query_count`'
+          title: Change
+          type: integer
+        change_ratio:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: '`change` relative to `previous_query_count`; null when the
+            previous period had no queries'
+          title: Change Ratio
+        organization_id:
+          description: The organization the zone belongs to
+          examples:
+          - organization_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^organization_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Organization Id
+          type: string
+          x-typeid-prefix: organization
+        previous_query_count:
+          description: Queries in the period of the same length before it
+          title: Previous Query Count
+          type: integer
+        query_count:
+          description: Queries in the period
+          title: Query Count
+          type: integer
+        zone_created_on:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Day the zone was created (UTC); null when unknown
+          title: Zone Created On
+        zone_name:
+          description: The zone, with a trailing dot
+          title: Zone Name
+          type: string
+      required:
+      - zone_name
+      - organization_id
+      - zone_created_on
+      - query_count
+      - previous_query_count
+      - change
+      - change_ratio
+      title: DnsZoneMoverResponse
+      type: object
+    DnsZoneMoversResponse:
+      properties:
+        direction:
+          $ref: '#/components/schemas/DnsMoverDirection'
+          description: Whether the list shows drops or rises
+        period:
+          $ref: '#/components/schemas/DnsMoversPeriod'
+          description: The period compared with the one before it
+        period_end:
+          description: 'Last day of the period: the newest day with data'
+          format: date
+          title: Period End
+          type: string
+        period_start:
+          description: First day of the period (UTC)
+          format: date
+          title: Period Start
+          type: string
+        previous_period_end:
+          description: Last day of the period compared with
+          format: date
+          title: Previous Period End
+          type: string
+        previous_period_start:
+          description: First day of the period compared with
+          format: date
+          title: Previous Period Start
+          type: string
+        results:
+          items:
+            $ref: '#/components/schemas/DnsZoneMoverResponse'
+          title: Results
+          type: array
+        statistics_updated_at:
+          description: When these numbers were computed. They are recomputed after
+            each new day of data and after zones changed owner or were deleted, so
+            a change can take a few hours to show
+          format: date-time
+          title: Statistics Updated At
+          type: string
+      required:
+      - period_start
+      - period_end
+      - statistics_updated_at
+      - period
+      - previous_period_start
+      - previous_period_end
+      - direction
+      - results
+      title: DnsZoneMoversResponse
+      type: object
     DnsZonePatchRecordsBulkCommand:
       properties:
         command:
@@ -10940,6 +11494,17 @@ components:
       - zone
       title: DnsZonePatchRrsetsWorkerPayload
       type: object
+    DnsZoneRank:
+      description: 'Order of the top zones: by queries, by queries answered with NXDOMAIN,
+        or by the NXDOMAIN share of
+
+        a zone''s queries.'
+      enum:
+      - queries
+      - nxdomains
+      - nxdomain_ratio
+      title: DnsZoneRank
+      type: string
     DnsZoneRecordsPatchOps:
       properties:
         ops:
@@ -13736,8 +14301,9 @@ components:
           anyOf:
           - $ref: '#/components/schemas/VerificationResponse'
           - type: 'null'
-          description: Verification data for this domain, including pending claims
-            and deadlines.
+          description: 'What the domain''s active verification cases still wait for:
+            who asks, the claims and the earliest deadline of each type. Null when
+            no case is active.'
       required:
       - name
       - sld
@@ -15224,6 +15790,17 @@ components:
       - domain
       title: DomainUpdateWorkerPayload
       type: object
+    DomainVerificationCloseReason:
+      enum:
+      - EVIDENCE_VERIFIED
+      - REGISTRY_CLEARED
+      - REGISTRY_REJECTED
+      - SUPERSEDED
+      - DOMAIN_DELETED
+      - TRANSFERRED_OUT
+      - TRANSFER_ABORTED
+      title: DomainVerificationCloseReason
+      type: string
     DomainVerificationDetails:
       properties:
         detail_type:
@@ -15239,6 +15816,10 @@ components:
             $ref: '#/components/schemas/VerificationRegistrantDetails'
           title: Registrants
           type: array
+        source:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationKind'
+          - type: 'null'
         verification_claims:
           items:
             $ref: '#/components/schemas/VerificationClaimType'
@@ -15249,10 +15830,116 @@ components:
             $ref: '#/components/schemas/VerificationDeadline'
           title: Verification Deadlines
           type: array
+        verification_id:
+          anyOf:
+          - examples:
+            - domain_verification_01h45ytscbebyvny4gc8cr8ma2
+            format: typeid
+            pattern: ^domain_verification_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+            type: string
+            x-typeid-prefix: domain_verification
+          - type: 'null'
+          title: Verification Id
       required:
       - domain_id
       title: DomainVerificationDetails
       type: object
+    DomainVerificationKind:
+      enum:
+      - ICANN
+      - REGISTRY
+      title: DomainVerificationKind
+      type: string
+    DomainVerificationResponse:
+      properties:
+        claims:
+          description: What has to be verified about the registrant
+          items:
+            $ref: '#/components/schemas/VerificationClaimType'
+          title: Claims
+          type: array
+        close_reason:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationCloseReason'
+          - type: 'null'
+          description: Why the case was closed, null while it is active
+        closed_on:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: When the case was closed, null while it is active
+          title: Closed On
+        contact_id:
+          description: The registrant contact the case is about
+          examples:
+          - contact_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^contact_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Contact Id
+          type: string
+          x-typeid-prefix: contact
+        deadlines:
+          description: The deadlines of the case
+          items:
+            $ref: '#/components/schemas/VerificationDeadline'
+          title: Deadlines
+          type: array
+        opened_on:
+          description: When the case was opened
+          format: date-time
+          title: Opened On
+          type: string
+        source:
+          $ref: '#/components/schemas/DomainVerificationKind'
+          description: 'Who asks for the verification: ICANN or the registry'
+        status:
+          $ref: '#/components/schemas/DomainVerificationStatus'
+          description: The status of the case
+        trigger:
+          $ref: '#/components/schemas/DomainVerificationTrigger'
+          description: What opened the case
+        verification_id:
+          description: The ID of the verification case
+          examples:
+          - domain_verification_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^domain_verification_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Verification Id
+          type: string
+          x-typeid-prefix: domain_verification
+      required:
+      - verification_id
+      - source
+      - trigger
+      - status
+      - claims
+      - deadlines
+      - contact_id
+      - opened_on
+      - closed_on
+      - close_reason
+      title: DomainVerificationResponse
+      type: object
+    DomainVerificationStatus:
+      enum:
+      - OPEN
+      - SUBMITTED
+      - OVERDUE
+      - SATISFIED
+      - FAILED
+      - CANCELED
+      title: DomainVerificationStatus
+      type: string
+    DomainVerificationTrigger:
+      enum:
+      - CREATE
+      - REGISTRANT_CHANGE
+      - TRANSFER
+      - REGISTRY_REQUEST
+      - BACKFILL
+      title: DomainVerificationTrigger
+      type: string
     DomainWithdrawRequest:
       properties:
         zone_delete:
@@ -16437,6 +17124,7 @@ components:
       - SUCCESS
       - FAILURE
       - CANCELED
+      - OVERDUE
       title: EventSubtype
       type: string
     EventType:
@@ -19676,6 +20364,20 @@ components:
       - pagination
       title: Pagination[DomainResponse]
       type: object
+    Pagination_DomainVerificationResponse_:
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationMetadata'
+        results:
+          items:
+            $ref: '#/components/schemas/DomainVerificationResponse'
+          title: Results
+          type: array
+      required:
+      - results
+      - pagination
+      title: Pagination[DomainVerificationResponse]
+      type: object
     Pagination_EmailForwardResponse_:
       properties:
         pagination:
@@ -20975,6 +21677,7 @@ components:
       - api_keys
       - registrar_credentials
       - tags
+      - custom_fields
       - audit_logs
       - vanity_ns
       - whitelabel_branding
@@ -21612,7 +22315,7 @@ components:
       - nominet_dragon
       - red_es
       - internet_nz
-      - zacr
+      - zarc
       - traficom
       - ie_registry
       - nic_im
@@ -23960,6 +24663,7 @@ components:
     VerificationClaimType:
       enum:
       - name
+      - legal_entity
       - address
       - email
       - phone
@@ -23980,6 +24684,7 @@ components:
       type: object
     VerificationDeadlineType:
       enum:
+      - verification
       - dedelegation
       - deletion
       title: VerificationDeadlineType
@@ -24025,7 +24730,14 @@ components:
             $ref: '#/components/schemas/VerificationDeadline'
           title: Deadlines
           type: array
+        sources:
+          description: 'Who asks for the verification: ICANN, the registry or both'
+          items:
+            $ref: '#/components/schemas/DomainVerificationKind'
+          title: Sources
+          type: array
       required:
+      - sources
       - claims
       title: VerificationResponse
       type: object
@@ -24673,6 +25385,108 @@ components:
       - dnssec_status
       title: ZoneSortField
       type: string
+    ZoneStatisticsBucketResponse:
+      properties:
+        nxdomain_count:
+          description: Of those, queries answered with NXDOMAIN
+          title: Nxdomain Count
+          type: integer
+        partial:
+          description: 'The bucket counts only part of its span: it reaches outside
+            the window (a week or month the window cuts), part of it lies before `data_available_from`
+            or after `data_available_to`, or the zone was created during it. A partial
+            bucket must not be read as a rise or fall against its neighbours.'
+          title: Partial
+          type: boolean
+        period_start:
+          description: First day of the bucket (UTC)
+          format: date
+          title: Period Start
+          type: string
+        query_count:
+          description: Queries answered for the zone in this bucket, within the window
+          title: Query Count
+          type: integer
+      required:
+      - period_start
+      - query_count
+      - nxdomain_count
+      - partial
+      title: ZoneStatisticsBucketResponse
+      type: object
+    ZoneStatisticsResponse:
+      properties:
+        buckets:
+          description: One entry per bucket the window touches, oldest first, including
+            buckets without queries
+          items:
+            $ref: '#/components/schemas/ZoneStatisticsBucketResponse'
+          title: Buckets
+          type: array
+        data_available_from:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'First day the statistics hold data for the zone: the day collection
+            started, or the day the zone was created if that is later. Buckets before
+            it count zero because nothing was recorded, not because the zone had no
+            queries. Null while no statistics have been collected since the zone was
+            created.'
+          title: Data Available From
+        data_available_to:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Last day the statistics hold data for. Null while no statistics
+            have been collected since the zone was created.
+          title: Data Available To
+        end_date:
+          description: Last day of the window, inclusive
+          format: date
+          title: End Date
+          type: string
+        granularity:
+          $ref: '#/components/schemas/UsageGranularity'
+          description: Time-bucket size of the series
+        start_date:
+          description: First day of the window, inclusive
+          format: date
+          title: Start Date
+          type: string
+        totals:
+          $ref: '#/components/schemas/ZoneStatisticsTotalsResponse'
+        zone_name:
+          description: The zone the statistics are for, with a trailing dot
+          title: Zone Name
+          type: string
+      required:
+      - zone_name
+      - granularity
+      - start_date
+      - end_date
+      - totals
+      - buckets
+      - data_available_from
+      - data_available_to
+      title: ZoneStatisticsResponse
+      type: object
+    ZoneStatisticsTotalsResponse:
+      properties:
+        nxdomain_count:
+          description: Of those, queries answered with NXDOMAIN
+          title: Nxdomain Count
+          type: integer
+        query_count:
+          description: Queries answered for the zone in the window
+          title: Query Count
+          type: integer
+      required:
+      - query_count
+      - nxdomain_count
+      title: ZoneStatisticsTotalsResponse
+      type: object
     ZoneVanitySetUpdate:
       description: Public request body for assigning/clearing a zone's vanity NS branding.
       properties:
@@ -25153,7 +25967,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-10-16-144231
+  version: 2026-10-21-121958
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg
@@ -29723,6 +30537,696 @@ paths:
       - dns
       x-required-permissions:
       - dns:read
+  /v1/dns/statistics:
+    get:
+      description: 'Counts the DNS queries answered for all zones of your organization,
+        how many of them were NXDOMAIN, and how many zones had queries, in a window
+        of whole UTC days bucketed by the requested granularity. The window may span
+        at most 366 days at `granularity=day` or `week` and 120 calendar months at
+        `granularity=month`.
+
+
+        The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+        those of its sub-organizations too. A zone counts for its current owner with
+        its whole history: a zone moved to your organization brings its earlier queries
+        along, and a deleted zone no longer counts. They are recomputed after each
+        new day of data and after zones changed owner or were deleted; `statistics_updated_at`
+        tells when.
+
+
+        Every bucket the window touches is present, oldest first, so the series can
+        be charted as is; a bucket without queries counts zero. A bucket marked `partial`
+        covers only part of its span. Statistics are collected once a day, so the
+        newest day with data is usually yesterday.'
+      operationId: get_dns_statistics_v1_dns_statistics_get
+      parameters:
+      - description: First day of the window, inclusive (YYYY-MM-DD, UTC)
+        in: query
+        name: start_date
+        required: true
+        schema:
+          description: First day of the window, inclusive (YYYY-MM-DD, UTC)
+          format: date
+          title: Start Date
+          type: string
+      - description: 'Last day of the window, inclusive (YYYY-MM-DD, UTC). How far
+          it may reach depends on `granularity`: at most 366 days for `day` and `week`,
+          and 120 calendar months for `month`.'
+        in: query
+        name: end_date
+        required: true
+        schema:
+          description: 'Last day of the window, inclusive (YYYY-MM-DD, UTC). How far
+            it may reach depends on `granularity`: at most 366 days for `day` and
+            `week`, and 120 calendar months for `month`.'
+          format: date
+          title: End Date
+          type: string
+      - description: Time-bucket size. Weeks start on Monday and months on the 1st,
+          in UTC.
+        in: query
+        name: granularity
+        required: false
+        schema:
+          $ref: '#/components/schemas/UsageGranularity'
+          default: day
+          description: Time-bucket size. Weeks start on Monday and months on the 1st,
+            in UTC.
+      - description: Also count the zones of the organization's sub-organizations
+          (up to three levels), like the domain statistics do
+        in: query
+        name: include_sub_organizations
+        required: false
+        schema:
+          default: false
+          description: Also count the zones of the organization's sub-organizations
+            (up to three levels), like the domain statistics do
+          title: Include Sub Organizations
+          type: boolean
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                daily:
+                  description: Three days over all zones of the organization
+                  summary: Daily series
+                  value:
+                    buckets:
+                    - nxdomain_count: 17000
+                      partial: false
+                      period_start: '2026-10-18'
+                      query_count: 640000
+                      zone_count: 412
+                    - nxdomain_count: 23000
+                      partial: false
+                      period_start: '2026-10-19'
+                      query_count: 910000
+                      zone_count: 418
+                    - nxdomain_count: 21000
+                      partial: false
+                      period_start: '2026-10-20'
+                      query_count: 830000
+                      zone_count: 415
+                    data_available_from: '2026-04-24'
+                    data_available_to: '2026-10-20'
+                    end_date: '2026-10-20'
+                    granularity: day
+                    start_date: '2026-10-18'
+                    statistics_updated_at: '2026-10-21T07:12:03Z'
+                    totals:
+                      nxdomain_count: 61000
+                      query_count: 2380000
+              schema:
+                $ref: '#/components/schemas/DnsStatisticsResponse'
+          description: Statistics retrieved successfully
+        '400':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_QUERY
+                detail: The organization has 2400 organizations in its sub-tree, more
+                  than the 2000 these statistics can count over in one query
+                status: 400
+                title: Zone statistics query rejected.
+                type: zone-stats-query-rejected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Request
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '422':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_WINDOW
+                detail: '''start_date'' must be on or before ''end_date'''
+                status: 422
+                title: Invalid zone statistics window.
+                type: zone-stats-invalid-window
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unprocessable Content
+        '501':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_NOT_AVAILABLE
+                detail: Zone statistics are not available in this environment.
+                status: 501
+                title: Zone statistics not available.
+                type: zone-stats-not-available
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Implemented
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_UNAVAILABLE
+                detail: The statistics are not available yet, please try again later.
+                status: 503
+                title: Zone statistics unavailable.
+                type: zone-stats-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: Get DNS query statistics of the organization
+      tags:
+      - dns
+      x-required-permissions:
+      - dns:read
+  /v1/dns/statistics/inactive-zones:
+    get:
+      description: 'Lists the zones of your organization that answered no query in
+        a fixed period (7, 30 or 90 days) ending on the newest day with data, by name.
+        A zone without any query is most likely not delegated to the OpusDNS nameservers:
+        check the nameservers of its domain. Zones created within the period are included;
+        `zone_created_on` tells them apart.
+
+
+        The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+        those of its sub-organizations too. A zone counts for its current owner with
+        its whole history: a zone moved to your organization brings its earlier queries
+        along, and a deleted zone no longer counts. They are recomputed after each
+        new day of data and after zones changed owner or were deleted; `statistics_updated_at`
+        tells when.'
+      operationId: list_dns_inactive_zones_v1_dns_statistics_inactive_zones_get
+      parameters:
+      - description: Window without queries
+        in: query
+        name: period
+        required: false
+        schema:
+          $ref: '#/components/schemas/DnsStatisticsPeriod'
+          default: 30d
+          description: Window without queries
+      - description: Page number
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          description: Page number
+          maximum: 1000
+          minimum: 1
+          title: Page
+          type: integer
+      - description: Zones per page
+        in: query
+        name: page_size
+        required: false
+        schema:
+          default: 100
+          description: Zones per page
+          maximum: 1000
+          minimum: 1
+          title: Page Size
+          type: integer
+      - description: Also count the zones of the organization's sub-organizations
+          (up to three levels), like the domain statistics do
+        in: query
+        name: include_sub_organizations
+        required: false
+        schema:
+          default: false
+          description: Also count the zones of the organization's sub-organizations
+            (up to three levels), like the domain statistics do
+          title: Include Sub Organizations
+          type: boolean
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                default:
+                  summary: A zone that answered no query in the last 30 days
+                  value:
+                    pagination:
+                      current_page: 1
+                      has_next_page: false
+                      has_previous_page: false
+                      page_size: 100
+                      total_items: 1
+                      total_pages: 1
+                    period: 30d
+                    period_end: '2026-10-20'
+                    period_start: '2026-09-21'
+                    results:
+                    - nxdomain_count: 0
+                      nxdomain_ratio: 0.0
+                      organization_id: organization_01h45ytscbebyvny4gc8cr8ma2
+                      query_count: 0
+                      zone_created_on: '2026-08-02'
+                      zone_name: not-delegated.example.
+                    statistics_updated_at: '2026-10-21T07:12:03Z'
+              schema:
+                $ref: '#/components/schemas/DnsInactiveZonesResponse'
+          description: Zones without queries
+        '400':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_QUERY
+                detail: The organization has 2400 organizations in its sub-tree, more
+                  than the 2000 these statistics can count over in one query
+                status: 400
+                title: Zone statistics query rejected.
+                type: zone-stats-query-rejected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Request
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+        '501':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_NOT_AVAILABLE
+                detail: Zone statistics are not available in this environment.
+                status: 501
+                title: Zone statistics not available.
+                type: zone-stats-not-available
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Implemented
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_UNAVAILABLE
+                detail: The statistics are not available yet, please try again later.
+                status: 503
+                title: Zone statistics unavailable.
+                type: zone-stats-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: List the zones without DNS queries
+      tags:
+      - dns
+      x-required-permissions:
+      - dns:read
+  /v1/dns/statistics/movers:
+    get:
+      description: 'Lists the zones of your organization whose queries dropped (or
+        rose) most in a fixed period (7 or 30 days) ending on the newest day with
+        data, against the period of the same length before it. A sharp drop often
+        means the domain no longer points at the OpusDNS nameservers; a sharp rise
+        can be a campaign, a migration or an attack. Zones below `min_query_count`
+        in both periods are left out, and so are zones created after the earlier period
+        began, whose rise is only their creation.
+
+
+        The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+        those of its sub-organizations too. A zone counts for its current owner with
+        its whole history: a zone moved to your organization brings its earlier queries
+        along, and a deleted zone no longer counts. They are recomputed after each
+        new day of data and after zones changed owner or were deleted; `statistics_updated_at`
+        tells when.'
+      operationId: list_dns_zone_movers_v1_dns_statistics_movers_get
+      parameters:
+      - description: Window compared with the window of the same length before it
+        in: query
+        name: period
+        required: false
+        schema:
+          $ref: '#/components/schemas/DnsMoversPeriod'
+          default: 30d
+          description: Window compared with the window of the same length before it
+      - description: '`drop` lists the zones that lost the most queries, `rise` those
+          that gained the most'
+        in: query
+        name: direction
+        required: false
+        schema:
+          $ref: '#/components/schemas/DnsMoverDirection'
+          default: drop
+          description: '`drop` lists the zones that lost the most queries, `rise`
+            those that gained the most'
+      - description: Number of zones to return
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          description: Number of zones to return
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      - description: Leave out zones with fewer queries than this in both windows
+        in: query
+        name: min_query_count
+        required: false
+        schema:
+          default: 100
+          description: Leave out zones with fewer queries than this in both windows
+          maximum: 9223372036854775807
+          minimum: 0
+          title: Min Query Count
+          type: integer
+      - description: Also count the zones of the organization's sub-organizations
+          (up to three levels), like the domain statistics do
+        in: query
+        name: include_sub_organizations
+        required: false
+        schema:
+          default: false
+          description: Also count the zones of the organization's sub-organizations
+            (up to three levels), like the domain statistics do
+          title: Include Sub Organizations
+          type: boolean
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                default:
+                  summary: A zone that lost almost all its queries against the 30
+                    days before
+                  value:
+                    direction: drop
+                    period: 30d
+                    period_end: '2026-10-20'
+                    period_start: '2026-09-21'
+                    previous_period_end: '2026-09-20'
+                    previous_period_start: '2026-08-22'
+                    results:
+                    - change: -96800
+                      change_ratio: -0.98776
+                      organization_id: organization_01h45ytscbebyvny4gc8cr8ma2
+                      previous_query_count: 98000
+                      query_count: 1200
+                      zone_created_on: '2023-01-09'
+                      zone_name: moved-away.example.
+                    statistics_updated_at: '2026-10-21T07:12:03Z'
+              schema:
+                $ref: '#/components/schemas/DnsZoneMoversResponse'
+          description: Zones whose queries changed most
+        '400':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_QUERY
+                detail: The organization has 2400 organizations in its sub-tree, more
+                  than the 2000 these statistics can count over in one query
+                status: 400
+                title: Zone statistics query rejected.
+                type: zone-stats-query-rejected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Request
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+        '501':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_NOT_AVAILABLE
+                detail: Zone statistics are not available in this environment.
+                status: 501
+                title: Zone statistics not available.
+                type: zone-stats-not-available
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Implemented
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_UNAVAILABLE
+                detail: The statistics are not available yet, please try again later.
+                status: 503
+                title: Zone statistics unavailable.
+                type: zone-stats-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: List the zones whose DNS queries changed most
+      tags:
+      - dns
+      x-required-permissions:
+      - dns:read
+  /v1/dns/statistics/top-zones:
+    get:
+      description: 'Ranks the zones of your organization by queries, NXDOMAIN answers
+        or NXDOMAIN share over a fixed period (7, 30 or 90 days) ending on the newest
+        day with data. Zones without queries in the period are left out. A high NXDOMAIN
+        share often points at missing records or typos in links.
+
+
+        The numbers cover all DNS zones of your organization, and with `include_sub_organizations=true`
+        those of its sub-organizations too. A zone counts for its current owner with
+        its whole history: a zone moved to your organization brings its earlier queries
+        along, and a deleted zone no longer counts. They are recomputed after each
+        new day of data and after zones changed owner or were deleted; `statistics_updated_at`
+        tells when.'
+      operationId: list_dns_top_zones_v1_dns_statistics_top_zones_get
+      parameters:
+      - description: Window of the ranking
+        in: query
+        name: period
+        required: false
+        schema:
+          $ref: '#/components/schemas/DnsStatisticsPeriod'
+          default: 30d
+          description: Window of the ranking
+      - description: 'Order of the zones: by queries, by NXDOMAIN answers, or by the
+          NXDOMAIN share of their queries (raise `min_query_count` to leave out zones
+          with a handful of queries)'
+        in: query
+        name: rank_by
+        required: false
+        schema:
+          $ref: '#/components/schemas/DnsZoneRank'
+          default: queries
+          description: 'Order of the zones: by queries, by NXDOMAIN answers, or by
+            the NXDOMAIN share of their queries (raise `min_query_count` to leave
+            out zones with a handful of queries)'
+      - description: Number of zones to return
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          description: Number of zones to return
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      - description: Leave out zones with fewer queries in the period
+        in: query
+        name: min_query_count
+        required: false
+        schema:
+          default: 0
+          description: Leave out zones with fewer queries in the period
+          maximum: 9223372036854775807
+          minimum: 0
+          title: Min Query Count
+          type: integer
+      - description: Also count the zones of the organization's sub-organizations
+          (up to three levels), like the domain statistics do
+        in: query
+        name: include_sub_organizations
+        required: false
+        schema:
+          default: false
+          description: Also count the zones of the organization's sub-organizations
+            (up to three levels), like the domain statistics do
+          title: Include Sub Organizations
+          type: boolean
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                default:
+                  summary: The zones with the most queries in the last 30 days
+                  value:
+                    period: 30d
+                    period_end: '2026-10-20'
+                    period_start: '2026-09-21'
+                    rank_by: queries
+                    results:
+                    - last_query_date: '2026-10-20'
+                      nxdomain_count: 8400
+                      nxdomain_ratio: 0.00672
+                      organization_id: organization_01h45ytscbebyvny4gc8cr8ma2
+                      query_count: 1250000
+                      zone_created_on: '2024-03-14'
+                      zone_name: example.com.
+                    statistics_updated_at: '2026-10-21T07:12:03Z'
+              schema:
+                $ref: '#/components/schemas/DnsTopZonesResponse'
+          description: Zones ranked
+        '400':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_QUERY
+                detail: The organization has 2400 organizations in its sub-tree, more
+                  than the 2000 these statistics can count over in one query
+                status: 400
+                title: Zone statistics query rejected.
+                type: zone-stats-query-rejected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Request
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+        '501':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_NOT_AVAILABLE
+                detail: Zone statistics are not available in this environment.
+                status: 501
+                title: Zone statistics not available.
+                type: zone-stats-not-available
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Implemented
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_UNAVAILABLE
+                detail: The statistics are not available yet, please try again later.
+                status: 503
+                title: Zone statistics unavailable.
+                type: zone-stats-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: List the zones with the most DNS queries
+      tags:
+      - dns
+      x-required-permissions:
+      - dns:read
   /v1/dns/summary:
     get:
       operationId: get_zones_summary_v1_dns_summary_get
@@ -30357,6 +31861,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
+        '429':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_WRITE_BUSY
+                detail: Other DNS zone changes are still being applied, please retry
+                  after the Retry-After delay
+                status: 429
+                title: DNS Zone Busy
+                type: dns-zone-write-busy
+                zone_name: example.com.
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Too Many Requests
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -30543,6 +32061,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
+        '429':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_WRITE_BUSY
+                detail: Other DNS zone changes are still being applied, please retry
+                  after the Retry-After delay
+                status: 429
+                title: DNS Zone Busy
+                type: dns-zone-write-busy
+                zone_name: example.com.
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Too Many Requests
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -30699,6 +32231,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
+        '429':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_WRITE_BUSY
+                detail: Other DNS zone changes are still being applied, please retry
+                  after the Retry-After delay
+                status: 429
+                title: DNS Zone Busy
+                type: dns-zone-write-busy
+                zone_name: example.com.
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Too Many Requests
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -30707,6 +32253,238 @@ paths:
       - dns
       x-required-permissions:
       - dns:manage
+  /v1/dns/{zone_name}/statistics:
+    get:
+      description: 'Counts the DNS queries answered for the zone, and how many of
+        them were NXDOMAIN, in a window of whole UTC days, bucketed by the requested
+        granularity. The window may span at most 366 days at `granularity=day` or
+        `week` and 120 calendar months at `granularity=month`.
+
+
+        Every bucket the window touches is present, oldest first, so the series can
+        be charted as is; a bucket without queries counts zero. Buckets count only
+        the days inside the window and the zone''s lifetime. A bucket marked `partial`
+        covers only part of its span: it reaches outside the window, part of it lies
+        outside the stored data, or the zone was created during it.
+
+
+        Statistics are collected once a day, so the newest day with data is usually
+        yesterday. `data_available_from` and `data_available_to` report the days the
+        statistics hold data for the zone, never earlier than the day it was created:
+        a window reaching further back is empty before it rather than genuinely zero.'
+      operationId: get_zone_statistics_v1_dns__zone_name__statistics_get
+      parameters:
+      - description: DNS zone name (trailing dot optional)
+        in: path
+        name: zone_name
+        required: true
+        schema:
+          description: DNS zone name (trailing dot optional)
+          title: Zone Name
+          type: string
+      - description: First day of the window, inclusive (YYYY-MM-DD, UTC)
+        in: query
+        name: start_date
+        required: true
+        schema:
+          description: First day of the window, inclusive (YYYY-MM-DD, UTC)
+          format: date
+          title: Start Date
+          type: string
+      - description: 'Last day of the window, inclusive (YYYY-MM-DD, UTC). How far
+          it may reach depends on `granularity`: at most 366 days for `day` and `week`,
+          and 120 calendar months for `month`.'
+        in: query
+        name: end_date
+        required: true
+        schema:
+          description: 'Last day of the window, inclusive (YYYY-MM-DD, UTC). How far
+            it may reach depends on `granularity`: at most 366 days for `day` and
+            `week`, and 120 calendar months for `month`.'
+          format: date
+          title: End Date
+          type: string
+      - description: Time-bucket size. Weeks start on Monday and months on the 1st,
+          in UTC.
+        in: query
+        name: granularity
+        required: false
+        schema:
+          $ref: '#/components/schemas/UsageGranularity'
+          default: day
+          description: Time-bucket size. Weeks start on Monday and months on the 1st,
+            in UTC.
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                daily:
+                  description: Three days, one of them without a recorded query
+                  summary: Daily series
+                  value:
+                    buckets:
+                    - nxdomain_count: 40
+                      partial: false
+                      period_start: '2026-10-01'
+                      query_count: 1200
+                    - nxdomain_count: 0
+                      partial: false
+                      period_start: '2026-10-02'
+                      query_count: 0
+                    - nxdomain_count: 30
+                      partial: false
+                      period_start: '2026-10-03'
+                      query_count: 700
+                    data_available_from: '2026-06-01'
+                    data_available_to: '2026-10-03'
+                    end_date: '2026-10-03'
+                    granularity: day
+                    start_date: '2026-10-01'
+                    totals:
+                      nxdomain_count: 70
+                      query_count: 1900
+                    zone_name: example.com.
+                monthly:
+                  description: Calendar months; the last month is partial because
+                    the window ends before it does
+                  summary: Monthly series
+                  value:
+                    buckets:
+                    - nxdomain_count: 300
+                      partial: false
+                      period_start: '2026-08-01'
+                      query_count: 9000
+                    - nxdomain_count: 1100
+                      partial: false
+                      period_start: '2026-09-01'
+                      query_count: 30000
+                    - nxdomain_count: 500
+                      partial: true
+                      period_start: '2026-10-01'
+                      query_count: 13000
+                    data_available_from: '2026-06-01'
+                    data_available_to: '2026-10-19'
+                    end_date: '2026-10-14'
+                    granularity: month
+                    start_date: '2026-08-01'
+                    totals:
+                      nxdomain_count: 1900
+                      query_count: 52000
+                    zone_name: example.com.
+                weekly:
+                  description: Weeks start on Monday. The window runs from a Wednesday
+                    to a Tuesday, so the first and the last week count only the days
+                    inside it and are partial
+                  summary: Weekly series
+                  value:
+                    buckets:
+                    - nxdomain_count: 200
+                      partial: true
+                      period_start: '2026-09-28'
+                      query_count: 6000
+                    - nxdomain_count: 380
+                      partial: false
+                      period_start: '2026-10-05'
+                      query_count: 10500
+                    - nxdomain_count: 60
+                      partial: true
+                      period_start: '2026-10-12'
+                      query_count: 1500
+                    data_available_from: '2026-06-01'
+                    data_available_to: '2026-10-19'
+                    end_date: '2026-10-13'
+                    granularity: week
+                    start_date: '2026-09-30'
+                    totals:
+                      nxdomain_count: 640
+                      query_count: 18000
+                    zone_name: example.com.
+              schema:
+                $ref: '#/components/schemas/ZoneStatisticsResponse'
+          description: Zone statistics retrieved successfully
+        '400':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_QUERY
+                detail: invalid 'zone'
+                status: 400
+                title: Zone statistics query rejected.
+                type: zone-stats-query-rejected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Request
+        '401':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_AUTHENTICATION
+                detail: Additional error context.
+                status: 401
+                title: Authentication Error
+                type: authentication
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_PERMISSION_DENIED
+                detail: Insufficient permissions to perform this action
+                status: 403
+                title: Permission Denied
+                type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '422':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_WINDOW
+                detail: '''start_date'' must be on or before ''end_date'''
+                status: 422
+                title: Invalid zone statistics window.
+                type: zone-stats-invalid-window
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Unprocessable Content
+        '501':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_NOT_AVAILABLE
+                detail: Zone statistics are not available in this environment.
+                status: 501
+                title: Zone statistics not available.
+                type: zone-stats-not-available
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Implemented
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ZONE_STATISTICS_UNAVAILABLE
+                detail: Zone statistics are currently unavailable, please try again
+                  later.
+                status: 503
+                title: Zone statistics unavailable.
+                type: zone-stats-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: Get zone query statistics
+      tags:
+      - dns
+      x-required-permissions:
+      - dns:read
   /v1/dns/{zone_name}/vanity-set:
     patch:
       operationId: update_zone_vanity_set_v1_dns__zone_name__vanity_set_patch
@@ -35751,9 +37529,17 @@ paths:
         '422':
           content:
             application/problem+json:
+              example:
+                code: ERROR_DOMAIN_REGISTRANT_CHANGE_NOT_SUPPORTED
+                detail: Registrant change is not supported for .lu domains
+                domain_name: example.lu
+                status: 422
+                title: Domain Management Error
+                tld: lu
+                type: domain-registrant-change-not-supported
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
+                $ref: '#/components/schemas/Problem'
+          description: Unprocessable Content
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -36504,6 +38290,79 @@ paths:
       - domain
       x-required-permissions:
       - domains:manage
+  /v1/domains/{domain_reference}/verifications:
+    get:
+      description: 'Lists the verification cases of a domain, active and closed, newest
+        first: what ICANN or the registry asks to
+
+        verify about the registrant, by when, and how the case ended.'
+      operationId: list_domain_verifications_v1_domains__domain_reference__verifications_get
+      parameters:
+      - in: path
+        name: domain_reference
+        required: true
+        schema:
+          anyOf:
+          - examples:
+            - domain_01h45ytscbebyvny4gc8cr8ma2
+            format: typeid
+            pattern: ^domain_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+            type: string
+            x-typeid-prefix: domain
+          - type: string
+          title: Domain Reference
+      - in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          title: Page
+          type: integer
+      - in: query
+        name: page_size
+        required: false
+        schema:
+          default: 10
+          maximum: 1000
+          minimum: 1
+          title: Page Size
+          type: integer
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pagination_DomainVerificationResponse_'
+          description: Successful Response
+        '404':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_DOMAIN_NOT_FOUND
+                detail: Domain not found
+                domain_name: Additional error context.
+                status: 404
+                title: Domain Management Error
+                type: domain-not-found
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Found
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: List the verification cases of a domain
+      tags:
+      - domain
+      x-required-permissions:
+      - domains:read
   /v1/email-forwards:
     get:
       description: Retrieves a paginated list of all email forwards for the organization.
@@ -38949,12 +40808,11 @@ paths:
           content:
             application/problem+json:
               example:
-                code: ERROR_BATCH_JOB_CREATION_FAILED
-                command: Additional error context.
-                detail: Failed to create job for command 'Additional error context.'
+                code: ERROR_JOB_SERVICE_UNAVAILABLE
+                detail: Additional error context.
                 status: 503
-                title: Batch Operation Error
-                type: batch-job-creation
+                title: Job Service Unavailable
+                type: job-service-unavailable
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Service Unavailable
