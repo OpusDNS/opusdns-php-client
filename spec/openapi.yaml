@@ -10792,35 +10792,76 @@ components:
       type: object
     DnsStatisticsBucketResponse:
       properties:
+        covered_from:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'First day the bucket''s counts include: the latest of `period_start`,
+            `start_date` and `data_available_from`. A month the window cuts is summed
+            from the daily statistics, which are kept for 25 months, so in a month
+            older than that it is also no earlier than the oldest day still kept.
+            Null when the bucket is not covered: none of its days lies within both
+            the window and the stored data'
+          title: Covered From
+        covered_to:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'Last day the bucket''s counts include: the earliest of `period_end`,
+            `end_date` and `data_available_to`. Null when the bucket is not covered'
+          title: Covered To
         nxdomain_count:
-          description: Of those, queries answered with NXDOMAIN
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Of those, queries answered with NXDOMAIN. Null when the bucket
+            is not covered
           title: Nxdomain Count
-          type: integer
         partial:
-          description: 'The bucket counts only part of its span: it reaches outside
-            the window, or part of it lies before `data_available_from` or after `data_available_to`.
-            A partial bucket must not be read as a rise or fall against its neighbours.'
+          description: 'True when the counts are not those of the whole bucket: `covered_from`..`covered_to`
+            is shorter than `period_start`..`period_end` because the window or the
+            stored data cuts it, or the bucket is the first month of monthly statistics
+            older than the daily ones (see `data_available_from`), whose first day
+            of data is not known. Also true for a bucket that is not covered, which
+            has no counts. A partial bucket must not be read as a rise or fall against
+            its neighbours'
           title: Partial
           type: boolean
+        period_end:
+          description: 'Last day of the bucket (UTC): the day itself, the Sunday of
+            its week, or the last day of its month'
+          format: date
+          title: Period End
+          type: string
         period_start:
           description: First day of the bucket (UTC)
           format: date
           title: Period Start
           type: string
         query_count:
-          description: Queries answered for the organization's zones in this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Queries answered for the organization''s zones from `covered_from`
+            to `covered_to`; 0 when none were recorded. Null when the bucket is not
+            covered: no data, rather than no queries'
           title: Query Count
-          type: integer
         zone_count:
           anyOf:
           - type: integer
           - type: 'null'
-          description: 'Zones with at least one query in the bucket. Null for weeks,
-            and for a month the window cuts: those are summed from days, and a zone
-            active on several of them cannot be counted once'
+          description: 'Zones with at least one query in the bucket. Null when the
+            bucket is not covered, and for weeks and for a month the window cuts:
+            those are summed from days, and a zone active on several of them cannot
+            be counted once'
           title: Zone Count
       required:
       - period_start
+      - period_end
+      - covered_from
+      - covered_to
       - query_count
       - nxdomain_count
       - zone_count
@@ -10840,7 +10881,7 @@ components:
       properties:
         buckets:
           description: One entry per bucket the window touches, oldest first, including
-            buckets without queries
+            buckets without queries (0) and buckets without data (null)
           items:
             $ref: '#/components/schemas/DnsStatisticsBucketResponse'
           title: Buckets
@@ -10850,16 +10891,22 @@ components:
           - format: date
             type: string
           - type: 'null'
-          description: First day the statistics hold data for. Null while no statistics
-            have been collected.
+          description: First day the statistics hold data for. Buckets count no day
+            before it; one left without a day to count carries null counts. Null while
+            no statistics have been collected; then every bucket carries null counts.
+            At `granularity=month`, once the daily statistics older than 25 months
+            have been deleted, it is the first day of the oldest month the monthly
+            statistics hold; the day the data starts on within that month is no longer
+            known.
           title: Data Available From
         data_available_to:
           anyOf:
           - format: date
             type: string
           - type: 'null'
-          description: Last day the statistics hold data for. Null while no statistics
-            have been collected.
+          description: Last day the statistics hold data for. Buckets count no day
+            after it; one left without a day to count carries null counts. Null while
+            no statistics have been collected.
           title: Data Available To
         end_date:
           description: Last day of the window, inclusive
@@ -10897,13 +10944,19 @@ components:
     DnsStatisticsTotalsResponse:
       properties:
         nxdomain_count:
-          description: Of those, queries answered with NXDOMAIN
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Of those, queries answered with NXDOMAIN. Null when no bucket
+            is covered
           title: Nxdomain Count
-          type: integer
         query_count:
-          description: Queries answered for the organization's zones in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Queries answered for the organization's zones, summed over
+            the covered buckets. Null when no bucket is covered
           title: Query Count
-          type: integer
       required:
       - query_count
       - nxdomain_count
@@ -12074,6 +12127,11 @@ components:
           - type: 'null'
           description: Error details when status is 'error', e.g. why a domain is
             invalid
+        marketplace:
+          $ref: '#/components/schemas/Marketplace'
+          description: The marketplace a taken domain can be bought on; only on `market_available`
+            results of `POST /v1/availability/stream` with `marketplaces`, omitted
+            otherwise.
         status:
           $ref: '#/components/schemas/DomainAvailabilityStatus'
       required:
@@ -12118,6 +12176,18 @@ components:
           maxItems: 1000
           minItems: 1
           title: Domains
+          type: array
+        marketplaces:
+          description: 'Marketplaces to check, by name, or `all` for every marketplace.
+            A taken domain that can be bought on one of them is reported as `market_available`.
+            Best-effort: such a domain may still be reported as `unavailable`. Empty
+            or omitted: no marketplace is checked.'
+          items:
+            anyOf:
+            - const: all
+              type: string
+            - $ref: '#/components/schemas/MarketplaceName'
+          title: Marketplaces
           type: array
       required:
       - domains
@@ -14421,6 +14491,12 @@ components:
         domain:
           title: Domain
           type: string
+        marketplace:
+          $ref: '#/components/schemas/Marketplace'
+          description: 'Present on a domain for sale on a marketplace, added after
+            the suggestions with `available: false` and no amount yet; omitted on
+            suggestions. A domain can appear twice: as a suggestion with its registry
+            fields, and as a marketplace item.'
         premium:
           title: Premium
           type: boolean
@@ -14508,48 +14584,100 @@ components:
       type: object
     DomainStatisticsBucketResponse:
       properties:
+        covered_from:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'First day the bucket''s counts include: the latest of `period_start`,
+            `start_date` and the day of `data_available_from`. Null when the bucket
+            is not covered: none of its days lies within the window, on or after the
+            day of `data_available_from` and on or before today (UTC)'
+          title: Covered From
+        covered_to:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'Last day the bucket''s counts include: the earliest of `period_end`,
+            `end_date` and today (UTC). Null when the bucket is not covered'
+          title: Covered To
         create:
-          description: Domains created in this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Domains created from `covered_from` to `covered_to`; 0 when
+            none were. Null when the bucket is not covered: no data, rather than no
+            movement'
           title: Create
-          type: integer
         delete:
-          description: Domains deleted in this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Domains deleted. Null when the bucket is not covered: no data,
+            rather than no movement'
           title: Delete
-          type: integer
         net:
-          description: Created plus transferred in, minus deleted and transferred
-            out
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Created plus transferred in, minus deleted and transferred
+            out. Null when the bucket is not covered: no data, rather than no movement'
           title: Net
-          type: integer
         partial:
-          description: The bucket reaches outside the requested window, so its counts
-            cover only part of its span and must not be read as a rise or fall against
-            its neighbours
+          description: 'True when the counts are not those of the whole bucket: `covered_from`..`covered_to`
+            is shorter than `period_start`..`period_end` because the window, the start
+            of the event log or today cuts it; it includes the day of `data_available_from`,
+            which the log covers only from that instant unless it is midnight; or
+            it reaches today, which is still running. Also true for a bucket that
+            is not covered, which has no counts. A partial bucket must not be read
+            as a rise or fall against its neighbours'
           title: Partial
           type: boolean
+        period_end:
+          description: 'Last day of the bucket (UTC): the day itself, the Sunday of
+            its week, or the last day of its month'
+          format: date
+          title: Period End
+          type: string
         period_start:
           description: First day of the bucket (UTC)
           format: date
           title: Period Start
           type: string
         renew:
-          description: Domain renewals in this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Domain renewals. Null when the bucket is not covered: no data,
+            rather than no movement'
           title: Renew
-          type: integer
         restore:
-          description: Domains restored in this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Domains restored. Null when the bucket is not covered: no
+            data, rather than no movement'
           title: Restore
-          type: integer
         transfer:
-          description: Domains transferred in during this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Domains transferred in. Null when the bucket is not covered:
+            no data, rather than no movement'
           title: Transfer
-          type: integer
         transfer_out:
-          description: Domains transferred away during this bucket
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Domains transferred away. Null when the bucket is not covered:
+            no data, rather than no movement'
           title: Transfer Out
-          type: integer
       required:
       - period_start
+      - period_end
+      - covered_from
+      - covered_to
       - create
       - transfer
       - delete
@@ -14571,7 +14699,7 @@ components:
           type: array
         buckets:
           description: One entry per bucket the window touches, oldest first, including
-            empty buckets
+            buckets without movement (0) and buckets without data (null)
           items:
             $ref: '#/components/schemas/DomainStatisticsBucketResponse'
           title: Buckets
@@ -14581,10 +14709,11 @@ components:
           - format: date-time
             type: string
           - type: 'null'
-          description: Oldest day these statistics can report on. They are read from
-            the domain event log, which starts later than the domains themselves,
-            so a window reaching further back is empty before this instant rather
-            than zero.
+          description: Oldest event the domain event log holds, which starts later
+            than the domains themselves. Buckets count no day before its day; one
+            left without a day to count carries null counts. Null when the log holds
+            no event or its start could not be read; buckets are then counted over
+            the whole window.
           title: Data Available From
         end_date:
           description: Last day of the window, inclusive
@@ -14624,39 +14753,61 @@ components:
     DomainStatisticsTotalsResponse:
       properties:
         create:
-          description: Domains created (newly registered) in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Domains created (newly registered), summed over the covered
+            buckets. Null when no bucket is covered
           title: Create
-          type: integer
         delete:
-          description: Domains deleted in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Domains deleted, summed over the covered buckets. Null when
+            no bucket is covered
           title: Delete
-          type: integer
         net:
+          anyOf:
+          - type: integer
+          - type: 'null'
           description: Created plus transferred in, minus deleted and transferred
-            out
+            out, summed over the covered buckets. Null when no bucket is covered
           title: Net
-          type: integer
         renew:
-          description: Domains renewed in the window, counted once per day a domain
-            was renewed
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Domains renewed, counted once per day a domain was renewed,
+            summed over the covered buckets. Null when no bucket is covered
           title: Renew
-          type: integer
         restore:
-          description: Domains restored from redemption in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Domains restored from redemption, summed over the covered buckets.
+            Null when no bucket is covered
           title: Restore
-          type: integer
         total:
-          description: Created plus transferred
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Created plus transferred, summed over the covered buckets.
+            Null when no bucket is covered
           title: Total
-          type: integer
         transfer:
-          description: Domains transferred to OpusDNS in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Domains transferred to OpusDNS, summed over the covered buckets.
+            Null when no bucket is covered
           title: Transfer
-          type: integer
         transfer_out:
-          description: Domains transferred away from OpusDNS in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Domains transferred away from OpusDNS, summed over the covered
+            buckets. Null when no bucket is covered
           title: Transfer Out
-          type: integer
       required:
       - create
       - transfer
@@ -18706,6 +18857,22 @@ components:
           type: string
       title: MailTemplateVariable
       type: object
+    Marketplace:
+      description: The marketplace a domain is for sale on.
+      properties:
+        name:
+          $ref: '#/components/schemas/MarketplaceName'
+          description: Name of the marketplace
+      required:
+      - name
+      title: Marketplace
+      type: object
+    MarketplaceName:
+      description: Marketplaces OpusDNS lists domains from.
+      enum:
+      - fruits
+      title: MarketplaceName
+      type: string
     MemoryFact:
       properties:
         created_at:
@@ -18985,6 +19152,12 @@ components:
       - accept_name
       title: NorIdDeclarationConfirmRequest
       type: object
+    NorIdDeclarationPurpose:
+      enum:
+      - registration
+      - registrant_change
+      title: NorIdDeclarationPurpose
+      type: string
     NorIdDeclarationResponse:
       properties:
         declaration_contract_text:
@@ -19008,7 +19181,7 @@ components:
           title: Domain Name
           type: string
         expires_on:
-          description: When the unconfirmed create request expires
+          description: When the unsigned request expires
           format: date-time
           title: Expires On
           type: string
@@ -19033,6 +19206,11 @@ components:
           title: Organization Id
           type: string
           x-typeid-prefix: organization
+        purpose:
+          $ref: '#/components/schemas/NorIdDeclarationPurpose'
+          default: registration
+          description: 'What the signature completes: the registration of the domain
+            or a change of its registrant'
         status:
           $ref: '#/components/schemas/NorIdDeclarationStatus'
           description: The declaration status
@@ -25387,28 +25565,69 @@ components:
       type: string
     ZoneStatisticsBucketResponse:
       properties:
+        covered_from:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'First day the bucket''s counts include: the latest of `period_start`,
+            `start_date` and `data_available_from`. A month the window cuts is summed
+            from the daily statistics, which are kept for 25 months, so in a month
+            older than that it is also no earlier than the oldest day still kept.
+            Null when the bucket is not covered: none of its days lies within both
+            the window and the stored data'
+          title: Covered From
+        covered_to:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: 'Last day the bucket''s counts include: the earliest of `period_end`,
+            `end_date` and `data_available_to`. Null when the bucket is not covered'
+          title: Covered To
         nxdomain_count:
-          description: Of those, queries answered with NXDOMAIN
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Of those, queries answered with NXDOMAIN. Null when the bucket
+            is not covered
           title: Nxdomain Count
-          type: integer
         partial:
-          description: 'The bucket counts only part of its span: it reaches outside
-            the window (a week or month the window cuts), part of it lies before `data_available_from`
-            or after `data_available_to`, or the zone was created during it. A partial
-            bucket must not be read as a rise or fall against its neighbours.'
+          description: 'True when the counts are not those of the whole bucket: `covered_from`..`covered_to`
+            is shorter than `period_start`..`period_end` because the window or the
+            stored data cuts it, or the bucket is the first month of monthly statistics
+            older than the daily ones (see `data_available_from`), whose first day
+            of data is not known. Also true for a bucket that is not covered, which
+            has no counts. A partial bucket must not be read as a rise or fall against
+            its neighbours. Also true when `covered_from` is the day the zone was
+            created: that day is counted whole, with the queries from before the zone
+            existed'
           title: Partial
           type: boolean
+        period_end:
+          description: 'Last day of the bucket (UTC): the day itself, the Sunday of
+            its week, or the last day of its month'
+          format: date
+          title: Period End
+          type: string
         period_start:
           description: First day of the bucket (UTC)
           format: date
           title: Period Start
           type: string
         query_count:
-          description: Queries answered for the zone in this bucket, within the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Queries answered for the zone from `covered_from` to `covered_to`;
+            0 when none were recorded. Null when the bucket is not covered: no data,
+            rather than no queries'
           title: Query Count
-          type: integer
       required:
       - period_start
+      - period_end
+      - covered_from
+      - covered_to
       - query_count
       - nxdomain_count
       - partial
@@ -25418,7 +25637,7 @@ components:
       properties:
         buckets:
           description: One entry per bucket the window touches, oldest first, including
-            buckets without queries
+            buckets without queries (0) and buckets without data (null)
           items:
             $ref: '#/components/schemas/ZoneStatisticsBucketResponse'
           title: Buckets
@@ -25429,18 +25648,22 @@ components:
             type: string
           - type: 'null'
           description: 'First day the statistics hold data for the zone: the day collection
-            started, or the day the zone was created if that is later. Buckets before
-            it count zero because nothing was recorded, not because the zone had no
-            queries. Null while no statistics have been collected since the zone was
-            created.'
+            started, or the day the zone was created if that is later. Buckets count
+            no day before it; one left without a day to count carries null counts.
+            Null while no statistics have been collected since the zone was created;
+            then every bucket carries null counts. At `granularity=month`, once the
+            daily statistics older than 25 months have been deleted, it is the first
+            day of the oldest month the monthly statistics hold; the day the data
+            starts on within that month is no longer known.'
           title: Data Available From
         data_available_to:
           anyOf:
           - format: date
             type: string
           - type: 'null'
-          description: Last day the statistics hold data for. Null while no statistics
-            have been collected since the zone was created.
+          description: Last day the statistics hold data for. Buckets count no day
+            after it; one left without a day to count carries null counts. Null while
+            no statistics have been collected since the zone was created.
           title: Data Available To
         end_date:
           description: Last day of the window, inclusive
@@ -25475,13 +25698,19 @@ components:
     ZoneStatisticsTotalsResponse:
       properties:
         nxdomain_count:
-          description: Of those, queries answered with NXDOMAIN
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Of those, queries answered with NXDOMAIN. Null when no bucket
+            is covered
           title: Nxdomain Count
-          type: integer
         query_count:
-          description: Queries answered for the zone in the window
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Queries answered for the zone, summed over the covered buckets.
+            Null when no bucket is covered
           title: Query Count
-          type: integer
       required:
       - query_count
       - nxdomain_count
@@ -25967,7 +26196,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-10-21-121958
+  version: 2026-10-23-075952
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg
@@ -28302,8 +28531,13 @@ paths:
       tags:
       - availability
     post:
-      description: Stream domain availability results using Server-Sent Events (SSE)
+      description: 'Stream domain availability results using Server-Sent Events (SSE)
         until the `done` event is received.
+
+
+        With `marketplaces` (e.g. `["fruits"]`, or `["all"]`), a taken domain that
+        can be bought on one of them is reported as `market_available` with `marketplace:
+        {"name": ...}` (best-effort); taken domains may then arrive slightly later.'
       operationId: stream_availability_post_v1_availability_stream_post
       parameters:
       - $ref: '#/components/parameters/DatetimeFormatHeader'
@@ -29690,14 +29924,13 @@ paths:
           content:
             application/problem+json:
               example:
-                code: ERROR_DOMAIN_VERIFICATION_INCONSISTENT_METHOD_PROOF
-                detail: All attestations in a single submission must share the same
-                  method and proof. Submit separate requests if you used different
-                  methods or proofs.
-                domain_name: Additional error context.
+                code: ERROR_DOMAIN_VERIFICATION_MISSING_REFERENCE
+                contact_id: Additional error context.
+                detail: DENIC verification is pending for this contact, so every attestation
+                  needs an attestation_reference.
                 status: 400
-                title: Domain Verification Inconsistent Method/Proof
-                type: domain-verification-inconsistent-method-proof
+                title: Domain Verification Missing Reference
+                type: domain-verification-missing-reference
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Bad Request
@@ -30555,9 +30788,12 @@ paths:
 
 
         Every bucket the window touches is present, oldest first, so the series can
-        be charted as is; a bucket without queries counts zero. A bucket marked `partial`
-        covers only part of its span. Statistics are collected once a day, so the
-        newest day with data is usually yesterday.'
+        be charted as is. A bucket counts the days it shares with the window and with
+        `data_available_from`..`data_available_to`, from `covered_from` to `covered_to`;
+        without a recorded query on them it counts zero. A bucket without such a day
+        carries null counts: no data, rather than no queries. A bucket marked `partial`
+        counts only part of its span; one with null counts is partial too. Statistics
+        are collected once a day, so the newest day with data is usually yesterday.'
       operationId: get_dns_statistics_v1_dns_statistics_get
       parameters:
       - description: First day of the window, inclusive (YYYY-MM-DD, UTC)
@@ -30614,18 +30850,27 @@ paths:
                   summary: Daily series
                   value:
                     buckets:
-                    - nxdomain_count: 17000
+                    - covered_from: '2026-10-18'
+                      covered_to: '2026-10-18'
+                      nxdomain_count: 17000
                       partial: false
+                      period_end: '2026-10-18'
                       period_start: '2026-10-18'
                       query_count: 640000
                       zone_count: 412
-                    - nxdomain_count: 23000
+                    - covered_from: '2026-10-19'
+                      covered_to: '2026-10-19'
+                      nxdomain_count: 23000
                       partial: false
+                      period_end: '2026-10-19'
                       period_start: '2026-10-19'
                       query_count: 910000
                       zone_count: 418
-                    - nxdomain_count: 21000
+                    - covered_from: '2026-10-20'
+                      covered_to: '2026-10-20'
+                      nxdomain_count: 21000
                       partial: false
+                      period_end: '2026-10-20'
                       period_start: '2026-10-20'
                       query_count: 830000
                       zone_count: 415
@@ -30638,6 +30883,41 @@ paths:
                     totals:
                       nxdomain_count: 61000
                       query_count: 2380000
+                monthly:
+                  description: 'Calendar months; collection started on 24 April: March
+                    holds no data and carries null counts, April counts from the 24th
+                    and is partial, May is counted whole'
+                  summary: Monthly series
+                  value:
+                    buckets:
+                    - partial: true
+                      period_end: '2026-03-31'
+                      period_start: '2026-03-01'
+                    - covered_from: '2026-04-24'
+                      covered_to: '2026-04-30'
+                      nxdomain_count: 150000
+                      partial: true
+                      period_end: '2026-04-30'
+                      period_start: '2026-04-01'
+                      query_count: 5600000
+                      zone_count: 395
+                    - covered_from: '2026-05-01'
+                      covered_to: '2026-05-31'
+                      nxdomain_count: 660000
+                      partial: false
+                      period_end: '2026-05-31'
+                      period_start: '2026-05-01'
+                      query_count: 25400000
+                      zone_count: 431
+                    data_available_from: '2026-04-24'
+                    data_available_to: '2026-10-20'
+                    end_date: '2026-05-31'
+                    granularity: month
+                    start_date: '2026-03-01'
+                    statistics_updated_at: '2026-10-21T07:12:03Z'
+                    totals:
+                      nxdomain_count: 810000
+                      query_count: 31000000
               schema:
                 $ref: '#/components/schemas/DnsStatisticsResponse'
           description: Statistics retrieved successfully
@@ -32262,16 +32542,18 @@ paths:
 
 
         Every bucket the window touches is present, oldest first, so the series can
-        be charted as is; a bucket without queries counts zero. Buckets count only
-        the days inside the window and the zone''s lifetime. A bucket marked `partial`
-        covers only part of its span: it reaches outside the window, part of it lies
-        outside the stored data, or the zone was created during it.
+        be charted as is. A bucket counts the days it shares with the window and with
+        `data_available_from`..`data_available_to`, from `covered_from` to `covered_to`;
+        without a recorded query on them it counts zero. A bucket without such a day
+        carries null counts: no data, rather than no queries. A bucket marked `partial`
+        counts only part of its span, because the window or the stored data cuts it,
+        or starts on the day the zone was created, which is counted whole. A bucket
+        with null counts is partial too.
 
 
         Statistics are collected once a day, so the newest day with data is usually
         yesterday. `data_available_from` and `data_available_to` report the days the
-        statistics hold data for the zone, never earlier than the day it was created:
-        a window reaching further back is empty before it rather than genuinely zero.'
+        statistics hold data for the zone, never earlier than the day it was created.'
       operationId: get_zone_statistics_v1_dns__zone_name__statistics_get
       parameters:
       - description: DNS zone name (trailing dot optional)
@@ -32325,16 +32607,25 @@ paths:
                   summary: Daily series
                   value:
                     buckets:
-                    - nxdomain_count: 40
+                    - covered_from: '2026-10-01'
+                      covered_to: '2026-10-01'
+                      nxdomain_count: 40
                       partial: false
+                      period_end: '2026-10-01'
                       period_start: '2026-10-01'
                       query_count: 1200
-                    - nxdomain_count: 0
+                    - covered_from: '2026-10-02'
+                      covered_to: '2026-10-02'
+                      nxdomain_count: 0
                       partial: false
+                      period_end: '2026-10-02'
                       period_start: '2026-10-02'
                       query_count: 0
-                    - nxdomain_count: 30
+                    - covered_from: '2026-10-03'
+                      covered_to: '2026-10-03'
+                      nxdomain_count: 30
                       partial: false
+                      period_end: '2026-10-03'
                       period_start: '2026-10-03'
                       query_count: 700
                     data_available_from: '2026-06-01'
@@ -32347,31 +32638,37 @@ paths:
                       query_count: 1900
                     zone_name: example.com.
                 monthly:
-                  description: Calendar months; the last month is partial because
-                    the window ends before it does
+                  description: 'Calendar months of a zone created on 12 August: July
+                    holds no data and carries null counts, August counts from the
+                    12th and is partial, September is counted whole'
                   summary: Monthly series
                   value:
                     buckets:
-                    - nxdomain_count: 300
-                      partial: false
+                    - partial: true
+                      period_end: '2026-07-31'
+                      period_start: '2026-07-01'
+                    - covered_from: '2026-08-12'
+                      covered_to: '2026-08-31'
+                      nxdomain_count: 300
+                      partial: true
+                      period_end: '2026-08-31'
                       period_start: '2026-08-01'
                       query_count: 9000
-                    - nxdomain_count: 1100
+                    - covered_from: '2026-09-01'
+                      covered_to: '2026-09-30'
+                      nxdomain_count: 1100
                       partial: false
+                      period_end: '2026-09-30'
                       period_start: '2026-09-01'
                       query_count: 30000
-                    - nxdomain_count: 500
-                      partial: true
-                      period_start: '2026-10-01'
-                      query_count: 13000
-                    data_available_from: '2026-06-01'
+                    data_available_from: '2026-08-12'
                     data_available_to: '2026-10-19'
-                    end_date: '2026-10-14'
+                    end_date: '2026-09-30'
                     granularity: month
-                    start_date: '2026-08-01'
+                    start_date: '2026-07-01'
                     totals:
-                      nxdomain_count: 1900
-                      query_count: 52000
+                      nxdomain_count: 1400
+                      query_count: 39000
                     zone_name: example.com.
                 weekly:
                   description: Weeks start on Monday. The window runs from a Wednesday
@@ -32380,16 +32677,25 @@ paths:
                   summary: Weekly series
                   value:
                     buckets:
-                    - nxdomain_count: 200
+                    - covered_from: '2026-09-30'
+                      covered_to: '2026-10-04'
+                      nxdomain_count: 200
                       partial: true
+                      period_end: '2026-10-04'
                       period_start: '2026-09-28'
                       query_count: 6000
-                    - nxdomain_count: 380
+                    - covered_from: '2026-10-05'
+                      covered_to: '2026-10-11'
+                      nxdomain_count: 380
                       partial: false
+                      period_end: '2026-10-11'
                       period_start: '2026-10-05'
                       query_count: 10500
-                    - nxdomain_count: 60
+                    - covered_from: '2026-10-12'
+                      covered_to: '2026-10-13'
+                      nxdomain_count: 60
                       partial: true
+                      period_end: '2026-10-18'
                       period_start: '2026-10-12'
                       query_count: 1500
                     data_available_from: '2026-06-01'
@@ -35067,7 +35373,19 @@ paths:
         \ `bluewidgets.de`) \u2014 the queried domain is always returned as the first\n\
         \  result, with availability checked directly against the registry.\n\nUse\
         \ a full domain name, or `GET /v1/availability`, whenever you need a definitive\
-        \ answer about a\nspecific domain."
+        \ answer about a\nspecific domain.\n\nWith `marketplaces=fruits` (repeatable,\
+        \ or `marketplaces=all`), domains for sale on the marketplace are added to\
+        \ `results` after the\nsuggestions, which are returned unchanged and in their\
+        \ order. These items have\n`marketplace: {\"name\": ...}` (the marketplace\
+        \ the domain is for sale on), `available: false` and no\namount yet (`price.amount`\
+        \ is null, so `price.period` has no meaning). `marketplace` is omitted on\n\
+        suggestions. A domain can appear twice: as a suggestion with its\nregistry\
+        \ fields, and as a marketplace item. `limit` and `tlds` apply to the marketplace\
+        \ domains as\nwell, with `limit` capping them separately from the suggestions;\
+        \ the organization's TLD restriction\nand `premium` do not apply to them.\
+        \ `meta.total` counts all items in `results`, both entries of a\ndomain included.\
+        \ Marketplace domains are best-effort and left out when the marketplace does\
+        \ not\nanswer in time."
       operationId: suggest_v1_domain_search_suggest_get
       parameters:
       - description: The primary keyword or phrase for the domain search. A full domain
@@ -35108,7 +35426,8 @@ paths:
             exist in it, and raising `limit` does not change that. To guarantee a
             TLD is represented, query it on its own.'
           title: Tlds
-      - description: The maximum number of domain suggestions to return
+      - description: The maximum number of domain suggestions to return; with `marketplaces`,
+          also caps the marketplace domains added after them
         in: query
         name: limit
         required: false
@@ -35118,7 +35437,8 @@ paths:
             minimum: 1
             type: integer
           - type: 'null'
-          description: The maximum number of domain suggestions to return
+          description: The maximum number of domain suggestions to return; with `marketplaces`,
+            also caps the marketplace domains added after them
           title: Limit
       - description: Whether to include premium domains in the suggestions
         in: query
@@ -35130,6 +35450,25 @@ paths:
           - type: 'null'
           description: Whether to include premium domains in the suggestions
           title: Premium
+      - description: 'Marketplaces to include domains for sale from, by name (repeatable),
+          or `all` for every marketplace. Best-effort: marketplace domains may be
+          missing.'
+        in: query
+        name: marketplaces
+        required: false
+        schema:
+          anyOf:
+          - items:
+              anyOf:
+              - const: all
+                type: string
+              - $ref: '#/components/schemas/MarketplaceName'
+            type: array
+          - type: 'null'
+          description: 'Marketplaces to include domains for sale from, by name (repeatable),
+            or `all` for every marketplace. Best-effort: marketplace domains may be
+            missing.'
+          title: Marketplaces
       - $ref: '#/components/parameters/DatetimeFormatHeader'
       responses:
         '200':
@@ -35960,15 +36299,19 @@ paths:
         a connected external registrar are not included.
 
 
-        Every bucket the window touches is present, so the series can be charted as
-        is. A bucket marked `partial` reaches outside the window and covers only part
-        of its span.
+        Every bucket the window touches is present, oldest first, so the series can
+        be charted as is. A bucket counts the days it shares with the window, from
+        the day of `data_available_from` and up to today, from `covered_from` to `covered_to`;
+        without a movement on them it counts zero. A bucket without such a day carries
+        null counts: no data, rather than no movement. A bucket marked `partial` does
+        not count its whole span: the window, the start of the event log or today
+        cuts it, it includes the day the log begins on (unless at midnight), or it
+        reaches today, which is still running. A bucket with null counts is partial
+        too.
 
 
         These counts are read from the domain event log, which begins later than the
-        domains themselves. `data_available_from` reports the oldest event it holds:
-        a window reaching further back is empty before that instant rather than genuinely
-        zero.'
+        domains themselves; `data_available_from` reports the oldest event it holds.'
       operationId: get_domain_statistics_v1_domains_statistics_get
       parameters:
       - description: First day of the window, inclusive (YYYY-MM-DD, UTC)
@@ -37356,14 +37699,25 @@ paths:
         '409':
           content:
             application/problem+json:
-              example:
-                code: ERROR_DOMAIN_DELETE_PROHIBITED
-                detail: 'Domain deletion is prohibited due to current status: '
-                domain_name: Additional error context.
-                prohibiting_statuses: []
-                status: 409
-                title: Domain Management Error
-                type: domain-delete-prohibited
+              examples:
+                Domain Management Error:
+                  value:
+                    code: ERROR_DOMAIN_DELETE_PROHIBITED
+                    detail: 'Domain deletion is prohibited due to current status: '
+                    domain_name: Additional error context.
+                    prohibiting_statuses: []
+                    status: 409
+                    title: Domain Management Error
+                    type: domain-delete-prohibited
+                Domain Subscription Pending:
+                  value:
+                    code: ERROR_DOMAIN_SUBSCRIPTION_PENDING
+                    detail: The domain's subscription is not available yet; retry
+                      shortly
+                    domain_name: example.com
+                    status: 409
+                    title: Domain Subscription Pending
+                    type: domain-subscription-pending
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Conflict
@@ -38048,14 +38402,25 @@ paths:
         '409':
           content:
             application/problem+json:
-              example:
-                code: ERROR_DOMAIN_TRANSFER_ON_RENEW_PENDING
-                detail: A renewal already started the transfer of this domain into
-                  OpusDNS
-                domain_name: example.com
-                status: 409
-                title: Domain Management Error
-                type: domain-transfer-on-renew-pending
+              examples:
+                Domain Management Error:
+                  value:
+                    code: ERROR_DOMAIN_TRANSFER_ON_RENEW_PENDING
+                    detail: A renewal already started the transfer of this domain
+                      into OpusDNS
+                    domain_name: example.com
+                    status: 409
+                    title: Domain Management Error
+                    type: domain-transfer-on-renew-pending
+                Domain Subscription Pending:
+                  value:
+                    code: ERROR_DOMAIN_SUBSCRIPTION_PENDING
+                    detail: The domain's subscription is not available yet; retry
+                      shortly
+                    domain_name: example.com
+                    status: 409
+                    title: Domain Subscription Pending
+                    type: domain-subscription-pending
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Conflict
@@ -46434,32 +46799,32 @@ tags:
     \ `EMAIL_VER_TRANSACTION_LOG`, `PHONE_VER_TRANSACTION_LOG`, `ADDRESS_DATABASE`\
     \ |\n| `attestation_reference` | string | Caller-supplied reference (e.g. internal\
     \ ticket ID, document hash). Up to 255 chars. |\n\n**DENIC-only constraint:**\
-    \ when the contact has DENIC verification pending, all items in a single request\
-    \ must share the same `method`, `proof`, and `attestation_reference`. DENIC's\
-    \ `contactUPDATE` carries one verification block per call; the API enforces this\
-    \ only when DENIC is in scope so callers see a synchronous 400 instead of a partial-success.\
-    \ Contacts not pending DENIC verification accept heterogeneous batches.\n\n####\
-    \ Response\n\nThe endpoint returns **HTTP 200 OK** with an object containing the\
-    \ per-claim verification state from the contact-verification service:\n\n```json\n\
-    {\n  \"verifications\": [\n    {\n      \"claim\": \"NAME\",\n      \"state\"\
-    : \"VERIFIED\",\n      \"method\": \"AUTH\",\n      \"proof\": \"IDCARD\",\n \
-    \     \"attestation_reference\": \"ticket-12345\",\n      \"verified_on\": \"\
-    2026-05-15T12:00:00Z\",\n      \"expires_on\": null\n    }\n  ]\n}\n```\n\n| Field\
-    \ | Type | Notes |\n|-------|------|-------|\n| `claim` | enum | The claim this\
-    \ entry describes. |\n| `state` | enum | `UNVERIFIED`, `VERIFIED`, `IN_PROGRESS`,\
-    \ `EXPIRED`. |\n| `method` | enum or null | The method that produced the current\
-    \ state. |\n| `proof` | enum or null | The proof that produced the current state.\
-    \ |\n| `attestation_reference` | string or null | Reference recorded with the\
-    \ current state. |\n| `verified_on` | RFC3339 datetime or null | When the claim\
-    \ entered the `VERIFIED` state. |\n| `expires_on` | RFC3339 datetime or null |\
-    \ When the current verification expires. |\n\nWhen DENIC verification was pending\
-    \ for the contact, the registry-side `contactUPDATE` is queued behind the scenes\
-    \ and emits a `CONTACT/VERIFICATION/SUCCESS` or `CONTACT/VERIFICATION/FAILURE`\
+    \ when the contact has DENIC verification pending, every item DENIC can record\
+    \ must carry an `attestation_reference`, since DENIC stores one with each verification\
+    \ block; the API checks this before anything is stored, so callers see a synchronous\
+    \ 400. Items with different `method`, `proof` or `attestation_reference` are fine:\
+    \ they reach DENIC as separate verification blocks.\n\n#### Response\n\nThe endpoint\
+    \ returns **HTTP 200 OK** with an object containing the per-claim verification\
+    \ state from the contact-verification service:\n\n```json\n{\n  \"verifications\"\
+    : [\n    {\n      \"claim\": \"NAME\",\n      \"state\": \"VERIFIED\",\n     \
+    \ \"method\": \"AUTH\",\n      \"proof\": \"IDCARD\",\n      \"attestation_reference\"\
+    : \"ticket-12345\",\n      \"verified_on\": \"2026-05-15T12:00:00Z\",\n      \"\
+    expires_on\": null\n    }\n  ]\n}\n```\n\n| Field | Type | Notes |\n|-------|------|-------|\n\
+    | `claim` | enum | The claim this entry describes. |\n| `state` | enum | `UNVERIFIED`,\
+    \ `VERIFIED`, `IN_PROGRESS`, `EXPIRED`. |\n| `method` | enum or null | The method\
+    \ that produced the current state. |\n| `proof` | enum or null | The proof that\
+    \ produced the current state. |\n| `attestation_reference` | string or null |\
+    \ Reference recorded with the current state. |\n| `verified_on` | RFC3339 datetime\
+    \ or null | When the claim entered the `VERIFIED` state. |\n| `expires_on` | RFC3339\
+    \ datetime or null | When the current verification expires. |\n\nWhen DENIC verification\
+    \ is pending for the contact, a push to DENIC is queued behind the scenes. It\
+    \ sends the claims DENIC asked for once the contact's verified claims cover all\
+    \ of them, and emits a `CONTACT/VERIFICATION/SUCCESS` or `CONTACT/VERIFICATION/FAILURE`\
     \ poll-message event keyed on `contact_id`. The `VERIFICATION_REQUIRED` status\
     \ tag on the affected domains is cleared on success.\n\n#### Error codes\n\n|\
-    \ Code | Status | Meaning |\n|------|--------|---------|\n| `ERROR_DOMAIN_VERIFICATION_INCONSISTENT_METHOD_PROOF`\
-    \ | 400 | DENIC verification is pending for this contact and items in the request\
-    \ disagree on `method`, `proof`, or `attestation_reference`. |\n| `ERROR_DOMAIN_VERIFICATION_INVALID_COMBINATION`\
+    \ Code | Status | Meaning |\n|------|--------|---------|\n| `ERROR_DOMAIN_VERIFICATION_MISSING_REFERENCE`\
+    \ | 400 | DENIC verification is pending for this contact and an item DENIC records\
+    \ has an empty `attestation_reference`. |\n| `ERROR_DOMAIN_VERIFICATION_INVALID_COMBINATION`\
     \ | (async) | The registry rejected the DENIC attestation as an invalid method/proof/reference\
     \ combination. Surfaces as a `CONTACT/VERIFICATION/FAILURE` poll-message event.\
     \ |\n| `ERROR_DOMAIN_VERIFICATION_REGISTRY_REJECTED` | (async) | DENIC accepted\

@@ -17,17 +17,21 @@ final readonly class DnsStatisticsResponse implements ApiModel
 {
     /**
      * @param list<DnsStatisticsBucketResponse> $buckets One entry per bucket the window touches, oldest first,
-     *     including buckets without queries
+     *     including buckets without queries (0) and buckets without data (null)
      * @param \DateTimeImmutable $endDate Last day of the window, inclusive
      * @param UsageGranularity|string $granularity Time-bucket size of the series
      * @param \DateTimeImmutable $startDate First day of the window, inclusive
      * @param \DateTimeImmutable $statisticsUpdatedAt When these numbers were computed. They are recomputed after
      *     each new day of data and after zones changed owner or were deleted, so a change can take a few hours to
      *     show
-     * @param \DateTimeImmutable|null $dataAvailableFrom First day the statistics hold data for. Null while no
-     *     statistics have been collected.
-     * @param \DateTimeImmutable|null $dataAvailableTo Last day the statistics hold data for. Null while no
-     *     statistics have been collected.
+     * @param \DateTimeImmutable|null $dataAvailableFrom First day the statistics hold data for. Buckets count no day
+     *     before it; one left without a day to count carries null counts. Null while no statistics have been
+     *     collected; then every bucket carries null counts. At `granularity=month`, once the daily statistics older
+     *     than 25 months have been deleted, it is the first day of the oldest month the monthly statistics hold; the
+     *     day the data starts on within that month is no longer known.
+     * @param \DateTimeImmutable|null $dataAvailableTo Last day the statistics hold data for. Buckets count no day
+     *     after it; one left without a day to count carries null counts. Null while no statistics have been
+     *     collected.
      */
     public function __construct(
         public array $buckets,

@@ -15,20 +15,36 @@ use OpusDNS\Client\Serializer;
 final readonly class DnsStatisticsBucketResponse implements ApiModel
 {
     /**
-     * @param int $nxdomainCount Of those, queries answered with NXDOMAIN
-     * @param bool $partial The bucket counts only part of its span: it reaches outside the window, or part of it
-     *     lies before `data_available_from` or after `data_available_to`. A partial bucket must not be read as a
-     *     rise or fall against its neighbours.
+     * @param bool $partial True when the counts are not those of the whole bucket: `covered_from`..`covered_to` is
+     *     shorter than `period_start`..`period_end` because the window or the stored data cuts it, or the bucket is
+     *     the first month of monthly statistics older than the daily ones (see `data_available_from`), whose first
+     *     day of data is not known. Also true for a bucket that is not covered, which has no counts. A partial
+     *     bucket must not be read as a rise or fall against its neighbours
+     * @param \DateTimeImmutable $periodEnd Last day of the bucket (UTC): the day itself, the Sunday of its week, or
+     *     the last day of its month
      * @param \DateTimeImmutable $periodStart First day of the bucket (UTC)
-     * @param int $queryCount Queries answered for the organization's zones in this bucket
-     * @param int|null $zoneCount Zones with at least one query in the bucket. Null for weeks, and for a month the
-     *     window cuts: those are summed from days, and a zone active on several of them cannot be counted once
+     * @param \DateTimeImmutable|null $coveredFrom First day the bucket's counts include: the latest of
+     *     `period_start`, `start_date` and `data_available_from`. A month the window cuts is summed from the daily
+     *     statistics, which are kept for 25 months, so in a month older than that it is also no earlier than the
+     *     oldest day still kept. Null when the bucket is not covered: none of its days lies within both the window
+     *     and the stored data
+     * @param \DateTimeImmutable|null $coveredTo Last day the bucket's counts include: the earliest of `period_end`,
+     *     `end_date` and `data_available_to`. Null when the bucket is not covered
+     * @param int|null $nxdomainCount Of those, queries answered with NXDOMAIN. Null when the bucket is not covered
+     * @param int|null $queryCount Queries answered for the organization's zones from `covered_from` to `covered_to`;
+     *     0 when none were recorded. Null when the bucket is not covered: no data, rather than no queries
+     * @param int|null $zoneCount Zones with at least one query in the bucket. Null when the bucket is not covered,
+     *     and for weeks and for a month the window cuts: those are summed from days, and a zone active on several of
+     *     them cannot be counted once
      */
     public function __construct(
-        public int $nxdomainCount,
         public bool $partial,
+        public \DateTimeImmutable $periodEnd,
         public \DateTimeImmutable $periodStart,
-        public int $queryCount,
+        public ?\DateTimeImmutable $coveredFrom = null,
+        public ?\DateTimeImmutable $coveredTo = null,
+        public ?int $nxdomainCount = null,
+        public ?int $queryCount = null,
         public ?int $zoneCount = null,
     ) {
     }
@@ -39,10 +55,13 @@ final readonly class DnsStatisticsBucketResponse implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            nxdomainCount: $data['nxdomain_count'],
             partial: $data['partial'],
+            periodEnd: Serializer::parseDate($data['period_end']),
             periodStart: Serializer::parseDate($data['period_start']),
-            queryCount: $data['query_count'],
+            coveredFrom: isset($data['covered_from']) ? Serializer::parseDate($data['covered_from']) : null,
+            coveredTo: isset($data['covered_to']) ? Serializer::parseDate($data['covered_to']) : null,
+            nxdomainCount: $data['nxdomain_count'] ?? null,
+            queryCount: $data['query_count'] ?? null,
             zoneCount: $data['zone_count'] ?? null,
         );
     }
@@ -53,9 +72,12 @@ final readonly class DnsStatisticsBucketResponse implements ApiModel
     public function toArray(): array
     {
         return Serializer::normalize([
-            'nxdomain_count' => $this->nxdomainCount,
             'partial' => $this->partial,
+            'period_end' => $this->periodEnd->format('Y-m-d'),
             'period_start' => $this->periodStart->format('Y-m-d'),
+            'covered_from' => $this->coveredFrom === null ? null : $this->coveredFrom->format('Y-m-d'),
+            'covered_to' => $this->coveredTo === null ? null : $this->coveredTo->format('Y-m-d'),
+            'nxdomain_count' => $this->nxdomainCount,
             'query_count' => $this->queryCount,
             'zone_count' => $this->zoneCount,
         ]);

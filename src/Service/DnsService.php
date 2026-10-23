@@ -218,9 +218,12 @@ final class DnsService
      * counts. They are recomputed after each new day of data and after zones changed owner or were
      * deleted; `statistics_updated_at` tells when.
      *
-     * Every bucket the window touches is present, oldest first, so the series can be charted as is; a
-     * bucket without queries counts zero. A bucket marked `partial` covers only part of its span.
-     * Statistics are collected once a day, so the newest day with data is usually yesterday.
+     * Every bucket the window touches is present, oldest first, so the series can be charted as is. A
+     * bucket counts the days it shares with the window and with
+     * `data_available_from`..`data_available_to`, from `covered_from` to `covered_to`; without a recorded
+     * query on them it counts zero. A bucket without such a day carries null counts: no data, rather than
+     * no queries. A bucket marked `partial` counts only part of its span; one with null counts is partial
+     * too. Statistics are collected once a day, so the newest day with data is usually yesterday.
      *
      * Required permissions: dns:read
      *
@@ -629,15 +632,17 @@ final class DnsService
      * whole UTC days, bucketed by the requested granularity. The window may span at most 366 days at
      * `granularity=day` or `week` and 120 calendar months at `granularity=month`.
      *
-     * Every bucket the window touches is present, oldest first, so the series can be charted as is; a
-     * bucket without queries counts zero. Buckets count only the days inside the window and the zone's
-     * lifetime. A bucket marked `partial` covers only part of its span: it reaches outside the window,
-     * part of it lies outside the stored data, or the zone was created during it.
+     * Every bucket the window touches is present, oldest first, so the series can be charted as is. A
+     * bucket counts the days it shares with the window and with
+     * `data_available_from`..`data_available_to`, from `covered_from` to `covered_to`; without a recorded
+     * query on them it counts zero. A bucket without such a day carries null counts: no data, rather than
+     * no queries. A bucket marked `partial` counts only part of its span, because the window or the stored
+     * data cuts it, or starts on the day the zone was created, which is counted whole. A bucket with null
+     * counts is partial too.
      *
      * Statistics are collected once a day, so the newest day with data is usually yesterday.
      * `data_available_from` and `data_available_to` report the days the statistics hold data for the zone,
-     * never earlier than the day it was created: a window reaching further back is empty before it rather
-     * than genuinely zero.
+     * never earlier than the day it was created.
      *
      * Required permissions: dns:read
      *
