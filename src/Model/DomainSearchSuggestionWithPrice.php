@@ -19,6 +19,9 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
      *     registry accreditation (`ams`). The registry bills the domain to that accreditation, so `price` and
      *     `renewal_price` are the OpusDNS service fee alone, premium or not. Null for TLDs registered on OpusDNS
      *     registry accounts.
+     * @param Marketplace|null $marketplace Present on a domain for sale on a marketplace, added after the
+     *     suggestions with `available: false` and no amount yet; omitted on suggestions. A domain can appear twice:
+     *     as a suggestion with its registry fields, and as a marketplace item.
      */
     public function __construct(
         public bool $available,
@@ -26,6 +29,7 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
         public bool $premium,
         public DomainSearchSuggestionPriceData $price,
         public ?DomainAmsAccountResponse $connectedAccount = null,
+        public ?Marketplace $marketplace = null,
         public ?DomainSearchSuggestionPriceData $renewalPrice = null,
     ) {
     }
@@ -41,6 +45,7 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
             premium: $data['premium'],
             price: DomainSearchSuggestionPriceData::fromArray($data['price']),
             connectedAccount: isset($data['connected_account']) ? DomainAmsAccountResponse::fromArray($data['connected_account']) : null,
+            marketplace: isset($data['marketplace']) ? Marketplace::fromArray($data['marketplace']) : null,
             renewalPrice: isset($data['renewal_price']) ? DomainSearchSuggestionPriceData::fromArray($data['renewal_price']) : null,
         );
     }
@@ -56,6 +61,7 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
             'premium' => $this->premium,
             'price' => $this->price,
             'connected_account' => $this->connectedAccount,
+            'marketplace' => $this->marketplace,
             'renewal_price' => $this->renewalPrice,
         ]);
     }

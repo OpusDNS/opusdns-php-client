@@ -81,6 +81,10 @@ final class AvailabilityService
      * Stream domain availability results using Server-Sent Events (SSE) until the `done` event is
      * received.
      *
+     * With `marketplaces` (e.g. `["fruits"]`, or `["all"]`), a taken domain that can be bought on one of
+     * them is reported as `market_available` with `marketplace: {"name": ...}` (best-effort); taken
+     * domains may then arrive slightly later.
+     *
      * @param DomainAvailabilityRequest|array<string, mixed> $body
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and

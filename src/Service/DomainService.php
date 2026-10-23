@@ -313,12 +313,16 @@ final class DomainService
      * restores are counted once per day a domain was renewed or restored, so a domain renewed in two
      * different months counts in both. Domains held at a connected external registrar are not included.
      *
-     * Every bucket the window touches is present, so the series can be charted as is. A bucket marked
-     * `partial` reaches outside the window and covers only part of its span.
+     * Every bucket the window touches is present, oldest first, so the series can be charted as is. A
+     * bucket counts the days it shares with the window, from the day of `data_available_from` and up to
+     * today, from `covered_from` to `covered_to`; without a movement on them it counts zero. A bucket
+     * without such a day carries null counts: no data, rather than no movement. A bucket marked `partial`
+     * does not count its whole span: the window, the start of the event log or today cuts it, it includes
+     * the day the log begins on (unless at midnight), or it reaches today, which is still running. A
+     * bucket with null counts is partial too.
      *
-     * These counts are read from the domain event log, which begins later than the domains themselves.
-     * `data_available_from` reports the oldest event it holds: a window reaching further back is empty
-     * before that instant rather than genuinely zero.
+     * These counts are read from the domain event log, which begins later than the domains themselves;
+     * `data_available_from` reports the oldest event it holds.
      *
      * Required permissions: domains:read
      *

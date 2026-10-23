@@ -17,17 +17,20 @@ final readonly class ZoneStatisticsResponse implements ApiModel
 {
     /**
      * @param list<ZoneStatisticsBucketResponse> $buckets One entry per bucket the window touches, oldest first,
-     *     including buckets without queries
+     *     including buckets without queries (0) and buckets without data (null)
      * @param \DateTimeImmutable $endDate Last day of the window, inclusive
      * @param UsageGranularity|string $granularity Time-bucket size of the series
      * @param \DateTimeImmutable $startDate First day of the window, inclusive
      * @param string $zoneName The zone the statistics are for, with a trailing dot
      * @param \DateTimeImmutable|null $dataAvailableFrom First day the statistics hold data for the zone: the day
-     *     collection started, or the day the zone was created if that is later. Buckets before it count zero because
-     *     nothing was recorded, not because the zone had no queries. Null while no statistics have been collected
-     *     since the zone was created.
-     * @param \DateTimeImmutable|null $dataAvailableTo Last day the statistics hold data for. Null while no
-     *     statistics have been collected since the zone was created.
+     *     collection started, or the day the zone was created if that is later. Buckets count no day before it; one
+     *     left without a day to count carries null counts. Null while no statistics have been collected since the
+     *     zone was created; then every bucket carries null counts. At `granularity=month`, once the daily statistics
+     *     older than 25 months have been deleted, it is the first day of the oldest month the monthly statistics
+     *     hold; the day the data starts on within that month is no longer known.
+     * @param \DateTimeImmutable|null $dataAvailableTo Last day the statistics hold data for. Buckets count no day
+     *     after it; one left without a day to count carries null counts. Null while no statistics have been
+     *     collected since the zone was created.
      */
     public function __construct(
         public array $buckets,
