@@ -146,6 +146,9 @@ final class Endpoint
     /** GET */
     public const DNS_BY_ZONE_NAME_STATISTICS = '/v1/dns/{zone_name}/statistics';
 
+    /** GET */
+    public const DNS_BY_ZONE_NAME_STATISTICS_NXDOMAINS = '/v1/dns/{zone_name}/statistics/nxdomains';
+
     /** PATCH */
     public const DNS_BY_ZONE_NAME_VANITY_SET = '/v1/dns/{zone_name}/vanity-set';
 

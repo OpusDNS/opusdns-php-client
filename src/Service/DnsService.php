@@ -40,6 +40,7 @@ use OpusDNS\Client\Model\EmailForwardZone;
 use OpusDNS\Client\Model\PaginationDnsZoneResponse;
 use OpusDNS\Client\Model\PaginationDomainForwardZone;
 use OpusDNS\Client\Model\PaginationEmailForwardZone;
+use OpusDNS\Client\Model\ZoneNxdomainStatisticsResponse;
 use OpusDNS\Client\Model\ZoneStatisticsResponse;
 use OpusDNS\Client\Model\ZoneVanitySetUpdate;
 
@@ -672,6 +673,54 @@ final class DnsService
         );
 
         return $this->client->hydrate($response, static fn (array $data): ZoneStatisticsResponse => ZoneStatisticsResponse::fromArray($data));
+    }
+
+    /**
+     * List the names of a zone answered with NXDOMAIN
+     *
+     * Lists the names queried in the zone that do not exist in it, answered with NXDOMAIN, with the type
+     * they were queried with, summed over a window of at most 31 whole UTC days and ordered by count,
+     * largest first. Use it to find what causes the NXDOMAIN answers of `GET
+     * /v1/dns/{zone_name}/statistics`: typos, removed records, or clients probing for names such as
+     * `autodiscover`.
+     *
+     * A name is listed only on days with more than 30 NXDOMAIN answers to it;
+     * `totals.listed_nxdomain_count` sums the listed names, `totals.nxdomain_count` all NXDOMAIN answers
+     * of the zone from the daily statistics, which end yesterday. The names are kept for 30 days plus
+     * today and are updated hourly; `data_complete_to` is the newest day whose list is final, usually
+     * yesterday. Days before the zone was created are not counted.
+     *
+     * Required permissions: dns:read
+     *
+     * @param string $zoneName DNS zone name (trailing dot optional)
+     * @param \DateTimeImmutable $startDate First day of the window, inclusive (YYYY-MM-DD, UTC)
+     * @param \DateTimeImmutable $endDate Last day of the window, inclusive (YYYY-MM-DD, UTC). The window spans at
+     *     most 31 days, both ends included: the names are kept for 30 days plus today
+     * @param string|null $qtype Only names queried with this type, such as A, AAAA or TXT
+     * @param int|null $page Page number Server default: 1.
+     * @param int|null $pageSize Names per page Server default: 100.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function listZoneNxdomains(
+        string $zoneName,
+        \DateTimeImmutable $startDate,
+        \DateTimeImmutable $endDate,
+        ?string $qtype = null,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ?string $xDatetimeFormat = null,
+    ): ZoneNxdomainStatisticsResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::DNS_BY_ZONE_NAME_STATISTICS_NXDOMAINS,
+            path: ['zone_name' => $zoneName],
+            query: ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d'), 'qtype' => $qtype, 'page' => $page, 'page_size' => $pageSize],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): ZoneNxdomainStatisticsResponse => ZoneNxdomainStatisticsResponse::fromArray($data));
     }
 
     /**
