@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OpusDNS\Client\Model;
 
 use OpusDNS\Client\ApiModel;
-use OpusDNS\Client\Enum\DomainVerificationKind;
 use OpusDNS\Client\Enum\VerificationClaimType;
 use OpusDNS\Client\Serializer;
 
@@ -18,12 +17,10 @@ final readonly class VerificationResponse implements ApiModel
 {
     /**
      * @param list<VerificationClaimType|string> $claims Verification claims
-     * @param list<DomainVerificationKind|string> $sources Who asks for the verification: ICANN, the registry or both
      * @param list<VerificationDeadline>|null $deadlines Verification deadlines
      */
     public function __construct(
         public array $claims,
-        public array $sources,
         public ?array $deadlines = null,
     ) {
     }
@@ -35,7 +32,6 @@ final readonly class VerificationResponse implements ApiModel
     {
         return new self(
             claims: array_map(static fn (string $item): VerificationClaimType|string => VerificationClaimType::tryFrom($item) ?? $item, $data['claims']),
-            sources: array_map(static fn (string $item): DomainVerificationKind|string => DomainVerificationKind::tryFrom($item) ?? $item, $data['sources']),
             deadlines: isset($data['deadlines']) ? array_map(static fn (array $item): VerificationDeadline => VerificationDeadline::fromArray($item), $data['deadlines']) : null,
         );
     }
@@ -47,7 +43,6 @@ final readonly class VerificationResponse implements ApiModel
     {
         return Serializer::normalize([
             'claims' => $this->claims,
-            'sources' => $this->sources,
             'deadlines' => $this->deadlines,
         ]);
     }

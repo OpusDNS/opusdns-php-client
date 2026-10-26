@@ -75,6 +75,7 @@ final class Permission
         '/v1/dns/{zone_name}/records' => ['PATCH' => ['dns:manage']],
         '/v1/dns/{zone_name}/rrsets' => ['PUT' => ['dns:manage'], 'PATCH' => ['dns:manage']],
         '/v1/dns/{zone_name}/statistics' => ['GET' => ['dns:read']],
+        '/v1/dns/{zone_name}/statistics/nxdomains' => ['GET' => ['dns:read']],
         '/v1/dns/{zone_name}/vanity-set' => ['PATCH' => ['dns:manage', 'vanity_ns:manage']],
         '/v1/domain-forwards' => [
             'GET' => ['domain_forwards:read'],

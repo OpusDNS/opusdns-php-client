@@ -21,6 +21,9 @@ final readonly class DomainResponse implements ApiModel
      * @param string $roid The registry object id of the domain
      * @param string $sld The second level domain
      * @param string $tld The top level domain of the domain
+     * @param list<ActiveDomainVerificationResponse>|null $activeVerifications The domain's active verification cases,
+     *     at most one per source (ICANN and the registry): what each still waits for and by when. Oldest first, by
+     *     `opened_on`. Empty when no case is active.
      * @param string|null $authCode The auth code for the domain
      * @param \DateTimeImmutable|null $authCodeExpiresOn When the auth code expires
      * @param \DateTimeImmutable|null $canceledOn When the domain was deleted
@@ -62,14 +65,16 @@ final readonly class DomainResponse implements ApiModel
      * @param bool $transferLock Whether the domain is locked for transfer
      * @param \DateTimeImmutable|null $transferredOn When the domain was last transferred to us
      * @param \DateTimeImmutable|null $updatedOn The date/time the entry was last updated on
-     * @param VerificationResponse|null $verificationRequired What the domain's active verification cases still wait
-     *     for: who asks, the claims and the earliest deadline of each type. Null when no case is active.
+     * @param VerificationResponse|null $verificationRequired Deprecated, read `active_verifications` instead. What
+     *     the domain's active verification cases still wait for: who asks, the claims and the earliest deadline of
+     *     each type, merged over all cases. Null when no case is active.
      */
     public function __construct(
         public string $name,
         public string $roid,
         public string $sld,
         public string $tld,
+        public ?array $activeVerifications = null,
         public ?string $authCode = null,
         public ?\DateTimeImmutable $authCodeExpiresOn = null,
         public ?\DateTimeImmutable $canceledOn = null,
@@ -110,6 +115,7 @@ final readonly class DomainResponse implements ApiModel
             roid: $data['roid'],
             sld: $data['sld'],
             tld: $data['tld'],
+            activeVerifications: isset($data['active_verifications']) ? array_map(static fn (array $item): ActiveDomainVerificationResponse => ActiveDomainVerificationResponse::fromArray($item), $data['active_verifications']) : null,
             authCode: $data['auth_code'] ?? null,
             authCodeExpiresOn: isset($data['auth_code_expires_on']) ? new \DateTimeImmutable($data['auth_code_expires_on']) : null,
             canceledOn: isset($data['canceled_on']) ? new \DateTimeImmutable($data['canceled_on']) : null,
@@ -150,6 +156,7 @@ final readonly class DomainResponse implements ApiModel
             'roid' => $this->roid,
             'sld' => $this->sld,
             'tld' => $this->tld,
+            'active_verifications' => $this->activeVerifications,
             'auth_code' => $this->authCode,
             'auth_code_expires_on' => $this->authCodeExpiresOn,
             'canceled_on' => $this->canceledOn,
