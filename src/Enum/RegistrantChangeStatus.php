@@ -14,7 +14,7 @@ enum RegistrantChangeStatus: string
     case PENDING_CONFIRMATION = 'pending_confirmation';
     case CONFIRMED = 'confirmed';
     case EXECUTING = 'executing';
-    case REGISTRY_PENDING = 'registry_pending';
+    case PENDING_REGISTRY = 'pending_registry';
     case COMPLETED = 'completed';
     case NOT_MATERIAL = 'not_material';
     case EXPIRED = 'expired';

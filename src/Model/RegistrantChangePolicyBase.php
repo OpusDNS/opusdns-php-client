@@ -26,8 +26,12 @@ final readonly class RegistrantChangePolicyBase implements ApiModel
      * @param bool $renewsDomain Whether the change renews the domain
      * @param string $transferLockAfterChange Inter-registrar transfer lock applied after the change (e.g., '60D'),
      *     '0D' disables it
+     * @param list<RegistrantChangeField>|null $confirmationFields TLD-specific fields sent in `fields` to confirm
+     *     the registrant change
      * @param string|null $confirmationWindow How long the parties have to confirm the change (e.g., '14D'), at most
      *     60 days
+     * @param list<RegistrantChangeField>|null $requestFields TLD-specific fields sent in `fields` with the
+     *     registrant change request
      */
     public function __construct(
         public RegistrantChangeConfirmationType|string $confirmation,
@@ -36,7 +40,9 @@ final readonly class RegistrantChangePolicyBase implements ApiModel
         public bool $priorRegistrantNotice,
         public bool $renewsDomain,
         public string $transferLockAfterChange,
+        public ?array $confirmationFields = null,
         public ?string $confirmationWindow = null,
+        public ?array $requestFields = null,
     ) {
     }
 
@@ -52,7 +58,9 @@ final readonly class RegistrantChangePolicyBase implements ApiModel
             priorRegistrantNotice: $data['prior_registrant_notice'],
             renewsDomain: $data['renews_domain'],
             transferLockAfterChange: $data['transfer_lock_after_change'],
+            confirmationFields: isset($data['confirmation_fields']) ? array_map(static fn (array $item): RegistrantChangeField => RegistrantChangeField::fromArray($item), $data['confirmation_fields']) : null,
             confirmationWindow: $data['confirmation_window'] ?? null,
+            requestFields: isset($data['request_fields']) ? array_map(static fn (array $item): RegistrantChangeField => RegistrantChangeField::fromArray($item), $data['request_fields']) : null,
         );
     }
 
@@ -68,7 +76,9 @@ final readonly class RegistrantChangePolicyBase implements ApiModel
             'prior_registrant_notice' => $this->priorRegistrantNotice,
             'renews_domain' => $this->renewsDomain,
             'transfer_lock_after_change' => $this->transferLockAfterChange,
+            'confirmation_fields' => $this->confirmationFields,
             'confirmation_window' => $this->confirmationWindow,
+            'request_fields' => $this->requestFields,
         ]);
     }
 

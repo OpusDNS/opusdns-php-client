@@ -57,6 +57,7 @@ final class Permission
             'PUT' => ['contacts:manage'],
             'DELETE' => ['contacts:manage'],
         ],
+        '/v1/contacts/{contact_id}/verification-cases' => ['GET' => ['contacts:read']],
         '/v1/contacts/{contact_id}/verifications' => ['GET' => ['contacts:read']],
         '/v1/contacts/{contact_id}/verifications/attest' => ['POST' => ['contacts:manage']],
         '/v1/dns' => ['GET' => ['dns:read'], 'POST' => ['dns:manage']],
@@ -140,6 +141,7 @@ final class Permission
         '/v1/domains/{domain_reference}/transfer' => ['DELETE' => ['domains:manage']],
         '/v1/domains/{domain_reference}/transfer/outbound' => ['POST' => ['domains:manage']],
         '/v1/domains/{domain_reference}/verifications' => ['GET' => ['domains:read']],
+        '/v1/domains/{domain_reference}/verifications/{verification_id}/resend' => ['POST' => ['domains:manage']],
         '/v1/email-forwards' => ['GET' => ['email_forwards:read'], 'POST' => ['dns:manage', 'email_forwards:manage']],
         '/v1/email-forwards/{email_forward_id}' => [
             'GET' => ['email_forwards:read'],

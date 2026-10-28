@@ -12,6 +12,7 @@ namespace OpusDNS\Client\Service;
 use OpusDNS\Client\Client;
 use OpusDNS\Client\Endpoint;
 use OpusDNS\Client\Enum\ContactAttributeSetSortField;
+use OpusDNS\Client\Enum\ContactCompleteness;
 use OpusDNS\Client\Enum\ContactIncludeField;
 use OpusDNS\Client\Enum\ContactSortField;
 use OpusDNS\Client\Enum\ContactStatusTagType;
@@ -31,6 +32,7 @@ use OpusDNS\Client\Model\ContactVerificationEmailResponse;
 use OpusDNS\Client\Model\ContactVerificationResponse;
 use OpusDNS\Client\Model\PaginationContactAttributeSetResponse;
 use OpusDNS\Client\Model\PaginationContactResponse;
+use OpusDNS\Client\Model\PaginationContactVerificationCaseResponse;
 use OpusDNS\Client\Union;
 
 /**
@@ -74,6 +76,8 @@ final class ContactService
      *     whitespace-separated terms must all match (as substrings), so a full "First Last" name matches across the
      *     separate first- and last-name columns. A contact ID is matched exactly.
      * @param string|null $country Filter by country
+     * @param ContactCompleteness|string|null $completeness Filter by the completeness recorded when the contact was
+     *     stored
      * @param bool|null $inUse Filter by whether the contact is in use by any domain (true = has domains, false =
      *     none)
      * @param \DateTimeImmutable|null $createdAfter Filter contacts created after this date
@@ -99,6 +103,7 @@ final class ContactService
         ?string $email = null,
         ?string $search = null,
         ?string $country = null,
+        ContactCompleteness|string|null $completeness = null,
         ?bool $inUse = null,
         ?\DateTimeImmutable $createdAfter = null,
         ?\DateTimeImmutable $createdBefore = null,
@@ -108,7 +113,7 @@ final class ContactService
         $response = $this->client->request(
             'GET',
             Endpoint::CONTACTS,
-            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'first_name' => $firstName, 'last_name' => $lastName, 'email' => $email, 'search' => $search, 'country' => $country, 'in_use' => $inUse, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'include' => $include],
+            query: ['page' => $page, 'page_size' => $pageSize, 'sort_by' => $sortBy, 'sort_order' => $sortOrder, 'status_tags' => $statusTags, 'status_tag_mode' => $statusTagMode, 'tag_ids' => $tagIds, 'tag_mode' => $tagMode, 'has_tags' => $hasTags, 'first_name' => $firstName, 'last_name' => $lastName, 'email' => $email, 'search' => $search, 'country' => $country, 'completeness' => $completeness, 'in_use' => $inUse, 'created_after' => $createdAfter, 'created_before' => $createdBefore, 'include' => $include],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
@@ -268,9 +273,12 @@ final class ContactService
     /**
      * Retrieve contact verification by token
      *
+     * Serves the link in the verification mail; not meant for integrations.
+     *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
+     * @deprecated
      */
     public function getVerificationByToken(string $token, ?string $xDatetimeFormat = null): ContactResponse
     {
@@ -287,9 +295,12 @@ final class ContactService
     /**
      * Complete contact verification with token
      *
+     * Serves the link in the verification mail; not meant for integrations.
+     *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
+     * @deprecated
      */
     public function updateVerificationByToken(string $token, ?string $xDatetimeFormat = null): void
     {
@@ -304,9 +315,12 @@ final class ContactService
     /**
      * Email Verify Contact
      *
+     * Serves the link in the verification mail; not meant for integrations.
+     *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
+     * @deprecated
      */
     public function emailVerifyContact(string $token, ?string $xDatetimeFormat = null): mixed
     {
@@ -394,11 +408,15 @@ final class ContactService
     /**
      * Retrieve contact verification by contact ID
      *
+     * Deprecated: follow the verification through the domain's cases (GET
+     * /v1/domains/{domain_reference}/verifications).
+     *
      * Required permissions: contacts:manage
      *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
+     * @deprecated
      */
     public function getVerificationStatus(
         string $contactId,
@@ -417,12 +435,16 @@ final class ContactService
     /**
      * Start contact verification
      *
+     * Deprecated: an ICANN verification case asks the registrant when it opens; follow it with GET
+     * /v1/domains/{domain_reference}/verifications.
+     *
      * Required permissions: contacts:manage
      *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
      * @return ContactVerificationEmailResponse|ContactVerificationApiResponse
+     * @deprecated
      */
     public function startContactVerification(
         string $contactId,
@@ -443,11 +465,15 @@ final class ContactService
     /**
      * Complete contact verification by contact ID
      *
+     * Deprecated: an organization with delegated contact verification confirms the registrant's email by
+     * attesting its EMAIL reachability (POST /v1/contacts/{contact_id}/verifications/attest).
+     *
      * Required permissions: contacts:manage
      *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
+     * @deprecated
      */
     public function updateVerification(string $contactId, string $token, ?string $xDatetimeFormat = null): void
     {
@@ -463,11 +489,14 @@ final class ContactService
     /**
      * Delete contact verification
      *
+     * Deprecated: an ICANN verification case closes with its domain; there is nothing to cancel.
+     *
      * Required permissions: contacts:manage
      *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
+     * @deprecated
      */
     public function cancelVerification(string $contactId, ?string $xDatetimeFormat = null): void
     {
@@ -477,6 +506,37 @@ final class ContactService
             path: ['contact_id' => $contactId],
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
+    }
+
+    /**
+     * List the verification cases of a contact
+     *
+     * Lists the verification cases about a contact on its organization's domains, active and closed,
+     * newest first: which domains ask to verify the contact, what, by when, and how each case ended.
+     *
+     * Required permissions: contacts:read
+     *
+     * @param int|null $page Server default: 1.
+     * @param int|null $pageSize Server default: 10.
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function listContactVerificationCases(
+        string $contactId,
+        ?int $page = null,
+        ?int $pageSize = null,
+        ?string $xDatetimeFormat = null,
+    ): PaginationContactVerificationCaseResponse {
+        $response = $this->client->request(
+            'GET',
+            Endpoint::CONTACTS_BY_CONTACT_ID_VERIFICATION_CASES,
+            path: ['contact_id' => $contactId],
+            query: ['page' => $page, 'page_size' => $pageSize],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): PaginationContactVerificationCaseResponse => PaginationContactVerificationCaseResponse::fromArray($data));
     }
 
     /**

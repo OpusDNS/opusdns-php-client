@@ -49,6 +49,7 @@ use OpusDNS\Client\Model\DomainTransferIn;
 use OpusDNS\Client\Model\DomainTransitRequest;
 use OpusDNS\Client\Model\DomainTransitResponse;
 use OpusDNS\Client\Model\DomainUpdate;
+use OpusDNS\Client\Model\DomainVerificationResponse;
 use OpusDNS\Client\Model\DomainWithdrawRequest;
 use OpusDNS\Client\Model\DomainWithdrawResponse;
 use OpusDNS\Client\Model\NorIdDeclarationConfirmRequest;
@@ -1181,5 +1182,36 @@ final class DomainService
         );
 
         return $this->client->hydrate($response, static fn (array $data): PaginationDomainVerificationResponse => PaginationDomainVerificationResponse::fromArray($data));
+    }
+
+    /**
+     * Resend the verification email of an ICANN case
+     *
+     * Mails the registrant a link to confirm the email an open ICANN case waits on. The mail covers every
+     * open ICANN case of that email in the organization and counts as a reminder: the scheduled reminders
+     * resume at the first one due more than 24 hours later. At most one mail goes to an email in 15
+     * minutes; an earlier request is answered 429 with `Retry-After`. Registry cases, closed cases, emails
+     * already confirmed and organizations that confirm their registrants' emails themselves are answered
+     * 409 with the reason.
+     *
+     * Required permissions: domains:manage
+     *
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function resendDomainVerification(
+        string $domainReference,
+        string $verificationId,
+        ?string $xDatetimeFormat = null,
+    ): DomainVerificationResponse {
+        $response = $this->client->request(
+            'POST',
+            Endpoint::DOMAINS_BY_DOMAIN_REFERENCE_VERIFICATIONS_BY_VERIFICATION_ID_RESEND,
+            path: ['domain_reference' => $domainReference, 'verification_id' => $verificationId],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
+
+        return $this->client->hydrate($response, static fn (array $data): DomainVerificationResponse => DomainVerificationResponse::fromArray($data));
     }
 }

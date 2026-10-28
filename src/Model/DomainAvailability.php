@@ -17,8 +17,9 @@ final readonly class DomainAvailability implements ApiModel
 {
     /**
      * @param DomainAvailabilityError|null $error Error details when status is 'error', e.g. why a domain is invalid
-     * @param Marketplace|null $marketplace The marketplace a taken domain can be bought on; only on
-     *     `market_available` results of `POST /v1/availability/stream` with `marketplaces`, omitted otherwise.
+     * @param Marketplace|null $marketplace The marketplace a taken domain can be bought on; set on
+     *     `market_available` results of `POST /v1/availability/stream` with `marketplaces`; null otherwise, or when
+     *     the marketplace is not known yet.
      */
     public function __construct(
         public string $domain,
