@@ -72,4 +72,5 @@ enum RegistryServiceBackend: string
     case COCCA = 'cocca';
     case AMAZON = 'amazon';
     case TANGO = 'tango';
+    case NIC_CL = 'nic_cl';
 }

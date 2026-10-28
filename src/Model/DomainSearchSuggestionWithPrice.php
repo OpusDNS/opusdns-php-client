@@ -19,9 +19,9 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
      *     registry accreditation (`ams`). The registry bills the domain to that accreditation, so `price` and
      *     `renewal_price` are the OpusDNS service fee alone, premium or not. Null for TLDs registered on OpusDNS
      *     registry accounts.
-     * @param Marketplace|null $marketplace Present on a domain for sale on a marketplace, added after the
-     *     suggestions with `available: false` and no amount yet; omitted on suggestions. A domain can appear twice:
-     *     as a suggestion with its registry fields, and as a marketplace item.
+     * @param Marketplace|null $marketplace Set on a domain for sale on a marketplace, added after the suggestions
+     *     with `available: false` and no amount yet; null on suggestions. A domain can appear twice: as a suggestion
+     *     with its registry fields, and as a marketplace item.
      */
     public function __construct(
         public bool $available,

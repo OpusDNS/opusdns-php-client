@@ -93,6 +93,9 @@ final class Endpoint
     public const CONTACTS_BY_CONTACT_ID_VERIFICATION = '/v1/contacts/{contact_id}/verification';
 
     /** GET */
+    public const CONTACTS_BY_CONTACT_ID_VERIFICATION_CASES = '/v1/contacts/{contact_id}/verification-cases';
+
+    /** GET */
     public const CONTACTS_BY_CONTACT_ID_VERIFICATIONS = '/v1/contacts/{contact_id}/verifications';
 
     /** POST */
@@ -286,6 +289,9 @@ final class Endpoint
 
     /** GET */
     public const DOMAINS_BY_DOMAIN_REFERENCE_VERIFICATIONS = '/v1/domains/{domain_reference}/verifications';
+
+    /** POST */
+    public const DOMAINS_BY_DOMAIN_REFERENCE_VERIFICATIONS_BY_VERIFICATION_ID_RESEND = '/v1/domains/{domain_reference}/verifications/{verification_id}/resend';
 
     /** GET, POST */
     public const EMAIL_FORWARDS = '/v1/email-forwards';

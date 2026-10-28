@@ -16,4 +16,5 @@ enum EventSubtype: string
     case FAILURE = 'FAILURE';
     case CANCELED = 'CANCELED';
     case OVERDUE = 'OVERDUE';
+    case REMINDER = 'REMINDER';
 }
