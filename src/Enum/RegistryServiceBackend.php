@@ -34,7 +34,6 @@ enum RegistryServiceBackend: string
     case DOT_UA = 'dot_ua';
     case NIC_IT = 'nic_it';
     case DNS_LU = 'dns_lu';
-    case RESTENA_LU = 'restena_lu';
     case CZ_NIC = 'cz_nic';
     case RAS_MANUAL = 'ras_manual';
     case RAS_EXTERNAL = 'ras_external';

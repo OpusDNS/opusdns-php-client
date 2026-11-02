@@ -23,8 +23,8 @@ final readonly class ContactsBase implements ApiModel
      * @param list<ContactAttributeDefinition>|null $possibleAttributes List of possible attributes that can be set
      *     for this TLD
      * @param bool|null $privacyProxy Whether a privacy service is allowed
-     * @param RegistrantChangeType|string|null $registrantChange Whether the registrant can change through update or
-     *     trade
+     * @param RegistrantChangeType|string|null $registrantChange Whether the registrant changes through an update, a
+     *     trade, or manually through our support team
      * @param RegistrantChangePolicyBase|null $registrantChangePolicy Change of registrant policy. When absent, the
      *     defaults of the TLD type apply.
      * @param bool|null $supportCheck Whether the registry supports contact checks

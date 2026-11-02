@@ -20,8 +20,11 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
      *     `renewal_price` are the OpusDNS service fee alone, premium or not. Null for TLDs registered on OpusDNS
      *     registry accounts.
      * @param Marketplace|null $marketplace Set on a domain for sale on a marketplace, added after the suggestions
-     *     with `available: false` and no amount yet; null on suggestions. A domain can appear twice: as a suggestion
-     *     with its registry fields, and as a marketplace item.
+     *     with `available: false`; null on suggestions. On such an item `price.amount` is the price to acquire the
+     *     domain from the marketplace (for 1 year, in the listing's currency; it does not include a transfer, which
+     *     the customer does with the auth code and is charged separately; null when the domain could not be priced),
+     *     and `renewal_price` is the TLD's standard renewal price. A domain can appear twice: as a suggestion with
+     *     its registry fields, and as a marketplace item.
      */
     public function __construct(
         public bool $available,

@@ -392,6 +392,422 @@ components:
       - uri_template
       title: AttributeType
       type: string
+    AuditCoverage:
+      properties:
+        domain_checker:
+          anyOf:
+          - $ref: '#/components/schemas/AuditSourceStatus'
+          - type: 'null'
+          description: The security scans.
+        index:
+          anyOf:
+          - $ref: '#/components/schemas/AuditSourceStatus'
+          - type: 'null'
+          description: The portfolio index, a synced copy.
+        newest_sync:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Newest Sync
+        not_checked:
+          description: What the audit could not cover, in English.
+          items:
+            type: string
+          title: Not Checked
+          type: array
+        oldest_sync:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Oldest sync of the indexed records read.
+          title: Oldest Sync
+        opusdns_api:
+          anyOf:
+          - $ref: '#/components/schemas/AuditSourceStatus'
+          - type: 'null'
+          description: The live OpusDNS API.
+      required:
+      - not_checked
+      title: AuditCoverage
+      type: object
+    AuditFilters:
+      properties:
+        name_list:
+          description: The names themselves, only when 20 or fewer.
+          items:
+            type: string
+          title: Name List
+          type: array
+        names:
+          default: 0
+          description: How many zone or domain names the audit was narrowed to; 0
+            = none.
+          title: Names
+          type: integer
+        registrar:
+          items:
+            type: string
+          title: Registrar
+          type: array
+        tld:
+          items:
+            type: string
+          title: Tld
+          type: array
+      required:
+      - names
+      - name_list
+      - tld
+      - registrar
+      title: AuditFilters
+      type: object
+    AuditFinding:
+      properties:
+        downgraded_from:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The rule's own severity, when lowered to info because the zone
+            does not serve it.
+          title: Downgraded From
+        entity:
+          default: ''
+          description: zone | domain
+          title: Entity
+          type: string
+        evidence:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Evidence
+        managed:
+          default: false
+          description: OpusDNS-managed, so the concierge can change it.
+          title: Managed
+          type: boolean
+        name:
+          default: ''
+          title: Name
+          type: string
+        registrar:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Registrar
+        rule:
+          $ref: '#/components/schemas/AuditRuleId'
+          description: '`AuditRule.id` of the rule that found it.'
+        severity:
+          default: ''
+          description: critical | warning | info
+          title: Severity
+          type: string
+      required:
+      - rule
+      - severity
+      - entity
+      - name
+      - managed
+      title: AuditFinding
+      type: object
+    AuditFindingsContext:
+      properties:
+        context_id:
+          examples:
+          - ctx_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^ctx_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Context Id
+          type: string
+          x-typeid-prefix: ctx
+        conversation_id:
+          examples:
+          - conv_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^conv_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Conversation Id
+          type: string
+          x-typeid-prefix: conv
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        kind:
+          const: audit_findings
+          default: audit_findings
+          title: Kind
+          type: string
+        organization_id:
+          examples:
+          - organization_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^organization_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Organization Id
+          type: string
+          x-typeid-prefix: organization
+        payload:
+          $ref: '#/components/schemas/AuditFindingsContextPayload'
+        user_id:
+          title: User Id
+          type: string
+      required:
+      - context_id
+      - conversation_id
+      - organization_id
+      - user_id
+      - created_at
+      - payload
+      title: AuditFindingsContext
+      type: object
+    AuditFindingsContextPayload:
+      properties:
+        complete:
+          default: false
+          description: 'False when a source stopped early or failed, or RAS did not
+            say: the findings are a lower bound.'
+          title: Complete
+          type: boolean
+        coverage:
+          $ref: '#/components/schemas/AuditCoverage'
+        filters:
+          $ref: '#/components/schemas/AuditFilters'
+        findings:
+          description: Most severe first.
+          items:
+            $ref: '#/components/schemas/AuditFinding'
+          title: Findings
+          type: array
+        generated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Generated At
+        rules:
+          description: One entry per rule that found something. A rule newer than
+            this API is left out with its findings; `totals` still counts them.
+          items:
+            $ref: '#/components/schemas/AuditRule'
+          title: Rules
+          type: array
+        schema:
+          default: ''
+          description: portfolio_audit/v1. Any other version arrives with only this
+            field set.
+          title: Schema
+          type: string
+        scope:
+          default: ''
+          description: zones | domains | security | all
+          title: Scope
+          type: string
+        totals:
+          $ref: '#/components/schemas/AuditTotals'
+        truncated:
+          default: false
+          description: True when `findings` was cut to fit the store; that cut leaves
+            `totals` and `rules` whole.
+          title: Truncated
+          type: boolean
+      required:
+      - schema
+      - scope
+      - filters
+      - complete
+      - totals
+      - coverage
+      - rules
+      - findings
+      - truncated
+      title: AuditFindingsContextPayload
+      type: object
+    AuditFix:
+      properties:
+        fix_context_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'A `domains` context of the OpusDNS-managed domains the rule
+            found: the targets of `template`.'
+          title: Fix Context Id
+        fixable_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: How many domains `fix_context_id` holds.
+          title: Fixable Count
+        hint:
+          default: ''
+          title: Hint
+          type: string
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Why a rule with a `template` has no `fix_context_id`, in English.
+          title: Reason
+        template:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: The shared change of a bulk domain update, for the bulk-fixable
+            rules.
+          title: Template
+        tool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The concierge tool that can apply the fix.
+          title: Tool
+      required:
+      - hint
+      title: AuditFix
+      type: object
+    AuditRule:
+      properties:
+        count:
+          default: 0
+          title: Count
+          type: integer
+        explanation:
+          default: ''
+          title: Explanation
+          type: string
+        fix:
+          $ref: '#/components/schemas/AuditFix'
+        id:
+          $ref: '#/components/schemas/AuditRuleId'
+          description: Stable rule id; never renamed. `title` and `explanation` are
+            its English text.
+        sample:
+          description: Up to five affected names, most severe first.
+          items:
+            type: string
+          title: Sample
+          type: array
+        severity:
+          default: ''
+          description: critical | warning | info
+          title: Severity
+          type: string
+        title:
+          default: ''
+          title: Title
+          type: string
+      required:
+      - id
+      - title
+      - severity
+      - count
+      - explanation
+      - fix
+      - sample
+      title: AuditRule
+      type: object
+    AuditRuleId:
+      description: A portfolio audit rule. New rules add values; for a value a client
+        does not know, show the rule's `title`.
+      enum:
+      - dns.cname_at_apex
+      - dns.cname_conflict
+      - dns.delegated_without_zone
+      - mail.spf_multiple
+      - mail.spf_pass_all
+      - mail.mx_target_ip
+      - domain.expired
+      - domain.hold
+      - domain.pending_delete
+      - mail.spf_missing
+      - mail.spf_neutral_all
+      - mail.spf_no_all
+      - mail.dmarc_missing
+      - mail.dmarc_multiple
+      - mail.dmarc_invalid
+      - mail.mx_target_cname
+      - mail.null_mx_mixed
+      - domain.expiring_soon
+      - domain.renewal_off_expiring
+      - domain.transfer_unlocked
+      - dns.single_nameserver
+      - dns.ns_delegation_mismatch
+      - dns.zone_empty
+      - dns.ttl_low
+      - dns.spf_rr_type
+      - dns.caa_missing
+      - mail.spf_softfail
+      - mail.dmarc_policy_none
+      - mail.no_mail_policy
+      - dns.dnssec_disabled
+      - scan.tls_certificate_invalid
+      - scan.tls_certificate_expiring
+      - scan.tls_protocol_weak
+      - scan.tls_chain_incomplete
+      - scan.spf_lookup_limit
+      - scan.dnssec_weak
+      - scan.hsts_missing
+      - scan.dnssec_unsigned
+      title: AuditRuleId
+      type: string
+    AuditSourceStatus:
+      properties:
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+        status:
+          default: ''
+          description: ok | partial | timeout | error | disabled
+          title: Status
+          type: string
+      required:
+      - status
+      title: AuditSourceStatus
+      type: object
+    AuditTotals:
+      properties:
+        critical:
+          default: 0
+          title: Critical
+          type: integer
+        domains_checked:
+          default: 0
+          title: Domains Checked
+          type: integer
+        findings:
+          default: 0
+          title: Findings
+          type: integer
+        info:
+          default: 0
+          title: Info
+          type: integer
+        scans_checked:
+          default: 0
+          description: Domains with a security scan (TLS, HSTS, DNSSEC).
+          title: Scans Checked
+          type: integer
+        warning:
+          default: 0
+          title: Warning
+          type: integer
+        zones_checked:
+          default: 0
+          title: Zones Checked
+          type: integer
+      required:
+      - zones_checked
+      - domains_checked
+      - scans_checked
+      - findings
+      - critical
+      - warning
+      - info
+      title: AuditTotals
+      type: object
     Auth:
       description: 'Pre-login OAuth bootstrap. The SPA resolves this document by hostname
         before login and uses
@@ -1486,6 +1902,7 @@ components:
             - discriminator:
                 mapping:
                   aggregations: '#/components/schemas/AggregationsContext'
+                  audit_findings: '#/components/schemas/AuditFindingsContext'
                   branding_design: '#/components/schemas/BrandingDesignContext'
                   call_operation_result: '#/components/schemas/CallOperationResultContext'
                   contacts: '#/components/schemas/ContactsContext'
@@ -1505,6 +1922,7 @@ components:
               - $ref: '#/components/schemas/AggregationsContext'
               - $ref: '#/components/schemas/BrandingDesignContext'
               - $ref: '#/components/schemas/CallOperationResultContext'
+              - $ref: '#/components/schemas/AuditFindingsContext'
               title: Response Create Context V1 Ai Concierge Conversations  Conversation
                 Id  Contexts Post
             - type: string
@@ -3360,6 +3778,7 @@ components:
             - discriminator:
                 mapping:
                   aggregations: '#/components/schemas/AggregationsContext'
+                  audit_findings: '#/components/schemas/AuditFindingsContext'
                   branding_design: '#/components/schemas/BrandingDesignContext'
                   call_operation_result: '#/components/schemas/CallOperationResultContext'
                   contacts: '#/components/schemas/ContactsContext'
@@ -3379,6 +3798,7 @@ components:
               - $ref: '#/components/schemas/AggregationsContext'
               - $ref: '#/components/schemas/BrandingDesignContext'
               - $ref: '#/components/schemas/CallOperationResultContext'
+              - $ref: '#/components/schemas/AuditFindingsContext'
               title: Response Get Context V1 Ai Concierge Contexts  Context Id  Get
             - type: string
           headers:
@@ -10074,7 +10494,8 @@ components:
           anyOf:
           - $ref: '#/components/schemas/RegistrantChangeType'
           - type: 'null'
-          description: Whether the registrant can change through update or trade
+          description: Whether the registrant changes through an update, a trade,
+            or manually through our support team
         registrant_change_policy:
           anyOf:
           - $ref: '#/components/schemas/RegistrantChangePolicyBase'
@@ -10242,6 +10663,7 @@ components:
             discriminator:
               mapping:
                 aggregations: '#/components/schemas/AggregationsContext'
+                audit_findings: '#/components/schemas/AuditFindingsContext'
                 branding_design: '#/components/schemas/BrandingDesignContext'
                 call_operation_result: '#/components/schemas/CallOperationResultContext'
                 contacts: '#/components/schemas/ContactsContext'
@@ -10261,6 +10683,7 @@ components:
             - $ref: '#/components/schemas/AggregationsContext'
             - $ref: '#/components/schemas/BrandingDesignContext'
             - $ref: '#/components/schemas/CallOperationResultContext'
+            - $ref: '#/components/schemas/AuditFindingsContext'
           title: Results
           type: array
       required:
@@ -14775,9 +15198,13 @@ components:
           - $ref: '#/components/schemas/Marketplace'
           - type: 'null'
           description: 'Set on a domain for sale on a marketplace, added after the
-            suggestions with `available: false` and no amount yet; null on suggestions.
-            A domain can appear twice: as a suggestion with its registry fields, and
-            as a marketplace item.'
+            suggestions with `available: false`; null on suggestions. On such an item
+            `price.amount` is the price to acquire the domain from the marketplace
+            (for 1 year, in the listing''s currency; it does not include a transfer,
+            which the customer does with the auth code and is charged separately;
+            null when the domain could not be priced), and `renewal_price` is the
+            TLD''s standard renewal price. A domain can appear twice: as a suggestion
+            with its registry fields, and as a marketplace item.'
         premium:
           title: Premium
           type: boolean
@@ -15329,7 +15756,10 @@ components:
             minLength: 6
             type: string
           - type: 'null'
-          description: The auth code for this domain (required by some TLDs)
+          description: 'The auth code for this domain (required by some TLDs). Omit
+            it for a domain the organization holds through a connected registrar account:
+            when the transfer runs, OpusDNS removes the domain''s transfer lock there
+            and fetches the code.'
           title: Auth Code
         contacts:
           anyOf:
@@ -15553,7 +15983,9 @@ components:
             minLength: 6
             type: string
           - type: 'null'
-          description: The auth code for the domain
+          description: 'The auth code for the domain. Omit it for a domain the organization
+            holds through a connected registrar account: when the transfer runs, OpusDNS
+            removes the domain''s transfer lock there and fetches the code.'
           title: Auth Code
         contacts:
           anyOf:
@@ -15656,7 +16088,9 @@ components:
             minLength: 6
             type: string
           - type: 'null'
-          description: The auth code for the domain
+          description: 'The auth code for the domain. Omit it for a domain the organization
+            holds through a connected registrar account: when the transfer runs, OpusDNS
+            removes the domain''s transfer lock there and fetches the code.'
           title: Auth Code
         contacts:
           anyOf:
@@ -19410,6 +19844,7 @@ components:
       - ADDRESS
       - NAME
       - LEGAL_ENTITY
+      - ICANN_RAA
       title: NizzaClaim
       type: string
     NizzaVerificationProof:
@@ -22484,6 +22919,7 @@ components:
       - confirmed
       - executing
       - pending_registry
+      - pending_manual
       - completed
       - not_material
       - expired
@@ -22496,6 +22932,7 @@ components:
       enum:
       - update
       - trade
+      - manual
       title: RegistrantChangeType
       type: string
     Registrar:
@@ -22754,6 +23191,7 @@ components:
       - NOR_ID_CONTACT_TYPE
       - NOR_ID_IDENTITY_TYPE
       - NOR_ID_IDENTITY_VALUE
+      - REGISTER_SI_CONTACT_TYPE
       - REGISTRY_SE_ORG_NO
       - REGISTRY_SE_VAT_NO
       - DNS_PT_VAT
@@ -22770,6 +23208,7 @@ components:
       - INTERNET_EE_IDENT_TYPE
       - INTERNET_EE_IDENT_CC
       - INTERNET_EE_IDENT_VALUE
+      - SPONSORING_CLIENT_ID
       title: RegistryHandleAttributeType
       type: string
     RegistryLockBase:
@@ -22827,7 +23266,6 @@ components:
       - dot_ua
       - nic_it
       - dns_lu
-      - restena_lu
       - cz_nic
       - ras_manual
       - ras_external
@@ -23098,7 +23536,7 @@ components:
           description: User agreement acceptances.
           title: Agreements
         organization:
-          $ref: '#/components/schemas/OrganizationCreate'
+          $ref: '#/components/schemas/SignupOrganizationCreate'
           description: Organization signup.
         terms_of_service:
           anyOf:
@@ -23112,6 +23550,140 @@ components:
       - user
       - organization
       title: SignupCreate
+      type: object
+    SignupOrganizationCreate:
+      properties:
+        address_1:
+          anyOf:
+          - maxLength: 255
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: First line of the organization's address.
+          title: Address 1
+        address_2:
+          anyOf:
+          - maxLength: 255
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Second line of the organization's address.
+          title: Address 2
+        attributes:
+          description: List of attributes for the organization.
+          items:
+            $ref: '#/components/schemas/OrganizationAttributeCreate'
+          title: Attributes
+          type: array
+        billing_mode:
+          $ref: '#/components/schemas/BillingMode'
+          default: consolidated
+          description: Whether the organization is billed on its own account (INDEPENDENT)
+            or rolled up to its parent (CONSOLIDATED). INDEPENDENT is only permitted
+            for eligible sub-organizations. Cannot be changed after creation.
+        business_number:
+          anyOf:
+          - maxLength: 100
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Government issued business identifier for the organization
+            issued.
+          title: Business Number
+        city:
+          anyOf:
+          - maxLength: 255
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: City of the organization's address.
+          title: City
+        country_code:
+          description: ISO 3166-1 alpha-2 country code, plus XK (Kosovo).
+          maxLength: 2
+          pattern: ^\w{2}$
+          title: Country Code
+          type: string
+        currency:
+          anyOf:
+          - $ref: '#/components/schemas/Currency'
+          - type: 'null'
+          description: The currency used by the organization.
+        default_locale:
+          anyOf:
+          - examples:
+            - en_US
+            type: string
+          - type: 'null'
+          description: Default locale for the organization.
+          title: Default Locale
+        name:
+          description: Name of the organization.
+          maxLength: 255
+          minLength: 1
+          title: Name
+          type: string
+        parent_organization_id:
+          anyOf:
+          - examples:
+            - organization_01h45ytscbebyvny4gc8cr8ma2
+            format: typeid
+            pattern: ^organization_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+            type: string
+            x-typeid-prefix: organization
+          - type: 'null'
+          description: ID of the parent organization.
+          title: Parent Organization Id
+        postal_code:
+          anyOf:
+          - maxLength: 20
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Postal code of the organization's address.
+          title: Postal Code
+        state:
+          anyOf:
+          - maxLength: 255
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: State or province of the organization's address.
+          title: State
+        tax_id:
+          anyOf:
+          - maxLength: 50
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Tax ID of the organization.
+          title: Tax Id
+        tax_id_type:
+          anyOf:
+          - maxLength: 50
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Type of tax ID for the organization.
+          title: Tax Id Type
+        tax_rate:
+          anyOf:
+          - type: number
+          - pattern: ^(?!^[-+.]*$)[+-]?0*(?:\d{0,8}|(?=[\d.]{1,11}0*$)\d{0,8}\.\d{0,2}0*$)
+            type: string
+          - type: 'null'
+          description: Tax rate for the organization.
+          title: Tax Rate
+        users:
+          description: List of users that needs to be created with the organization.
+          items:
+            $ref: '#/components/schemas/UserCreate'
+          title: Users
+          type: array
+      required:
+      - name
+      - country_code
+      title: SignupOrganizationCreate
       type: object
     SignupResponse:
       properties:
@@ -24008,6 +24580,11 @@ components:
           description: 'Post-transfer requirements: lists the behaviors, as in [''update_contacts'',
             ''set_transfer_lock''] or [ ''tld_specific'' ] for specific behavior'
           title: Post Transfer Requirements
+        supported:
+          default: true
+          description: Whether the registry supports domain transfers
+          title: Supported
+          type: boolean
         transfer_ack:
           anyOf:
           - $ref: '#/components/schemas/TransferAckType'
@@ -25240,15 +25817,16 @@ components:
           title: Contact Id
           type: string
         email:
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Email
-          type: string
         name:
           title: Name
           type: string
       required:
       - contact_id
       - name
-      - email
       title: VerificationRegistrantDetails
       type: object
     VerificationResponse:
@@ -26679,7 +27257,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-10-27-200302
+  version: 2026-10-31-220256
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg
@@ -26709,6 +27287,7 @@ paths:
                 discriminator:
                   mapping:
                     aggregations: '#/components/schemas/AggregationsContext'
+                    audit_findings: '#/components/schemas/AuditFindingsContext'
                     branding_design: '#/components/schemas/BrandingDesignContext'
                     call_operation_result: '#/components/schemas/CallOperationResultContext'
                     contacts: '#/components/schemas/ContactsContext'
@@ -26728,6 +27307,7 @@ paths:
                 - $ref: '#/components/schemas/AggregationsContext'
                 - $ref: '#/components/schemas/BrandingDesignContext'
                 - $ref: '#/components/schemas/CallOperationResultContext'
+                - $ref: '#/components/schemas/AuditFindingsContext'
                 title: Response Get Context V1 Ai Concierge Contexts  Context Id  Get
           description: Successful Response
         '401':
@@ -27315,6 +27895,7 @@ paths:
                 discriminator:
                   mapping:
                     aggregations: '#/components/schemas/AggregationsContext'
+                    audit_findings: '#/components/schemas/AuditFindingsContext'
                     branding_design: '#/components/schemas/BrandingDesignContext'
                     call_operation_result: '#/components/schemas/CallOperationResultContext'
                     contacts: '#/components/schemas/ContactsContext'
@@ -27334,6 +27915,7 @@ paths:
                 - $ref: '#/components/schemas/AggregationsContext'
                 - $ref: '#/components/schemas/BrandingDesignContext'
                 - $ref: '#/components/schemas/CallOperationResultContext'
+                - $ref: '#/components/schemas/AuditFindingsContext'
                 title: Response Create Context V1 Ai Concierge Conversations  Conversation
                   Id  Contexts Post
           description: Successful Response
@@ -29667,6 +30249,7 @@ paths:
     get:
       deprecated: true
       description: Serves the link in the verification mail; not meant for integrations.
+        Replaced by GET /v1/contacts/verification-challenges/{token}.
       operationId: get_verification_by_token_v1_contacts_verification_get
       parameters:
       - in: query
@@ -29699,27 +30282,53 @@ paths:
           content:
             application/problem+json:
               example:
-                code: ERROR_CONTACT_VERIFICATION_NOT_FOUND
-                detail: No contact verification found
+                code: ERROR_VERIFICATION_CHALLENGE_NOT_FOUND
+                detail: The verification link is unknown or incomplete
                 status: 404
-                title: Contact Management Error
-                token: Additional error context.
-                type: contact-verification-not-found
+                title: Verification Challenge Not Found
+                type: verification-challenge-not-found
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Not Found
+        '410':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_VERIFICATION_CHALLENGE_EXPIRED
+                detail: The verification link expired on 2026-01-15
+                expired_on: '2026-01-15T00:00:00+00:00'
+                organization_id: organization_01h45ytscbebyvny4gc8cr8ma2
+                status: 410
+                title: Verification Challenge Expired
+                type: verification-challenge-expired
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Gone
         '422':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
+        '502':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_CONTACT_VERIFICATION_UPSTREAM_ERROR
+                detail: Additional error context.
+                status: 502
+                title: Contact Verification Service Error
+                type: contact-verification-upstream
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Gateway
       summary: Retrieve contact verification by token
       tags:
       - contact
     put:
       deprecated: true
       description: Serves the link in the verification mail; not meant for integrations.
+        Replaced by POST /v1/contacts/verification-challenges/{token}/confirm.
       operationId: update_verification_by_token_v1_contacts_verification_put
       parameters:
       - in: query
@@ -29732,21 +30341,6 @@ paths:
       responses:
         '204':
           description: Successful Response
-        '400':
-          content:
-            application/problem+json:
-              examples:
-                Contact Management Error:
-                  value:
-                    code: ERROR_INVALID_VERIFICATION_TOKEN
-                    contact_id: Additional error context.
-                    detail: Invalid verification token
-                    status: 400
-                    title: Contact Management Error
-                    type: contact-verification-token-invalid
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Bad Request
         '401':
           content:
             application/problem+json:
@@ -29763,21 +30357,46 @@ paths:
           content:
             application/problem+json:
               example:
-                code: ERROR_CONTACT_VERIFICATION_NOT_FOUND
-                detail: No contact verification found
+                code: ERROR_VERIFICATION_CHALLENGE_NOT_FOUND
+                detail: The verification link is unknown or incomplete
                 status: 404
-                title: Contact Management Error
-                token: Additional error context.
-                type: contact-verification-not-found
+                title: Verification Challenge Not Found
+                type: verification-challenge-not-found
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Not Found
+        '410':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_VERIFICATION_CHALLENGE_EXPIRED
+                detail: The verification link expired on 2026-01-15
+                expired_on: '2026-01-15T00:00:00+00:00'
+                organization_id: organization_01h45ytscbebyvny4gc8cr8ma2
+                status: 410
+                title: Verification Challenge Expired
+                type: verification-challenge-expired
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Gone
         '422':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
+        '502':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_CONTACT_VERIFICATION_UPSTREAM_ERROR
+                detail: Additional error context.
+                status: 502
+                title: Contact Verification Service Error
+                type: contact-verification-upstream
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Gateway
       summary: Complete contact verification with token
       tags:
       - contact
@@ -30295,22 +30914,57 @@ paths:
         '404':
           content:
             application/problem+json:
-              example:
-                code: ERROR_CONTACT_VERIFICATION_NOT_FOUND
-                detail: No contact verification found
-                status: 404
-                title: Contact Management Error
-                token: Additional error context.
-                type: contact-verification-not-found
+              examples:
+                Contact Management Error:
+                  value:
+                    code: ERROR_CONTACT_VERIFICATION_NOT_FOUND
+                    detail: No contact verification found
+                    status: 404
+                    title: Contact Management Error
+                    token: Additional error context.
+                    type: contact-verification-not-found
+                Verification Challenge Not Found:
+                  value:
+                    code: ERROR_VERIFICATION_CHALLENGE_NOT_FOUND
+                    detail: The verification link is unknown or incomplete
+                    status: 404
+                    title: Verification Challenge Not Found
+                    type: verification-challenge-not-found
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Not Found
+        '410':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_VERIFICATION_CHALLENGE_EXPIRED
+                detail: The verification link expired on 2026-01-15
+                expired_on: '2026-01-15T00:00:00+00:00'
+                organization_id: organization_01h45ytscbebyvny4gc8cr8ma2
+                status: 410
+                title: Verification Challenge Expired
+                type: verification-challenge-expired
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Gone
         '422':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
+        '502':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_CONTACT_VERIFICATION_UPSTREAM_ERROR
+                detail: Additional error context.
+                status: 502
+                title: Contact Verification Service Error
+                type: contact-verification-upstream
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Gateway
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -36182,18 +36836,22 @@ paths:
         \  result, with availability checked directly against the registry.\n\nUse\
         \ a full domain name, or `GET /v1/availability`, whenever you need a definitive\
         \ answer about a\nspecific domain.\n\nWith `marketplaces=fruits` (repeatable,\
-        \ or `marketplaces=all`), domains for sale on the marketplace are added to\
-        \ `results` after the\nsuggestions, which are returned unchanged and in their\
-        \ order. These items have\n`marketplace: {\"name\": ...}` (the marketplace\
-        \ the domain is for sale on), `available: false` and no\namount yet (`price.amount`\
-        \ is null, so `price.period` has no meaning). `marketplace` is omitted on\n\
-        suggestions. A domain can appear twice: as a suggestion with its\nregistry\
-        \ fields, and as a marketplace item. `limit` and `tlds` apply to the marketplace\
-        \ domains as\nwell, with `limit` capping them separately from the suggestions;\
-        \ the organization's TLD restriction\nand `premium` do not apply to them.\
-        \ `meta.total` counts all items in `results`, both entries of a\ndomain included.\
-        \ Marketplace domains are best-effort and left out when the marketplace does\
-        \ not\nanswer in time."
+        \ or `marketplaces=all`), domains for sale on the marketplace are added to\n\
+        `results` after the suggestions, which are returned unchanged and in their\
+        \ order. These items have\n`available: false` and `marketplace` set (`name`,\
+        \ the marketplace the domain is for sale on). `price.amount` is\nthe price\
+        \ to acquire the domain from the marketplace, in the listing's currency, for\
+        \ a period of 1 year. It does\nnot include a transfer: the customer transfers\
+        \ the domain with the auth code, and that transfer is charged\nseparately.\
+        \ When the domain cannot be priced, `price.amount` is null. `renewal_price`\
+        \ is the TLD's standard\nrenewal price, and may be set on an unpriced item.\
+        \ `marketplace` is null on\nsuggestions. A domain can appear twice: as a suggestion\
+        \ with its registry fields, and as a\nmarketplace item. `limit` and `tlds`\
+        \ apply to the marketplace domains as\nwell, with `limit` capping them separately\
+        \ from the suggestions; the organization's TLD restriction\nand `premium`\
+        \ do not apply to them. `meta.total` counts all items in `results`, both entries\
+        \ of a\ndomain included. Marketplace domains are best-effort and left out\
+        \ when the marketplace does not\nanswer in time."
       operationId: suggest_v1_domain_search_suggest_get
       parameters:
       - description: The primary keyword or phrase for the domain search. A full domain
@@ -36902,13 +37560,28 @@ paths:
         '422':
           content:
             application/problem+json:
-              example:
-                code: ERROR_CLAIMS_NOTICE_HASH_MISMATCH
-                detail: The provided claims notice acceptance hash does not match
-                domain_name: Additional error context.
-                status: 422
-                title: Domain Management Error
-                type: claims-notice-hash-mismatch
+              examples:
+                Contact Incomplete:
+                  value:
+                    code: ERROR_CONTACT_INCOMPLETE
+                    contact_id: contact_01h45ytscbebyvny4gc8cr8ma2
+                    detail: 'Contact contact_01h45ytscbebyvny4gc8cr8ma2 is incomplete
+                      (missing or invalid: phone, postal_code); complete it before
+                      using it here'
+                    incomplete_fields:
+                    - phone
+                    - postal_code
+                    status: 422
+                    title: Contact Incomplete
+                    type: contact-incomplete
+                Domain Management Error:
+                  value:
+                    code: ERROR_CLAIMS_NOTICE_HASH_MISMATCH
+                    detail: The provided claims notice acceptance hash does not match
+                    domain_name: Additional error context.
+                    status: 422
+                    title: Domain Management Error
+                    type: claims-notice-hash-mismatch
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
@@ -38449,12 +39122,36 @@ paths:
         '422':
           content:
             application/problem+json:
-              example:
-                code: ERROR_POLICY_VALIDATION
-                detail: Additional error context.
-                status: 422
-                title: Policy Validation Error
-                type: policy-validation-error
+              examples:
+                Contact Incomplete:
+                  value:
+                    code: ERROR_CONTACT_INCOMPLETE
+                    contact_id: contact_01h45ytscbebyvny4gc8cr8ma2
+                    detail: 'Contact contact_01h45ytscbebyvny4gc8cr8ma2 is incomplete
+                      (missing or invalid: phone, postal_code); complete it before
+                      using it here'
+                    incomplete_fields:
+                    - phone
+                    - postal_code
+                    status: 422
+                    title: Contact Incomplete
+                    type: contact-incomplete
+                Domain Transfer Not Supported:
+                  value:
+                    code: ERROR_DOMAIN_TRANSFER_NOT_SUPPORTED
+                    detail: Domain transfers are not supported for .is domains
+                    domain_name: example.is
+                    status: 422
+                    title: Domain Transfer Not Supported
+                    tld: is
+                    type: domain-transfer-not-supported
+                Policy Validation Error:
+                  value:
+                    code: ERROR_POLICY_VALIDATION
+                    detail: Additional error context.
+                    status: 422
+                    title: Policy Validation Error
+                    type: policy-validation-error
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
@@ -38691,14 +39388,29 @@ paths:
         '422':
           content:
             application/problem+json:
-              example:
-                code: ERROR_DOMAIN_REGISTRANT_CHANGE_NOT_SUPPORTED
-                detail: Registrant change is not supported for .lu domains
-                domain_name: example.lu
-                status: 422
-                title: Domain Management Error
-                tld: lu
-                type: domain-registrant-change-not-supported
+              examples:
+                Contact Incomplete:
+                  value:
+                    code: ERROR_CONTACT_INCOMPLETE
+                    contact_id: contact_01h45ytscbebyvny4gc8cr8ma2
+                    detail: 'Contact contact_01h45ytscbebyvny4gc8cr8ma2 is incomplete
+                      (missing or invalid: phone, postal_code); complete it before
+                      using it here'
+                    incomplete_fields:
+                    - phone
+                    - postal_code
+                    status: 422
+                    title: Contact Incomplete
+                    type: contact-incomplete
+                Domain Management Error:
+                  value:
+                    code: ERROR_DOMAIN_REGISTRANT_CHANGE_NOT_SUPPORTED
+                    detail: Registrant change is not supported for .lu domains
+                    domain_name: example.lu
+                    status: 422
+                    title: Domain Management Error
+                    tld: lu
+                    type: domain-registrant-change-not-supported
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
@@ -42879,12 +43591,12 @@ paths:
               examples:
                 Organization Management Error:
                   value:
-                    code: ERROR_INDEPENDENT_BILLING_NOT_APPROVED
-                    detail: The parent organization is not approved to create sub-organizations
-                      with independent billing.
+                    code: ERROR_INDEPENDENT_BILLING_PLAN_NOT_INHERITABLE
+                    detail: The parent organization's plan cannot be inherited by
+                      the sub-organization.
                     status: 422
                     title: Organization Management Error
-                    type: independent-billing-not-approved
+                    type: independent-billing-plan-not-inheritable
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
@@ -44113,7 +44825,9 @@ paths:
       x-required-permissions:
       - organization:read
     patch:
-      description: Updates details for a specific organization
+      description: Updates details for a specific organization. The name, address
+        and tax ID of an organization billed on its own account are changed by support
+        only; changing them returns 403.
       operationId: update_organization_v1_organizations__organization_id__patch
       parameters:
       - in: path
@@ -44156,12 +44870,23 @@ paths:
         '403':
           content:
             application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
+              examples:
+                Organization Management Error:
+                  value:
+                    code: ERROR_ORGANIZATION_UPDATE_PROHIBITED
+                    detail: To change the organization name, address or tax ID, please
+                      contact support
+                    organization_id: organization_01kvn2kr34e9ts01z1330tkvfx
+                    status: 403
+                    title: Organization Management Error
+                    type: organization-update-prohibited
+                Permission Denied:
+                  value:
+                    code: ERROR_PERMISSION_DENIED
+                    detail: Insufficient permissions to perform this action
+                    status: 403
+                    title: Permission Denied
+                    type: permission-denied
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Forbidden
@@ -47697,17 +48422,36 @@ tags:
     \n            }\n          }\n        ]\n      }\n    ]\n  }\n}\n```\n"
   name: jobs
   x-displayName: Jobs
-- description: "Endpoints for creating and managing contacts.\n\n### ICANN Registrant\
-    \ Email Verification\n\nA domain on a TLD that requires ICANN registrant verification\
-    \ gets an ICANN verification case about its registrant's email.\nConfirming the\
-    \ email once satisfies every open ICANN case of that email in the organization.\n\
-    The registrant confirms through the link in the verification mail OpusDNS sends\
-    \ when the case opens.\nOrganizations with delegated contact verification get\
-    \ no mail; they confirm a registrant's email by attesting its `EMAIL` claim with\
-    \ the `REACHABILITY` method through `POST /v1/contacts/{contact_id}/verifications/attest`.\n\
-    The setting of the contact's organization counts, the same one that decides whether\
-    \ its registrants are mailed.\nFor other organizations, and with other methods,\
-    \ an `EMAIL` attestation is evidence for the registries only.\nFollow a domain's\
+- description: "Endpoints for creating and managing contacts.\n\n### Contacts Imported\
+    \ from a Registry\n\nA contact OpusDNS copies from a registry, when a domain is\
+    \ transferred in or imported, is stored without the validation of `POST /v1/contacts`.\n\
+    Values that pass it are returned in the same form as on any other contact, so\
+    \ a valid phone number is returned in international format.\nA value that does\
+    \ not pass it (for example a phone number such as `+31.600000000`) is returned\
+    \ as the registry sent it, and a value the registry left out is `null`.\nThe registry's\
+    \ name is split into `first_name` and `last_name`, its street lines are joined\
+    \ into `street`, and a value longer than 255 characters is cut to 255.\nWhen the\
+    \ registry refuses to show a contact, a contact with every data field `null` is\
+    \ created for it and takes its role on the domain, unless you supplied a contact\
+    \ for that role on a transfer-in (a registry that keeps the registrant through\
+    \ a transfer, such as AFNIC or RoTLD, keeps it for the registrant role); the initial\
+    \ sync of a domain on your own accreditation fails instead.\n\nEvery contact carries\
+    \ `completeness`: `complete` when it passed the create validation when it was\
+    \ stored, `incomplete` when it did not, with the fields that fail today listed\
+    \ in `incomplete_fields`.\nAn incomplete contact stays on the domain and role\
+    \ it was imported for, but you cannot give it another domain or role; replace\
+    \ it with a complete contact through a domain update.\nFilter the contact list\
+    \ by `completeness` to find them.\n\n### ICANN Registrant Email Verification\n\
+    \nA domain on a TLD that requires ICANN registrant verification gets an ICANN\
+    \ verification case about its registrant's email.\nConfirming the email once satisfies\
+    \ every open ICANN case of that email in the organization.\nThe registrant confirms\
+    \ through the link in the verification mail OpusDNS sends when the case opens.\n\
+    Organizations with delegated contact verification get no mail; they confirm a\
+    \ registrant's email by attesting its `EMAIL` claim with the `REACHABILITY` method\
+    \ through `POST /v1/contacts/{contact_id}/verifications/attest`.\nThe setting\
+    \ of the contact's organization counts, the same one that decides whether its\
+    \ registrants are mailed.\nFor other organizations, and with other methods, an\
+    \ `EMAIL` attestation is evidence for the registries only.\nFollow a domain's\
     \ cases with `GET /v1/domains/{domain_reference}/verifications`.\n\nThe per-contact\
     \ routes under `/v1/contacts/{contact_id}/verification` are deprecated: a case\
     \ asks the registrant on its own, and the domain's cases report the outcome.\n\

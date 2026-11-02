@@ -550,7 +550,8 @@ final class OrganizationService
     /**
      * Update an organization
      *
-     * Updates details for a specific organization
+     * Updates details for a specific organization. The name, address and tax ID of an organization billed
+     * on its own account are changed by support only; changing them returns 403.
      *
      * @param OrganizationUpdate|array<string, mixed> $body
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
