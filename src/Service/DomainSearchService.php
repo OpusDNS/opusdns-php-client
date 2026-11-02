@@ -42,13 +42,17 @@ final class DomainSearchService
      *
      * With `marketplaces=fruits` (repeatable, or `marketplaces=all`), domains for sale on the marketplace
      * are added to `results` after the suggestions, which are returned unchanged and in their order. These
-     * items have `marketplace: {"name": ...}` (the marketplace the domain is for sale on), `available:
-     * false` and no amount yet (`price.amount` is null, so `price.period` has no meaning). `marketplace`
-     * is omitted on suggestions. A domain can appear twice: as a suggestion with its registry fields, and
-     * as a marketplace item. `limit` and `tlds` apply to the marketplace domains as well, with `limit`
-     * capping them separately from the suggestions; the organization's TLD restriction and `premium` do
-     * not apply to them. `meta.total` counts all items in `results`, both entries of a domain included.
-     * Marketplace domains are best-effort and left out when the marketplace does not answer in time.
+     * items have `available: false` and `marketplace` set (`name`, the marketplace the domain is for sale
+     * on). `price.amount` is the price to acquire the domain from the marketplace, in the listing's
+     * currency, for a period of 1 year. It does not include a transfer: the customer transfers the domain
+     * with the auth code, and that transfer is charged separately. When the domain cannot be priced,
+     * `price.amount` is null. `renewal_price` is the TLD's standard renewal price, and may be set on an
+     * unpriced item. `marketplace` is null on suggestions. A domain can appear twice: as a suggestion with
+     * its registry fields, and as a marketplace item. `limit` and `tlds` apply to the marketplace domains
+     * as well, with `limit` capping them separately from the suggestions; the organization's TLD
+     * restriction and `premium` do not apply to them. `meta.total` counts all items in `results`, both
+     * entries of a domain included. Marketplace domains are best-effort and left out when the marketplace
+     * does not answer in time.
      *
      * @param string $query The primary keyword or phrase for the domain search. A full domain name is always
      *     returned as the first result, with registry-checked availability.

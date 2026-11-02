@@ -273,7 +273,8 @@ final class ContactService
     /**
      * Retrieve contact verification by token
      *
-     * Serves the link in the verification mail; not meant for integrations.
+     * Serves the link in the verification mail; not meant for integrations. Replaced by GET
+     * /v1/contacts/verification-challenges/{token}.
      *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
@@ -295,7 +296,8 @@ final class ContactService
     /**
      * Complete contact verification with token
      *
-     * Serves the link in the verification mail; not meant for integrations.
+     * Serves the link in the verification mail; not meant for integrations. Replaced by POST
+     * /v1/contacts/verification-challenges/{token}/confirm.
      *
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and

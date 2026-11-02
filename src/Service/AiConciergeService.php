@@ -13,6 +13,7 @@ use OpusDNS\Client\Client;
 use OpusDNS\Client\Endpoint;
 use OpusDNS\Client\Model\AggregationsContext;
 use OpusDNS\Client\Model\AggregationsContextCreate;
+use OpusDNS\Client\Model\AuditFindingsContext;
 use OpusDNS\Client\Model\BrandingDesignContext;
 use OpusDNS\Client\Model\CallOperationResultContext;
 use OpusDNS\Client\Model\ContactsContext;
@@ -59,12 +60,12 @@ final class AiConciergeService
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
-     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext
+     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext
      */
     public function getContext(
         string $contextId,
         ?string $xDatetimeFormat = null,
-    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext {
+    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext {
         $response = $this->client->request(
             'GET',
             Endpoint::AI_CONCIERGE_CONTEXTS_BY_CONTEXT_ID,
@@ -72,8 +73,9 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext => Union::discriminate($data, 'kind', [
+        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext => Union::discriminate($data, 'kind', [
             'aggregations' => AggregationsContext::class,
+            'audit_findings' => AuditFindingsContext::class,
             'branding_design' => BrandingDesignContext::class,
             'call_operation_result' => CallOperationResultContext::class,
             'contacts' => ContactsContext::class,
@@ -249,13 +251,13 @@ final class AiConciergeService
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
-     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext
+     * @return ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext
      */
     public function createContext(
         string $conversationId,
         ZonesContextCreate|ContactsContextCreate|DomainsContextCreate|DomainForwardsContextCreate|EmailForwardsContextCreate|DomainRecommendationsContextCreate|AggregationsContextCreate|array $body,
         ?string $xDatetimeFormat = null,
-    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext {
+    ): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext {
         $response = $this->client->request(
             'POST',
             Endpoint::AI_CONCIERGE_CONVERSATIONS_BY_CONVERSATION_ID_CONTEXTS,
@@ -264,8 +266,9 @@ final class AiConciergeService
             headers: ['X-Datetime-Format' => $xDatetimeFormat],
         );
 
-        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext => Union::discriminate($data, 'kind', [
+        return $this->client->hydrate($response, static fn (array $data): ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext => Union::discriminate($data, 'kind', [
             'aggregations' => AggregationsContext::class,
+            'audit_findings' => AuditFindingsContext::class,
             'branding_design' => BrandingDesignContext::class,
             'call_operation_result' => CallOperationResultContext::class,
             'contacts' => ContactsContext::class,
