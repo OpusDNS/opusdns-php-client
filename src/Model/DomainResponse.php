@@ -37,10 +37,9 @@ final readonly class DomainResponse implements ApiModel
      * @param string|null $domainId TypeID prefix: domain.
      * @param \DateTimeImmutable|null $expiresOn When the domain expires
      * @param list<DomainHostResponse>|null $hosts The subordinate hosts of the domain
-     * @param bool $isPremium Whether the registry prices this domain at a premium class for the action it was bought
-     *     under. Not purchase provenance: a renewal-time check that affirmatively quotes renew as standard corrects
-     *     the flag, so it tracks the registry's current classification. Registries classify each action separately,
-     *     so a domain premium only to restore is not premium here.
+     * @param bool $isPremium Whether the registry labelled this domain premium when we registered or transferred it
+     *     in. Set then and not changed afterwards; a premium domain renews at the price the registry quotes at
+     *     renewal time.
      * @param list<Nameserver>|null $nameservers The nameservers of the domain
      * @param string|null $ownerId The organization that owns the domain TypeID prefix: organization.
      * @param bool $readOnly Whether the domain is read-only in OpusDNS. When `true`, the domain is listed in your
