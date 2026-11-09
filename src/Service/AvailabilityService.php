@@ -28,7 +28,7 @@ final class AvailabilityService
      * Check domain availability
      *
      * Check the availability of one or more domains. Invalid domains are reported per domain (status
-     * 'error' with error details) instead of failing the whole request.
+     * 'unavailable' with error details) instead of failing the whole request.
      *
      * @param list<string> $domains Specify one or more domains to check for availability.
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on

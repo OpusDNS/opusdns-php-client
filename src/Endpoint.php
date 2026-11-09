@@ -69,6 +69,18 @@ final class Endpoint
     public const AVAILABILITY_STREAM = '/v1/availability/stream';
 
     /** GET, POST */
+    public const CONNECT_REGISTRARS = '/v1/connect/registrars';
+
+    /** GET, PUT, DELETE */
+    public const CONNECT_REGISTRARS_BY_REGISTRAR_CREDENTIAL_ID = '/v1/connect/registrars/{registrar_credential_id}';
+
+    /** GET, POST, DELETE */
+    public const CONNECT_REGISTRARS_BY_REGISTRAR_CREDENTIAL_ID_SYNC = '/v1/connect/registrars/{registrar_credential_id}/sync';
+
+    /** GET */
+    public const CONNECT_REGISTRARS_BY_REGISTRAR_CREDENTIAL_ID_SYNC_FAILURES = '/v1/connect/registrars/{registrar_credential_id}/sync/failures';
+
+    /** GET, POST */
     public const CONTACTS = '/v1/contacts';
 
     /** GET, POST */
@@ -184,6 +196,12 @@ final class Endpoint
 
     /** GET */
     public const DOMAIN_FORWARDS_METRICS_VISITS_BY_KEY = '/v1/domain-forwards/metrics/visits-by-key';
+
+    /** GET */
+    public const DOMAIN_FORWARDS_STATISTICS = '/v1/domain-forwards/statistics';
+
+    /** GET */
+    public const DOMAIN_FORWARDS_STATISTICS_MOVERS = '/v1/domain-forwards/statistics/movers';
 
     /** GET, POST, DELETE */
     public const DOMAIN_FORWARDS_BY_HOSTNAME = '/v1/domain-forwards/{hostname}';
@@ -357,6 +375,12 @@ final class Endpoint
     public const JOBS_BY_BATCH_ID_RETRY = '/v1/jobs/{batch_id}/retry';
 
     /** GET, POST */
+    public const ORDERS = '/v1/orders';
+
+    /** GET */
+    public const ORDERS_BY_ORDER_ID = '/v1/orders/{order_id}';
+
+    /** GET, POST */
     public const ORGANIZATIONS = '/v1/organizations';
 
     /** GET, PATCH */
@@ -397,6 +421,9 @@ final class Endpoint
 
     /** GET */
     public const ORGANIZATIONS_BY_ORGANIZATION_ID_BILLING_RECEIPTS = '/v1/organizations/{organization_id}/billing/receipts';
+
+    /** POST */
+    public const ORGANIZATIONS_BY_ORGANIZATION_ID_OWNERSHIP_TRANSFER = '/v1/organizations/{organization_id}/ownership-transfer';
 
     /** GET */
     public const ORGANIZATIONS_BY_ORGANIZATION_ID_PRICING_PRODUCT_TYPE_BY_PRODUCT_TYPE = '/v1/organizations/{organization_id}/pricing/product-type/{product_type}';

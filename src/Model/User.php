@@ -22,6 +22,7 @@ final readonly class User implements ApiModel
      * @param string $username The user's unique username
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
      * @param \DateTimeImmutable|null $deactivatedOn When the user was deactivated
+     * @param string|null $identityProviderId The identity provider the user last signed in through, null if none
      * @param string|null $keycloakUserId Keycloak user id
      * @param string|null $organizationId The user's organization id TypeID prefix: organization.
      * @param string|null $phone The user's phone number
@@ -37,6 +38,7 @@ final readonly class User implements ApiModel
         public string $username,
         public ?\DateTimeImmutable $createdOn = null,
         public ?\DateTimeImmutable $deactivatedOn = null,
+        public ?string $identityProviderId = null,
         public ?string $keycloakUserId = null,
         public ?string $organizationId = null,
         public ?string $phone = null,
@@ -59,6 +61,7 @@ final readonly class User implements ApiModel
             username: $data['username'],
             createdOn: isset($data['created_on']) ? new \DateTimeImmutable($data['created_on']) : null,
             deactivatedOn: isset($data['deactivated_on']) ? new \DateTimeImmutable($data['deactivated_on']) : null,
+            identityProviderId: $data['identity_provider_id'] ?? null,
             keycloakUserId: $data['keycloak_user_id'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             phone: $data['phone'] ?? null,
@@ -81,6 +84,7 @@ final readonly class User implements ApiModel
             'username' => $this->username,
             'created_on' => $this->createdOn,
             'deactivated_on' => $this->deactivatedOn,
+            'identity_provider_id' => $this->identityProviderId,
             'keycloak_user_id' => $this->keycloakUserId,
             'organization_id' => $this->organizationId,
             'phone' => $this->phone,

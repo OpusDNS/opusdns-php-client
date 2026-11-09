@@ -16,7 +16,11 @@ use OpusDNS\Client\Serializer;
 final readonly class DomainAvailability implements ApiModel
 {
     /**
-     * @param DomainAvailabilityError|null $error Error details when status is 'error', e.g. why a domain is invalid
+     * @param DomainAvailabilityStatus|string $status `unavailable` also covers reserved and invalid names (see
+     *     `error`). Retry `error` and `unknown` later. `tmch_claim` is not returned at present.
+     * @param DomainAvailabilityError|null $error Why the domain could not be checked: a `validation_error` (the name
+     *     is invalid; status `unavailable`) or a `check_error` (status `error`). Null otherwise; a status `error`
+     *     may also come without one.
      * @param Marketplace|null $marketplace The marketplace a taken domain can be bought on; set on
      *     `market_available` results of `POST /v1/availability/stream` with `marketplaces`; null otherwise, or when
      *     the marketplace is not known yet.

@@ -94,8 +94,10 @@ final class DomainService
      *     supplied; to filter on whether an object has any user tag, use has_tags. Server default: match_any.
      * @param bool|null $hasTags true returns only objects that carry at least one user tag, false only objects that
      *     carry none. Status tags are not counted. Combines with tag_ids and the other filters.
-     * @param string|null $name Filter by exact domain name
-     * @param string|null $search Search domains by name (contains) or domain ID (exact match)
+     * @param string|null $name Filter by exact domain name, in Unicode or punycode: either stored form matches. Only
+     *     whole labels match across forms.
+     * @param string|null $search Search domains by name (contains) or domain ID (exact match). A name matches in
+     *     Unicode or punycode, either stored form; only whole labels match across forms.
      * @param list<string>|null $tld Filter by top-level domain (e.g., 'com', 'org'). Can be specified multiple times
      *     (union of all provided values).
      * @param string|null $sld Filter by second-level domain
