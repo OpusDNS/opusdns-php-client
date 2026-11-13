@@ -27,6 +27,8 @@ final class ActiveDomainVerificationResponse implements ApiModel
      * @param DomainVerificationStatus|string $status The status of the case
      * @param DomainVerificationTrigger|string $trigger What opened the case
      * @param string $verificationId The ID of the verification case TypeID prefix: domain_verification.
+     * @param string|null $verificationUrl Where the registrant verifies with the registry, null when the registry
+     *     handles it otherwise
      */
     public function __construct(
         public readonly array $claims,
@@ -37,6 +39,7 @@ final class ActiveDomainVerificationResponse implements ApiModel
         public readonly DomainVerificationStatus|string $status,
         public readonly DomainVerificationTrigger|string $trigger,
         public readonly string $verificationId,
+        public readonly ?string $verificationUrl = null,
     ) {
     }
 
@@ -54,6 +57,7 @@ final class ActiveDomainVerificationResponse implements ApiModel
             status: DomainVerificationStatus::tryFrom($data['status']) ?? $data['status'],
             trigger: DomainVerificationTrigger::tryFrom($data['trigger']) ?? $data['trigger'],
             verificationId: $data['verification_id'],
+            verificationUrl: $data['verification_url'] ?? null,
         );
     }
 
@@ -71,6 +75,7 @@ final class ActiveDomainVerificationResponse implements ApiModel
             'status' => $this->status,
             'trigger' => $this->trigger,
             'verification_id' => $this->verificationId,
+            'verification_url' => $this->verificationUrl,
         ]);
     }
 

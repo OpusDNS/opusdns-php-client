@@ -15,7 +15,7 @@ use OpusDNS\Client\Serializer;
 final class ZonesContextCreate implements ApiModel
 {
     public function __construct(
-        public readonly ContextPayloadRegistrarZone $payload,
+        public readonly ZonesContextPayload $payload,
         public readonly string $kind = 'zones',
     ) {
     }
@@ -26,7 +26,7 @@ final class ZonesContextCreate implements ApiModel
     public static function fromArray(array $data): static
     {
         return new self(
-            payload: ContextPayloadRegistrarZone::fromArray($data['payload']),
+            payload: ZonesContextPayload::fromArray($data['payload']),
             kind: $data['kind'] ?? 'zones',
         );
     }

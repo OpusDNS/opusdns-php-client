@@ -24,7 +24,7 @@ final class ZonesContext implements ApiModel
         public readonly string $conversationId,
         public readonly \DateTimeImmutable $createdAt,
         public readonly string $organizationId,
-        public readonly ContextPayloadRegistrarZone $payload,
+        public readonly ZonesContextPayload $payload,
         public readonly string $userId,
         public readonly string $kind = 'zones',
     ) {
@@ -40,7 +40,7 @@ final class ZonesContext implements ApiModel
             conversationId: $data['conversation_id'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             organizationId: $data['organization_id'],
-            payload: ContextPayloadRegistrarZone::fromArray($data['payload']),
+            payload: ZonesContextPayload::fromArray($data['payload']),
             userId: $data['user_id'],
             kind: $data['kind'] ?? 'zones',
         );
