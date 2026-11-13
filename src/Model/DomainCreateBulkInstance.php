@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainCreateBulkInstance implements ApiModel
+final class DomainCreateBulkInstance implements ApiModel
 {
     /**
      * @param string $name The domain to be created
@@ -55,15 +55,15 @@ final readonly class DomainCreateBulkInstance implements ApiModel
      * @param RenewalMode|string|null $renewalMode Override renewal mode for this domain
      */
     public function __construct(
-        public string $name,
-        public ?array $attributes = null,
-        public ?string $authCode = null,
-        public ?array $contacts = null,
-        public ?bool $createZone = null,
-        public ?string $expectedPrice = null,
-        public ?array $nameservers = null,
-        public ?DomainPeriod $period = null,
-        public RenewalMode|string|null $renewalMode = null,
+        public readonly string $name,
+        public readonly ?array $attributes = null,
+        public readonly ?string $authCode = null,
+        public readonly ?array $contacts = null,
+        public readonly ?bool $createZone = null,
+        public readonly ?string $expectedPrice = null,
+        public readonly ?array $nameservers = null,
+        public readonly ?DomainPeriod $period = null,
+        public readonly RenewalMode|string|null $renewalMode = null,
     ) {
     }
 

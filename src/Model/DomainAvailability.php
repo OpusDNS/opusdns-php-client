@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\DomainAvailabilityStatus;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainAvailability implements ApiModel
+final class DomainAvailability implements ApiModel
 {
     /**
      * @param DomainAvailabilityError|null $error Error details when status is 'error', e.g. why a domain is invalid
@@ -22,10 +22,10 @@ final readonly class DomainAvailability implements ApiModel
      *     the marketplace is not known yet.
      */
     public function __construct(
-        public string $domain,
-        public DomainAvailabilityStatus|string $status,
-        public ?DomainAvailabilityError $error = null,
-        public ?Marketplace $marketplace = null,
+        public readonly string $domain,
+        public readonly DomainAvailabilityStatus|string $status,
+        public readonly ?DomainAvailabilityError $error = null,
+        public readonly ?Marketplace $marketplace = null,
     ) {
     }
 

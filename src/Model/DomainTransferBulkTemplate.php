@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainTransferBulkTemplate implements ApiModel
+final class DomainTransferBulkTemplate implements ApiModel
 {
     /**
      * @param RenewalMode|string $renewalMode The renewal mode of the domain
@@ -52,12 +52,12 @@ final readonly class DomainTransferBulkTemplate implements ApiModel
      * @param DomainPeriod|null $period Additional registration period to add upon transfer completion
      */
     public function __construct(
-        public RenewalMode|string $renewalMode,
-        public ?array $attributes = null,
-        public ?array $contacts = null,
-        public bool $createZone = false,
-        public ?array $nameservers = null,
-        public ?DomainPeriod $period = null,
+        public readonly RenewalMode|string $renewalMode,
+        public readonly ?array $attributes = null,
+        public readonly ?array $contacts = null,
+        public readonly bool $createZone = false,
+        public readonly ?array $nameservers = null,
+        public readonly ?DomainPeriod $period = null,
     ) {
     }
 

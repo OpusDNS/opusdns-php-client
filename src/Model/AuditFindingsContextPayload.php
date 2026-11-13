@@ -12,7 +12,7 @@ namespace OpusDNS\Client\Model;
 use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
 
-final readonly class AuditFindingsContextPayload implements ApiModel
+final class AuditFindingsContextPayload implements ApiModel
 {
     /**
      * @param list<AuditFinding> $findings Most severe first.
@@ -26,16 +26,16 @@ final readonly class AuditFindingsContextPayload implements ApiModel
      *     whole.
      */
     public function __construct(
-        public AuditCoverage $coverage,
-        public AuditFilters $filters,
-        public array $findings,
-        public array $rules,
-        public AuditTotals $totals,
-        public bool $complete = false,
-        public ?\DateTimeImmutable $generatedAt = null,
-        public string $schema = '',
-        public string $scope = '',
-        public bool $truncated = false,
+        public readonly AuditCoverage $coverage,
+        public readonly AuditFilters $filters,
+        public readonly array $findings,
+        public readonly array $rules,
+        public readonly AuditTotals $totals,
+        public readonly bool $complete = false,
+        public readonly ?\DateTimeImmutable $generatedAt = null,
+        public readonly string $schema = '',
+        public readonly string $scope = '',
+        public readonly bool $truncated = false,
     ) {
     }
 

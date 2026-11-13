@@ -17,7 +17,7 @@ use OpusDNS\Client\Enum\DomainVerificationTrigger;
 use OpusDNS\Client\Enum\VerificationClaimType;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainVerificationResponse implements ApiModel
+final class DomainVerificationResponse implements ApiModel
 {
     /**
      * @param list<VerificationClaimType|string> $claims What has to be verified about the registrant
@@ -35,18 +35,18 @@ final readonly class DomainVerificationResponse implements ApiModel
      *     never
      */
     public function __construct(
-        public array $claims,
-        public string $contactId,
-        public array $deadlines,
-        public \DateTimeImmutable $openedOn,
-        public int $remindersSent,
-        public DomainVerificationKind|string $source,
-        public DomainVerificationStatus|string $status,
-        public DomainVerificationTrigger|string $trigger,
-        public string $verificationId,
-        public DomainVerificationCloseReason|string|null $closeReason = null,
-        public ?\DateTimeImmutable $closedOn = null,
-        public ?\DateTimeImmutable $lastReminderSentOn = null,
+        public readonly array $claims,
+        public readonly string $contactId,
+        public readonly array $deadlines,
+        public readonly \DateTimeImmutable $openedOn,
+        public readonly int $remindersSent,
+        public readonly DomainVerificationKind|string $source,
+        public readonly DomainVerificationStatus|string $status,
+        public readonly DomainVerificationTrigger|string $trigger,
+        public readonly string $verificationId,
+        public readonly DomainVerificationCloseReason|string|null $closeReason = null,
+        public readonly ?\DateTimeImmutable $closedOn = null,
+        public readonly ?\DateTimeImmutable $lastReminderSentOn = null,
     ) {
     }
 

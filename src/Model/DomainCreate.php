@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainCreate implements ApiModel
+final class DomainCreate implements ApiModel
 {
     /**
      * @param array<string, list<ContactHandle>> $contacts The contacts of the domain
@@ -56,16 +56,16 @@ final readonly class DomainCreate implements ApiModel
      * @param list<Nameserver>|null $nameservers The name servers for the domain
      */
     public function __construct(
-        public array $contacts,
-        public string $name,
-        public DomainPeriod $period,
-        public RenewalMode|string $renewalMode,
-        public ?array $attributes = null,
-        public ?string $authCode = null,
-        public ?string $claimsNoticeAcceptanceHash = null,
-        public bool $createZone = false,
-        public ?string $expectedPrice = null,
-        public ?array $nameservers = null,
+        public readonly array $contacts,
+        public readonly string $name,
+        public readonly DomainPeriod $period,
+        public readonly RenewalMode|string $renewalMode,
+        public readonly ?array $attributes = null,
+        public readonly ?string $authCode = null,
+        public readonly ?string $claimsNoticeAcceptanceHash = null,
+        public readonly bool $createZone = false,
+        public readonly ?string $expectedPrice = null,
+        public readonly ?array $nameservers = null,
     ) {
     }
 

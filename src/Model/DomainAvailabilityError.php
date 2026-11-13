@@ -12,15 +12,15 @@ namespace OpusDNS\Client\Model;
 use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainAvailabilityError implements ApiModel
+final class DomainAvailabilityError implements ApiModel
 {
     /**
      * @param string $message Human-readable error message
      * @param string $type Error type identifier, e.g. validation_error or check_error
      */
     public function __construct(
-        public string $message,
-        public string $type,
+        public readonly string $message,
+        public readonly string $type,
     ) {
     }
 

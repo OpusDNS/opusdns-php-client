@@ -14,7 +14,7 @@ use OpusDNS\Client\Enum\DomainClientStatus;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainUpdateBulkTemplate implements ApiModel
+final class DomainUpdateBulkTemplate implements ApiModel
 {
     /**
      * @param array<string, string>|null $attributes Additional attributes of the domain, keyed by attribute name.
@@ -52,12 +52,12 @@ final readonly class DomainUpdateBulkTemplate implements ApiModel
      * @param list<DomainClientStatus|string>|null $statuses The new statuses of the domain
      */
     public function __construct(
-        public ?array $attributes = null,
-        public ?array $contacts = null,
-        public ?array $nameservers = null,
-        public RenewalMode|string|null $renewalMode = null,
-        public ?StatusChanges $statusChanges = null,
-        public ?array $statuses = null,
+        public readonly ?array $attributes = null,
+        public readonly ?array $contacts = null,
+        public readonly ?array $nameservers = null,
+        public readonly RenewalMode|string|null $renewalMode = null,
+        public readonly ?StatusChanges $statusChanges = null,
+        public readonly ?array $statuses = null,
     ) {
     }
 

@@ -12,17 +12,17 @@ namespace OpusDNS\Client\Model;
 use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
 
-final readonly class RegistrarRRSet implements ApiModel
+final class RegistrarRRSet implements ApiModel
 {
     /**
      * @param list<RegistrarRecord> $record
      */
     public function __construct(
-        public string $name,
-        public int $ttl,
-        public string $type,
-        public ?int $priority = null,
-        public array $record = [],
+        public readonly string $name,
+        public readonly int $ttl,
+        public readonly string $type,
+        public readonly ?int $priority = null,
+        public readonly array $record = [],
     ) {
     }
 

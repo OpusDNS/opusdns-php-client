@@ -16,7 +16,7 @@ use OpusDNS\Client\Enum\DomainVerificationTrigger;
 use OpusDNS\Client\Enum\VerificationClaimType;
 use OpusDNS\Client\Serializer;
 
-final readonly class ActiveDomainVerificationResponse implements ApiModel
+final class ActiveDomainVerificationResponse implements ApiModel
 {
     /**
      * @param list<VerificationClaimType|string> $claims What has to be verified about the registrant
@@ -29,14 +29,14 @@ final readonly class ActiveDomainVerificationResponse implements ApiModel
      * @param string $verificationId The ID of the verification case TypeID prefix: domain_verification.
      */
     public function __construct(
-        public array $claims,
-        public string $contactId,
-        public array $deadlines,
-        public \DateTimeImmutable $openedOn,
-        public DomainVerificationKind|string $source,
-        public DomainVerificationStatus|string $status,
-        public DomainVerificationTrigger|string $trigger,
-        public string $verificationId,
+        public readonly array $claims,
+        public readonly string $contactId,
+        public readonly array $deadlines,
+        public readonly \DateTimeImmutable $openedOn,
+        public readonly DomainVerificationKind|string $source,
+        public readonly DomainVerificationStatus|string $status,
+        public readonly DomainVerificationTrigger|string $trigger,
+        public readonly string $verificationId,
     ) {
     }
 

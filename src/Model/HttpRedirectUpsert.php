@@ -14,17 +14,17 @@ use OpusDNS\Client\Enum\HttpProtocol;
 use OpusDNS\Client\Enum\RedirectCode;
 use OpusDNS\Client\Serializer;
 
-final readonly class HttpRedirectUpsert implements ApiModel
+final class HttpRedirectUpsert implements ApiModel
 {
     public function __construct(
-        public RedirectCode|int $redirectCode,
-        public string $requestHostname,
-        public string $requestPath,
-        public HttpProtocol|string $requestProtocol,
-        public string $targetHostname,
-        public string $targetPath,
-        public HttpProtocol|string $targetProtocol,
-        public ?string $requestSubdomain = null,
+        public readonly RedirectCode|int $redirectCode,
+        public readonly string $requestHostname,
+        public readonly string $requestPath,
+        public readonly HttpProtocol|string $requestProtocol,
+        public readonly string $targetHostname,
+        public readonly string $targetPath,
+        public readonly HttpProtocol|string $targetProtocol,
+        public readonly ?string $requestSubdomain = null,
     ) {
     }
 

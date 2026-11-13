@@ -14,7 +14,7 @@ use OpusDNS\Client\Enum\DomainClientStatus;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainUpdateBulkInstance implements ApiModel
+final class DomainUpdateBulkInstance implements ApiModel
 {
     /**
      * @param array<string, string>|null $attributes Override attributes for this domain. Additional attributes of
@@ -55,15 +55,15 @@ final readonly class DomainUpdateBulkInstance implements ApiModel
      * @param list<DomainClientStatus|string>|null $statuses Override statuses for this domain
      */
     public function __construct(
-        public ?array $attributes = null,
-        public ?string $authCode = null,
-        public ?array $contacts = null,
-        public ?string $domainId = null,
-        public ?string $name = null,
-        public ?array $nameservers = null,
-        public RenewalMode|string|null $renewalMode = null,
-        public ?StatusChanges $statusChanges = null,
-        public ?array $statuses = null,
+        public readonly ?array $attributes = null,
+        public readonly ?string $authCode = null,
+        public readonly ?array $contacts = null,
+        public readonly ?string $domainId = null,
+        public readonly ?string $name = null,
+        public readonly ?array $nameservers = null,
+        public readonly RenewalMode|string|null $renewalMode = null,
+        public readonly ?StatusChanges $statusChanges = null,
+        public readonly ?array $statuses = null,
     ) {
     }
 

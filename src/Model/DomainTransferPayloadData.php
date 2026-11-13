@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainTransferPayloadData implements ApiModel
+final class DomainTransferPayloadData implements ApiModel
 {
     /**
      * @param string $name The domain to be created
@@ -58,15 +58,15 @@ final readonly class DomainTransferPayloadData implements ApiModel
      *     If omitted, the registry default policy will be applied.
      */
     public function __construct(
-        public string $name,
-        public RenewalMode|string $renewalMode,
-        public ?array $attributes = null,
-        public ?string $authCode = null,
-        public ?array $contacts = null,
-        public bool $createZone = false,
-        public ?string $expectedPrice = null,
-        public ?array $nameservers = null,
-        public ?DomainPeriod $period = null,
+        public readonly string $name,
+        public readonly RenewalMode|string $renewalMode,
+        public readonly ?array $attributes = null,
+        public readonly ?string $authCode = null,
+        public readonly ?array $contacts = null,
+        public readonly bool $createZone = false,
+        public readonly ?string $expectedPrice = null,
+        public readonly ?array $nameservers = null,
+        public readonly ?DomainPeriod $period = null,
     ) {
     }
 
