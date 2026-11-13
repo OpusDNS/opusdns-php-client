@@ -12,6 +12,9 @@ namespace OpusDNS\Client\Model;
 use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
 
+/**
+ * A DNS zone read from an external registrar, or from `GET /v1/dns` in a zones context.
+ */
 final class RegistrarZone implements ApiModel
 {
     /**

@@ -20,7 +20,8 @@ final class AuditFindingsContextPayload implements ApiModel
      *     with its findings; `totals` still counts them.
      * @param bool $complete False when a source stopped early or failed, or RAS did not say: the findings are a
      *     lower bound.
-     * @param string $schema portfolio_audit/v1. Any other version arrives with only this field set.
+     * @param string $schema portfolio_audit/v1. Any other version arrives with every other field at its empty
+     *     default: compare this with the version before reading the rest.
      * @param string $scope zones | domains | security | all
      * @param bool $truncated True when `findings` was cut to fit the store; that cut leaves `totals` and `rules`
      *     whole.

@@ -35,6 +35,8 @@ final class ContactVerificationCaseResponse implements ApiModel
      * @param \DateTimeImmutable|null $closedOn When the case was closed, null while it is active
      * @param \DateTimeImmutable|null $lastReminderSentOn When the registrant's email was last reminded, null if
      *     never
+     * @param string|null $verificationUrl Where the registrant verifies with the registry, null when the registry
+     *     handles it otherwise
      */
     public function __construct(
         public readonly array $claims,
@@ -51,6 +53,7 @@ final class ContactVerificationCaseResponse implements ApiModel
         public readonly DomainVerificationCloseReason|string|null $closeReason = null,
         public readonly ?\DateTimeImmutable $closedOn = null,
         public readonly ?\DateTimeImmutable $lastReminderSentOn = null,
+        public readonly ?string $verificationUrl = null,
     ) {
     }
 
@@ -74,6 +77,7 @@ final class ContactVerificationCaseResponse implements ApiModel
             closeReason: isset($data['close_reason']) ? DomainVerificationCloseReason::tryFrom($data['close_reason']) ?? $data['close_reason'] : null,
             closedOn: isset($data['closed_on']) ? new \DateTimeImmutable($data['closed_on']) : null,
             lastReminderSentOn: isset($data['last_reminder_sent_on']) ? new \DateTimeImmutable($data['last_reminder_sent_on']) : null,
+            verificationUrl: $data['verification_url'] ?? null,
         );
     }
 
@@ -97,6 +101,7 @@ final class ContactVerificationCaseResponse implements ApiModel
             'close_reason' => $this->closeReason,
             'closed_on' => $this->closedOn,
             'last_reminder_sent_on' => $this->lastReminderSentOn,
+            'verification_url' => $this->verificationUrl,
         ]);
     }
 

@@ -16,6 +16,16 @@ use OpusDNS\Client\Serializer;
 
 final class HttpRedirectRequest implements ApiModel
 {
+    /**
+     * @param string $requestPath Path to redirect. Matched exactly, ignoring a trailing slash: `/` matches only the
+     *     start page. `*` stands for whole path segments: `/*` matches every path, `/docs/*` matches `/docs` and
+     *     everything below it, `/a/* /c` matches any one segment in place of `*`. A `*` inside a segment, as in
+     *     `/blog*`, is matched literally. An exact path wins over a wildcard.
+     * @param string $targetHostname Hostname to redirect to, without protocol or path, e.g. `www.example.org`.
+     * @param string $targetPath Path to redirect to. A `*` is replaced by the part of the request path that the
+     *     wildcard in `request_path` matched: with `request_path` `/*`, `target_path` `/*` keeps the path and `/`
+     *     sends every path to the start page. The request's query string is appended.
+     */
     public function __construct(
         public readonly RedirectCode|int $redirectCode,
         public readonly string $requestPath,
