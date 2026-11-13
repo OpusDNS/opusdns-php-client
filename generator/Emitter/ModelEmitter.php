@@ -14,7 +14,7 @@ use OpusDNS\Generator\Spec;
 use OpusDNS\Generator\TypeResolver;
 
 /**
- * Emits one final readonly class per object schema, with fromArray() and toArray().
+ * Emits one final class with readonly properties per object schema, with fromArray() and toArray().
  */
 final class ModelEmitter
 {
@@ -47,7 +47,7 @@ final class ModelEmitter
         $namespace->addUse(TypeResolver::NAMESPACE . '\\ApiModel');
         $namespace->addUse(TypeResolver::NAMESPACE . '\\Serializer');
 
-        $class = $namespace->addClass($className)->setFinal()->setReadOnly();
+        $class = $namespace->addClass($className)->setFinal();
         $class->addImplement(TypeResolver::NAMESPACE . '\\ApiModel');
         $comment = Doc::forSchema($schemaName, $className, $schema);
         if ($comment !== '') {
@@ -69,7 +69,7 @@ final class ModelEmitter
         $constructor = $class->addMethod('__construct');
         foreach ($properties as $property) {
             $parameter = $constructor->addPromotedParameter($property->name)->setType($property->type->declaration());
-            $parameter->setPublic();
+            $parameter->setPublic()->setReadOnly();
             if ($property->hasDefault) {
                 $parameter->setDefaultValue($property->default);
             }

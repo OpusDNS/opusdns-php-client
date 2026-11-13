@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\Registrar;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainRegistrarCredentialResponse implements ApiModel
+final class DomainRegistrarCredentialResponse implements ApiModel
 {
     /**
      * @param string $name Human-readable name for this credential
@@ -24,10 +24,10 @@ final readonly class DomainRegistrarCredentialResponse implements ApiModel
      *     `/v1/connect/registrars`.
      */
     public function __construct(
-        public string $name,
-        public Registrar|string $registrar,
-        public string $registrarCredentialId,
-        public string $type = 'ras',
+        public readonly string $name,
+        public readonly Registrar|string $registrar,
+        public readonly string $registrarCredentialId,
+        public readonly string $type = 'ras',
     ) {
     }
 

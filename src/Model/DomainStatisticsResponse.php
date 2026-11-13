@@ -13,7 +13,7 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Enum\UsageGranularity;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainStatisticsResponse implements ApiModel
+final class DomainStatisticsResponse implements ApiModel
 {
     /**
      * @param list<DomainStatisticsBreakdownRowResponse> $breakdown Top organizations or TLDs by acquisitions in the
@@ -30,14 +30,14 @@ final readonly class DomainStatisticsResponse implements ApiModel
      *     over the whole window.
      */
     public function __construct(
-        public array $breakdown,
-        public array $buckets,
-        public \DateTimeImmutable $endDate,
-        public UsageGranularity|string $granularity,
-        public string $organizationId,
-        public \DateTimeImmutable $startDate,
-        public DomainStatisticsTotalsResponse $totals,
-        public ?\DateTimeImmutable $dataAvailableFrom = null,
+        public readonly array $breakdown,
+        public readonly array $buckets,
+        public readonly \DateTimeImmutable $endDate,
+        public readonly UsageGranularity|string $granularity,
+        public readonly string $organizationId,
+        public readonly \DateTimeImmutable $startDate,
+        public readonly DomainStatisticsTotalsResponse $totals,
+        public readonly ?\DateTimeImmutable $dataAvailableFrom = null,
     ) {
     }
 

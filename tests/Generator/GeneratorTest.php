@@ -88,27 +88,28 @@ final class GeneratorTest extends TestCase
     public function testModelConstructorReflectsRequiredNullableAndDefaults(): void
     {
         $pet = self::source('Model/FixturePet.php');
-        self::assertStringContainsString('final readonly class FixturePet implements ApiModel', $pet);
+        self::assertStringContainsString('final class FixturePet implements ApiModel', $pet);
+        self::assertStringNotContainsString('readonly class', $pet);
         self::assertStringContainsString(" * Pet\n *\n * A pet in the shop.", $pet);
-        self::assertStringContainsString('public string $id,', $pet);
-        self::assertStringContainsString('public FixturePetStatus|string $status,', $pet);
+        self::assertStringContainsString('public readonly string $id,', $pet);
+        self::assertStringContainsString('public readonly FixturePetStatus|string $status,', $pet);
         self::assertStringContainsString("status: FixturePetStatus::tryFrom(\$data['status']) ?? \$data['status'],", $pet);
-        self::assertStringContainsString('public \DateTimeImmutable $createdOn,', $pet);
-        self::assertStringContainsString('public ?\DateTimeImmutable $bornOn = null,', $pet);
-        self::assertStringContainsString('public ?string $ownerId = null,', $pet);
+        self::assertStringContainsString('public readonly \DateTimeImmutable $createdOn,', $pet);
+        self::assertStringContainsString('public readonly ?\DateTimeImmutable $bornOn = null,', $pet);
+        self::assertStringContainsString('public readonly ?string $ownerId = null,', $pet);
         self::assertStringNotContainsString("'None'", $pet);
         self::assertStringContainsString("bornOn: isset(\$data['born_on']) ? Serializer::parseDate(\$data['born_on']) : null,", $pet);
         self::assertStringContainsString("'born_on' => \$this->bornOn === null ? null : \$this->bornOn->format('Y-m-d'),", $pet);
-        self::assertStringContainsString('public float $weight,', $pet);
-        self::assertStringContainsString('public ?string $nickname = null,', $pet);
-        self::assertStringContainsString('public array $tags = [],', $pet);
-        self::assertStringContainsString('public ?FixtureOwner $owner = null,', $pet);
-        self::assertStringContainsString('public ?array $attributes = null,', $pet);
+        self::assertStringContainsString('public readonly float $weight,', $pet);
+        self::assertStringContainsString('public readonly ?string $nickname = null,', $pet);
+        self::assertStringContainsString('public readonly array $tags = [],', $pet);
+        self::assertStringContainsString('public readonly ?FixtureOwner $owner = null,', $pet);
+        self::assertStringContainsString('public readonly ?array $attributes = null,', $pet);
         self::assertStringContainsString("attributes: isset(\$data['attributes']) ? (array) \$data['attributes'] : null,", $pet);
         self::assertStringContainsString("'attributes' => \$this->attributes === null ? null : (\$this->attributes === [] ? new \\stdClass() : \$this->attributes),", $pet);
-        self::assertStringContainsString("public string \$kind = 'pet',", $pet);
-        self::assertStringContainsString('public FixtureRedirectCode|int $redirectCode = FixtureRedirectCode::_301,', $pet);
-        self::assertStringContainsString('public FixtureAdoptedEvent|FixtureLostEvent|null $event = null,', $pet);
+        self::assertStringContainsString("public readonly string \$kind = 'pet',", $pet);
+        self::assertStringContainsString('public readonly FixtureRedirectCode|int $redirectCode = FixtureRedirectCode::_301,', $pet);
+        self::assertStringContainsString('public readonly FixtureAdoptedEvent|FixtureLostEvent|null $event = null,', $pet);
         self::assertStringContainsString('@param string $id TypeID prefix: pet.', $pet);
         self::assertStringContainsString("@param string \$name The pet's name", $pet);
         self::assertStringContainsString('@param list<string> $tags', $pet);
@@ -172,7 +173,7 @@ final class GeneratorTest extends TestCase
     public function testPageModelsImplementPage(): void
     {
         $source = self::source('Model/FixturePetPage.php');
-        self::assertStringContainsString('final readonly class FixturePetPage implements ApiModel, Page', $source);
+        self::assertStringContainsString('final class FixturePetPage implements ApiModel, Page', $source);
         self::assertStringContainsString('@implements Page<FixturePet>', $source);
         self::assertStringContainsString('@return list<FixturePet>', $source);
         self::assertStringNotContainsString('implements ApiModel, Page', self::source('Model/FixturePet.php'));

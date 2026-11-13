@@ -12,7 +12,7 @@ namespace OpusDNS\Client\Model;
 use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
 
-final readonly class DomainSearchSuggestionWithPrice implements ApiModel
+final class DomainSearchSuggestionWithPrice implements ApiModel
 {
     /**
      * @param DomainAmsAccountResponse|null $connectedAccount Set when the organization registers this TLD on its own
@@ -27,13 +27,13 @@ final readonly class DomainSearchSuggestionWithPrice implements ApiModel
      *     its registry fields, and as a marketplace item.
      */
     public function __construct(
-        public bool $available,
-        public string $domain,
-        public bool $premium,
-        public DomainSearchSuggestionPriceData $price,
-        public ?DomainAmsAccountResponse $connectedAccount = null,
-        public ?Marketplace $marketplace = null,
-        public ?DomainSearchSuggestionPriceData $renewalPrice = null,
+        public readonly bool $available,
+        public readonly string $domain,
+        public readonly bool $premium,
+        public readonly DomainSearchSuggestionPriceData $price,
+        public readonly ?DomainAmsAccountResponse $connectedAccount = null,
+        public readonly ?Marketplace $marketplace = null,
+        public readonly ?DomainSearchSuggestionPriceData $renewalPrice = null,
     ) {
     }
 

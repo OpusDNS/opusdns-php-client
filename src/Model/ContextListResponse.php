@@ -13,14 +13,14 @@ use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
 use OpusDNS\Client\Union;
 
-final readonly class ContextListResponse implements ApiModel
+final class ContextListResponse implements ApiModel
 {
     /**
      * @param list<ZonesContext|ContactsContext|DomainsContext|DomainForwardsContext|EmailForwardsContext|DomainRecommendationsContext|AggregationsContext|BrandingDesignContext|CallOperationResultContext|AuditFindingsContext> $results
      */
     public function __construct(
-        public PaginationMetadata $pagination,
-        public array $results,
+        public readonly PaginationMetadata $pagination,
+        public readonly array $results,
     ) {
     }
 
