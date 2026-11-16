@@ -19,6 +19,10 @@ final class DomainSearchSuggestionWithPrice implements ApiModel
      *     registry accreditation (`ams`). The registry bills the domain to that accreditation, so `price` and
      *     `renewal_price` are the OpusDNS service fee alone, premium or not. Null for TLDs registered on OpusDNS
      *     registry accounts.
+     * @param DomainAvailabilityError|null $error Set on the exact match of a full domain name query when it could
+     *     not be checked normally: a `validation_error` (the name is invalid or its TLD is not available for
+     *     registration) or a `check_error` (the registry check failed). `available` is then false, which does not
+     *     mean the domain is taken. Null otherwise, and always null on generated suggestions.
      * @param Marketplace|null $marketplace Set on a domain for sale on a marketplace, added to the suggestions with
      *     `available: false`; null on suggestions. On such an item `price.amount` is the price to acquire the domain
      *     from the marketplace (for 1 year, in the listing's currency; it does not include a transfer, which the
@@ -32,6 +36,7 @@ final class DomainSearchSuggestionWithPrice implements ApiModel
         public readonly bool $premium,
         public readonly DomainSearchSuggestionPriceData $price,
         public readonly ?DomainAmsAccountResponse $connectedAccount = null,
+        public readonly ?DomainAvailabilityError $error = null,
         public readonly ?Marketplace $marketplace = null,
         public readonly ?DomainSearchSuggestionPriceData $renewalPrice = null,
     ) {
@@ -48,6 +53,7 @@ final class DomainSearchSuggestionWithPrice implements ApiModel
             premium: $data['premium'],
             price: DomainSearchSuggestionPriceData::fromArray($data['price']),
             connectedAccount: isset($data['connected_account']) ? DomainAmsAccountResponse::fromArray($data['connected_account']) : null,
+            error: isset($data['error']) ? DomainAvailabilityError::fromArray($data['error']) : null,
             marketplace: isset($data['marketplace']) ? Marketplace::fromArray($data['marketplace']) : null,
             renewalPrice: isset($data['renewal_price']) ? DomainSearchSuggestionPriceData::fromArray($data['renewal_price']) : null,
         );
@@ -64,6 +70,7 @@ final class DomainSearchSuggestionWithPrice implements ApiModel
             'premium' => $this->premium,
             'price' => $this->price,
             'connected_account' => $this->connectedAccount,
+            'error' => $this->error,
             'marketplace' => $this->marketplace,
             'renewal_price' => $this->renewalPrice,
         ]);

@@ -35,7 +35,8 @@ final class DomainSearchService
      * - **Keyword or phrase** (e.g. `bluewidgets`) — every result is a generated name, and its
      * `available` flag is best-effort. - **Full domain name** (e.g. `bluewidgets.de`) — the queried
      * domain is always returned as the first result, with availability checked directly against the
-     * registry.
+     * registry. `available: false` with an `error` (as in `GET /v1/domains/check`) means the name can't be
+     * registered here or wasn't checked, not that it is taken.
      *
      * Use a full domain name, or `GET /v1/availability`, whenever you need a definitive answer about a
      * specific domain.

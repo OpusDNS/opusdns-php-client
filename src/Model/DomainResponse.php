@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OpusDNS\Client\Model;
 
 use OpusDNS\Client\ApiModel;
+use OpusDNS\Client\Enum\NextActionType;
 use OpusDNS\Client\Enum\RenewalMode;
 use OpusDNS\Client\Serializer;
 use OpusDNS\Client\Union;
@@ -33,7 +34,8 @@ final class DomainResponse implements ApiModel
      *     domains, for domains on operator-managed registry accounts, and when the connected account was deleted.
      * @param list<DomainContactResponse>|null $contacts The contacts of the domain
      * @param \DateTimeImmutable|null $createdOn The date/time the entry was created on
-     * @param \DateTimeImmutable|null $deletedOn When the domain will be deleted
+     * @param \DateTimeImmutable|null $deletedOn Deprecated, always null. For the date a deleted domain is removed
+     *     for good, read `next_action_on` where `next_action_type` is `purge`; `canceled_on` is when it was deleted.
      * @param string|null $domainId TypeID prefix: domain.
      * @param \DateTimeImmutable|null $expiresOn When the domain expires
      * @param list<DomainHostResponse>|null $hosts The subordinate hosts of the domain
@@ -41,6 +43,13 @@ final class DomainResponse implements ApiModel
      *     in. Set then and not changed afterwards; a premium domain renews at the price the registry quotes at
      *     renewal time.
      * @param list<Nameserver>|null $nameservers The nameservers of the domain
+     * @param \DateTimeImmutable|null $nextActionOn When the action in `next_action_type` is due. Null when
+     *     `next_action_type` is null. Can lie in the past while the action is still being retried.
+     * @param NextActionType|string|null $nextActionType What OpusDNS does to the domain next on its own: `renew`
+     *     (renewed and charged; for monthly billing, the next monthly charge), `expire` (deleted because the renewal
+     *     mode is 'expire') or `purge` (already deleted, removed for good on that date; a restore is only possible
+     *     during the registry's redemption period, which ends earlier). Null for externally managed domains and when
+     *     no date is scheduled. More values may be added; treat unknown values as 'other'.
      * @param string|null $ownerId The organization that owns the domain TypeID prefix: organization.
      * @param bool $readOnly Whether the domain is read-only in OpusDNS. When `true`, the domain is listed in your
      *     portfolio but cannot be managed — for example while it awaits a migration, is locked for legal reasons,
@@ -86,6 +95,8 @@ final class DomainResponse implements ApiModel
         public readonly ?array $hosts = null,
         public readonly bool $isPremium = false,
         public readonly ?array $nameservers = null,
+        public readonly ?\DateTimeImmutable $nextActionOn = null,
+        public readonly NextActionType|string|null $nextActionType = null,
         public readonly ?string $ownerId = null,
         public readonly bool $readOnly = false,
         public readonly ?\DateTimeImmutable $registeredOn = null,
@@ -127,6 +138,8 @@ final class DomainResponse implements ApiModel
             hosts: isset($data['hosts']) ? array_map(static fn (array $item): DomainHostResponse => DomainHostResponse::fromArray($item), $data['hosts']) : null,
             isPremium: $data['is_premium'] ?? false,
             nameservers: isset($data['nameservers']) ? array_map(static fn (array $item): Nameserver => Nameserver::fromArray($item), $data['nameservers']) : null,
+            nextActionOn: isset($data['next_action_on']) ? new \DateTimeImmutable($data['next_action_on']) : null,
+            nextActionType: isset($data['next_action_type']) ? NextActionType::tryFrom($data['next_action_type']) ?? $data['next_action_type'] : null,
             ownerId: $data['owner_id'] ?? null,
             readOnly: $data['read_only'] ?? false,
             registeredOn: isset($data['registered_on']) ? new \DateTimeImmutable($data['registered_on']) : null,
@@ -168,6 +181,8 @@ final class DomainResponse implements ApiModel
             'hosts' => $this->hosts,
             'is_premium' => $this->isPremium,
             'nameservers' => $this->nameservers,
+            'next_action_on' => $this->nextActionOn,
+            'next_action_type' => $this->nextActionType,
             'owner_id' => $this->ownerId,
             'read_only' => $this->readOnly,
             'registered_on' => $this->registeredOn,
