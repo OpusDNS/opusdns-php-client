@@ -22,7 +22,7 @@ const REPOSITORY = 'OpusDNS/api-spec';
 const SPEC_PATH = 'src/openapi.yaml';
 
 $root = dirname(__DIR__);
-$options = getopt('', ['ref::', 'check', 'help']);
+$options = getopt('', ['ref:', 'check', 'help']);
 if (isset($options['help'])) {
     echo "Usage: bin/spec-sync [--ref <ref>] [--check]\n";
     exit(0);
