@@ -62,7 +62,10 @@ final class GeneratorTest extends TestCase
 
     public function testEveryFileIsMarkedAsGeneratedAndParses(): void
     {
-        $files = glob(self::$out . '/{*,*/*}.php', GLOB_BRACE) ?: [];
+        $files = array_merge(
+            glob(self::$out . '/*.php') ?: [],
+            glob(self::$out . '/*/*.php') ?: [],
+        );
         self::assertCount((int) self::$report['files'], $files);
         foreach ($files as $file) {
             self::assertStringContainsString('generated from the OpenAPI specification', (string) file_get_contents($file));
