@@ -27,21 +27,39 @@ jobs:
   release:
     name: Tag and release
     if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && !contains(github.event.pull_request.labels.*.name, 'no-release'))
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    # Each host runs several runners. setup-php would install PHP on the host with
+    # apt and switch the host's default php, so jobs on one host could run with
+    # each other's version. The official image gives every job its own PHP.
+    container: php:8.3-cli
+
+    env:
+      # Keeps Composer's cache in the container instead of the runner's home.
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
 
     steps:
+      # git before checkout, or actions/checkout downloads the tree without .git.
+      - name: Install git, unzip, gh and Composer
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          # Bump both together. The checksum is on https://getcomposer.org/download/.
+          COMPOSER_VERSION: 2.11.3
+          COMPOSER_SHA256: 04f8b003da4e3a2459056591fbfebd02b4dc3e5adeb158616b90cf55a65113ec
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git unzip gh
+          # The workspace belongs to the runner user, and the container runs as root.
+          git config --system --add safe.directory "$GITHUB_WORKSPACE"
+          curl -fsSL -o /usr/local/bin/composer "https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar"
+          echo "${COMPOSER_SHA256}  /usr/local/bin/composer" | sha256sum -c -
+          chmod +x /usr/local/bin/composer
+
       - name: Checkout main
         uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0
           fetch-tags: true
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          coverage: none
 
       - name: Install dependencies
         run: composer install --no-interaction --no-progress
@@ -86,3 +104,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "${{ steps.version.outputs.version }}" --generate-notes
+
+      # Files written in the container belong to root on the host. Hand them back
+      # to the runner user, or the next job on this runner cannot clean them up.
+      - name: Hand the workspace back to the runner user
+        if: always()
+        run: chown -R "$(stat -c '%u:%g' "$GITHUB_WORKSPACE/../..")" "$GITHUB_WORKSPACE" "$HOME"
