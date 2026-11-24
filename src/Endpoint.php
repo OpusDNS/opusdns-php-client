@@ -171,33 +171,6 @@ final class Endpoint
     public const DOMAIN_FORWARDS = '/v1/domain-forwards';
 
     /** GET */
-    public const DOMAIN_FORWARDS_METRICS = '/v1/domain-forwards/metrics';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_BROWSER = '/v1/domain-forwards/metrics/browser';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_GEO = '/v1/domain-forwards/metrics/geo';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_PLATFORM = '/v1/domain-forwards/metrics/platform';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_REFERRER = '/v1/domain-forwards/metrics/referrer';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_STATUS_CODE = '/v1/domain-forwards/metrics/status-code';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_TIME_SERIES = '/v1/domain-forwards/metrics/time-series';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_USER_AGENT = '/v1/domain-forwards/metrics/user-agent';
-
-    /** GET */
-    public const DOMAIN_FORWARDS_METRICS_VISITS_BY_KEY = '/v1/domain-forwards/metrics/visits-by-key';
-
-    /** GET */
     public const DOMAIN_FORWARDS_STATISTICS = '/v1/domain-forwards/statistics';
 
     /** GET */
@@ -380,7 +353,7 @@ final class Endpoint
     /** GET, POST */
     public const ORDERS = '/v1/orders';
 
-    /** GET */
+    /** GET, DELETE */
     public const ORDERS_BY_ORDER_ID = '/v1/orders/{order_id}';
 
     /** GET */

@@ -17,11 +17,11 @@ use OpusDNS\Client\Union;
 final class EventData implements ApiModel
 {
     /**
-     * @param DomainRenewalDetails|DomainVerificationDetails|RegistrantChangeDetails|null $details
+     * @param DomainRenewalDetails|DomainVerificationDetails|RegistrantChangeDetails|DomainModificationDetails|null $details
      */
     public function __construct(
         public readonly string $message,
-        public readonly DomainRenewalDetails|DomainVerificationDetails|RegistrantChangeDetails|null $details = null,
+        public readonly DomainRenewalDetails|DomainVerificationDetails|RegistrantChangeDetails|DomainModificationDetails|null $details = null,
         public readonly ?EventError $error = null,
         public readonly EventVersion|string $version = EventVersion::_1_0,
     ) {
@@ -35,6 +35,7 @@ final class EventData implements ApiModel
         return new self(
             message: $data['message'],
             details: isset($data['details']) ? Union::discriminate($data['details'], 'detail_type', [
+                'domain_modification' => DomainModificationDetails::class,
                 'domain_renewal' => DomainRenewalDetails::class,
                 'domain_verification' => DomainVerificationDetails::class,
                 'registrant_change' => RegistrantChangeDetails::class,

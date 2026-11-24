@@ -32,6 +32,8 @@ final class DomainServiceTest extends TestCase
     {
         return [
             'name' => 'example.com',
+            'name_ace' => 'example.com',
+            'name_unicode' => 'example.com',
             'roid' => 'D123-OPUS',
             'sld' => 'example',
             'tld' => 'com',
@@ -50,8 +52,8 @@ final class DomainServiceTest extends TestCase
     {
         [$client, $http] = ClientFactory::create();
         $http->queueJson(200, ['results' => [
-            ['domain' => 'example.com', 'available' => false, 'reason' => 'registered'],
-            ['domain' => 'example.net', 'available' => true, 'is_premium' => true],
+            ['domain' => 'example.com', 'domain_ace' => 'example.com', 'domain_unicode' => 'example.com', 'available' => false, 'reason' => 'registered'],
+            ['domain' => 'example.net', 'domain_ace' => 'example.net', 'domain_unicode' => 'example.net', 'available' => true, 'is_premium' => true],
         ]]);
 
         $check = $client->domain()->eppCheckDomain(['example.com', 'example.net']);
@@ -151,7 +153,7 @@ final class DomainServiceTest extends TestCase
     public function testTransferDomain(): void
     {
         [$client, $http] = ClientFactory::create();
-        $http->queueJson(201, ['name' => 'example.org', 'roid' => 'D456-OPUS', 'sld' => 'example', 'tld' => 'org']);
+        $http->queueJson(201, ['name' => 'example.org', 'name_ace' => 'example.org', 'name_unicode' => 'example.org', 'roid' => 'D456-OPUS', 'sld' => 'example', 'tld' => 'org']);
 
         $domain = $client->domain()->transferDomain(new DomainTransferIn('example.org', RenewalMode::RENEW, authCode: 'epp-secret'));
 

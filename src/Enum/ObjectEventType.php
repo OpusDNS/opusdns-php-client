@@ -14,6 +14,7 @@ enum ObjectEventType: string
     case CREATED = 'CREATED';
     case UPDATED = 'UPDATED';
     case DELETED = 'DELETED';
+    case CANCELED = 'CANCELED';
     case IMPORTED = 'IMPORTED';
     case SYNCED_AFTER_IMPORT = 'SYNCED_AFTER_IMPORT';
     case SYNCED = 'SYNCED';

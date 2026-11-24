@@ -9,11 +9,10 @@ declare(strict_types=1);
 
 namespace OpusDNS\Client\Enum;
 
-enum MetricsGrouping: string
+enum DomainModificationPartStatus: string
 {
-    case URL = 'url';
-    case FQDN = 'fqdn';
-    case DOMAIN = 'domain';
-    case FORWARD = 'forward';
-    case RULE = 'rule';
+    case VERIFIED = 'verified';
+    case ACCEPTED = 'accepted';
+    case FAILED = 'failed';
+    case UNCONFIRMED = 'unconfirmed';
 }

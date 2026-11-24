@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace OpusDNS\Client\Enum;
 
-enum Protocol: string
+enum DomainPreRegistrationNeedsAction: string
 {
-    case HTTP = 'http';
-    case HTTPS = 'https';
+    case SIGNED_MARK_REQUIRED = 'signed_mark_required';
+    case CONFIRMATION_REQUIRED = 'confirmation_required';
 }

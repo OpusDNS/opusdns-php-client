@@ -1352,23 +1352,6 @@ components:
           type: integer
       title: BrandingDocument
       type: object
-    BrowserStatsBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-        unique:
-          title: Unique
-          type: integer
-      required:
-      - key
-      - total
-      - unique
-      title: BrowserStatsBucket
-      type: object
     BulkObjectTagChanges:
       properties:
         add:
@@ -1541,37 +1524,6 @@ components:
       - properties:
           data:
             anyOf:
-            - $ref: '#/components/schemas/DomainForwardBrowserStatsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: browser_stats_v1_domain_forwards_metrics_browser_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: browser_stats_v1_domain_forwards_metrics_browser_get
-        type: object
-      - properties:
-          data:
-            anyOf:
             - $ref: '#/components/schemas/common__models__availability__datasource__DomainAvailabilityResponse'
             - type: string
           headers:
@@ -1660,6 +1612,36 @@ components:
         - status
         - operationId
         title: cancel_domain_transfer_v1_domains__domain_reference__transfer_delete
+        type: object
+      - properties:
+          data:
+            anyOf:
+            - type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: Selected response headers
+            title: Headers
+            type: object
+          httpStatus:
+            anyOf:
+            - type: integer
+            - type: 'null'
+            description: HTTP status returned by the underlying API
+            title: Httpstatus
+          operationId:
+            const: cancel_order_v1_orders__order_id__delete
+          status:
+            const: ok
+          truncated:
+            default: false
+            description: True when the gateway capped an oversized payload
+            title: Truncated
+            type: boolean
+        required:
+        - status
+        - operationId
+        title: cancel_order_v1_orders__order_id__delete
         type: object
       - properties:
           data:
@@ -3689,37 +3671,6 @@ components:
         - status
         - operationId
         title: epp_check_domain_v1_domains_check_get
-        type: object
-      - properties:
-          data:
-            anyOf:
-            - $ref: '#/components/schemas/DomainForwardGeoStatsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: geo_stats_v1_domain_forwards_metrics_geo_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: geo_stats_v1_domain_forwards_metrics_geo_get
         type: object
       - properties:
           data:
@@ -7035,37 +6986,6 @@ components:
       - properties:
           data:
             anyOf:
-            - $ref: '#/components/schemas/DomainForwardMetricsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: metrics_v1_domain_forwards_metrics_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: metrics_v1_domain_forwards_metrics_get
-        type: object
-      - properties:
-          data:
-            anyOf:
             - $ref: '#/components/schemas/Conversation'
             - type: string
           headers:
@@ -7309,37 +7229,6 @@ components:
       - properties:
           data:
             anyOf:
-            - $ref: '#/components/schemas/DomainForwardPlatformStatsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: platform_stats_v1_domain_forwards_metrics_platform_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: platform_stats_v1_domain_forwards_metrics_platform_get
-        type: object
-      - properties:
-          data:
-            anyOf:
             - $ref: '#/components/schemas/PreviewMailRes'
             - type: string
           headers:
@@ -7460,37 +7349,6 @@ components:
         - status
         - operationId
         title: recheck_whitelabel_branding_v1_whitelabel_branding_recheck_post
-        type: object
-      - properties:
-          data:
-            anyOf:
-            - $ref: '#/components/schemas/DomainForwardReferrerStatsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: referrer_stats_v1_domain_forwards_metrics_referrer_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: referrer_stats_v1_domain_forwards_metrics_referrer_get
         type: object
       - properties:
           data:
@@ -8366,37 +8224,6 @@ components:
       - properties:
           data:
             anyOf:
-            - $ref: '#/components/schemas/DomainForwardStatusCodeStatsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: status_code_stats_v1_domain_forwards_metrics_status_code_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: status_code_stats_v1_domain_forwards_metrics_status_code_get
-        type: object
-      - properties:
-          data:
-            anyOf:
             - type: string
           headers:
             additionalProperties:
@@ -8546,37 +8373,6 @@ components:
         - status
         - operationId
         title: sync_credential_v1_connect_registrars__registrar_credential_id__sync_post
-        type: object
-      - properties:
-          data:
-            anyOf:
-            - $ref: '#/components/schemas/DomainForwardMetricsTimeSeriesResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: time_series_v1_domain_forwards_metrics_time_series_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: time_series_v1_domain_forwards_metrics_time_series_get
         type: object
       - properties:
           data:
@@ -8802,6 +8598,7 @@ components:
           data:
             anyOf:
             - $ref: '#/components/schemas/DomainResponse'
+            - $ref: '#/components/schemas/DomainUpdatePendingResponse'
             - type: string
           headers:
             additionalProperties:
@@ -9294,68 +9091,6 @@ components:
         - status
         - operationId
         title: upload_whitelabel_asset_v1_whitelabel_branding_assets_post
-        type: object
-      - properties:
-          data:
-            anyOf:
-            - $ref: '#/components/schemas/DomainForwardUserAgentStatsResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: user_agent_stats_v1_domain_forwards_metrics_user_agent_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: user_agent_stats_v1_domain_forwards_metrics_user_agent_get
-        type: object
-      - properties:
-          data:
-            anyOf:
-            - $ref: '#/components/schemas/DomainForwardVisitsByKeyResponse'
-            - type: string
-          headers:
-            additionalProperties:
-              type: string
-            description: Selected response headers
-            title: Headers
-            type: object
-          httpStatus:
-            anyOf:
-            - type: integer
-            - type: 'null'
-            description: HTTP status returned by the underlying API
-            title: Httpstatus
-          operationId:
-            const: visits_by_key_v1_domain_forwards_metrics_visits_by_key_get
-          status:
-            const: ok
-          truncated:
-            default: false
-            description: True when the gateway capped an oversized payload
-            title: Truncated
-            type: boolean
-        required:
-        - status
-        - operationId
-        title: visits_by_key_v1_domain_forwards_metrics_visits_by_key_get
         type: object
       - properties:
           data:
@@ -13345,6 +13080,9 @@ components:
       - punktum_dk_terms_acceptance
       - punktum_dk_tracking_no
       - internet_ee_registrant_agreement
+      - https_support_confirmation
+      - no_false_affiliation_confirmation
+      - registry_rights_acknowledgement
       - promotion
       - promotion_eligibility
       - domain_contact_attributes
@@ -13410,6 +13148,18 @@ components:
         domain:
           title: Domain
           type: string
+        domain_ace:
+          description: The checked name in its ASCII form.
+          examples:
+          - xn--dmin-moa0i.example
+          title: Domain Ace
+          type: string
+        domain_unicode:
+          description: The checked name in Unicode.
+          examples:
+          - "d\xF6m\xE4in.example"
+          title: Domain Unicode
+          type: string
         error:
           anyOf:
           - $ref: '#/components/schemas/DomainAvailabilityError'
@@ -13417,6 +13167,13 @@ components:
           description: 'Why the domain could not be checked: a `validation_error`
             (the name is invalid; status `unavailable`) or a `check_error` (status
             `error`). Null otherwise; a status `error` may also come without one.'
+        is_premium:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: True if the name, registered or not, is on its registry's premium
+            list; null when not known.
+          title: Is Premium
         marketplace:
           anyOf:
           - $ref: '#/components/schemas/Marketplace'
@@ -13431,29 +13188,31 @@ components:
             at present.'
       required:
       - domain
+      - domain_ace
+      - domain_unicode
       - status
       title: DomainAvailability
       type: object
     DomainAvailabilityError:
       examples:
       - code: ERROR_DOMAIN_NAME_INVALID
-        detail: "The domain name m\u03C9nchen\u0436.com is not valid."
+        detail: "The domain name d\u03C9m\xE4in\u0436.com is not valid."
         errors:
         - character: "\u03C9"
           code: ERROR_DOMAIN_CHARACTER_NOT_ALLOWED
           codepoint: U+03C9
-          detail: "\"\u03C9\" (U+03C9) is not allowed in \"m\u03C9nchen\u0436\" by\
-            \ the .com registry."
-          label: "m\u03C9nchen\u0436"
+          detail: "\"\u03C9\" (U+03C9) is not allowed in \"d\u03C9m\xE4in\u0436\"\
+            \ by the .com registry."
+          label: "d\u03C9m\xE4in\u0436"
           position: 1
         - character: "\u0436"
           code: ERROR_DOMAIN_CHARACTER_NOT_ALLOWED
           codepoint: U+0436
-          detail: "\"\u0436\" (U+0436) is not allowed in \"m\u03C9nchen\u0436\" by\
-            \ the .com registry."
-          label: "m\u03C9nchen\u0436"
-          position: 7
-        message: "The domain name m\u03C9nchen\u0436.com is not valid."
+          detail: "\"\u0436\" (U+0436) is not allowed in \"d\u03C9m\xE4in\u0436\"\
+            \ by the .com registry."
+          label: "d\u03C9m\xE4in\u0436"
+          position: 6
+        message: "The domain name d\u03C9m\xE4in\u0436.com is not valid."
         status: 400
         title: Domain Management Error
         tld: com
@@ -13533,6 +13292,8 @@ components:
     DomainAvailabilityRequest:
       properties:
         domains:
+          description: "The domain names to check. A name can be sent in Unicode (`d\xF6\
+            m\xE4in.example`) or in its ASCII form (`xn--dmin-moa0i.example`)."
           items:
             maxLength: 1024
             type: string
@@ -13714,7 +13475,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -13733,10 +13496,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           examples:
           - auto_renew_period: monthly
           title: Attributes
@@ -13774,7 +13539,10 @@ components:
           description: Expected price for premium domain confirmation
           title: Expected Price
         name:
-          description: The domain to be created
+          description: "The domain name, in Unicode (`d\xF6m\xE4in.example`) or in\
+            \ its ASCII form (`xn--dmin-moa0i.example`)."
+          examples:
+          - "d\xF6m\xE4in.example"
           title: Name
           type: string
         nameservers:
@@ -13848,7 +13616,9 @@ components:
             \ update; a `monthly` stored before that rule applied is ignored at renewal.\n\
             - `music_registrant_attestation`: `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -13867,10 +13637,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           title: Attributes
         auth_code:
           anyOf:
@@ -13967,7 +13739,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -13986,10 +13760,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           title: Attributes
         auth_code:
           anyOf:
@@ -14076,7 +13852,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -14095,10 +13873,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           examples:
           - auto_renew_period: monthly
           title: Attributes
@@ -14136,7 +13916,10 @@ components:
           description: Expected price for premium domain confirmation
           title: Expected Price
         name:
-          description: The domain to be created
+          description: "The domain name, in Unicode (`d\xF6m\xE4in.example`) or in\
+            \ its ASCII form (`xn--dmin-moa0i.example`)."
+          examples:
+          - "d\xF6m\xE4in.example"
           title: Name
           type: string
         nameservers:
@@ -14368,17 +14151,6 @@ components:
       - updated_on
       - created_on
       title: DomainForward
-      type: object
-    DomainForwardBrowserStatsResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/BrowserStatsBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardBrowserStatsResponse
       type: object
     DomainForwardCreateBulkCommand:
       properties:
@@ -14641,49 +14413,6 @@ components:
       - instances
       title: DomainForwardEnableBulkPayload
       type: object
-    DomainForwardGeoStatsResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/GeoStatsBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardGeoStatsResponse
-      type: object
-    DomainForwardMetricsResponse:
-      properties:
-        configured_forwards:
-          title: Configured Forwards
-          type: integer
-        invoked_forwards:
-          title: Invoked Forwards
-          type: integer
-        total_visits:
-          title: Total Visits
-          type: integer
-        unique_visits:
-          title: Unique Visits
-          type: integer
-      required:
-      - invoked_forwards
-      - configured_forwards
-      - total_visits
-      - unique_visits
-      title: DomainForwardMetricsResponse
-      type: object
-    DomainForwardMetricsTimeSeriesResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/TimeSeriesBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardMetricsTimeSeriesResponse
-      type: object
     DomainForwardMoverDirection:
       description: '`drop`: the domains that lost the most redirects against the previous
         period; `rise`: those that gained
@@ -14844,17 +14573,6 @@ components:
       - ops
       title: DomainForwardPatchOps
       type: object
-    DomainForwardPlatformStatsResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/PlatformStatsBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardPlatformStatsResponse
-      type: object
     DomainForwardProtocolSetRequest:
       properties:
         redirects:
@@ -14886,17 +14604,6 @@ components:
       - updated_on
       - created_on
       title: DomainForwardProtocolSetResponse
-      type: object
-    DomainForwardReferrerStatsResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/ReferrerStatsBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardReferrerStatsResponse
       type: object
     DomainForwardSetCreateRequest:
       properties:
@@ -15112,12 +14819,13 @@ components:
             too low. For `user_agent`, `referrer`, `fqdn`, `domain`, `forward` and
             `rule`, days that are over are usually read from daily top lists, in which
             a value that did not make a day's list is missing for that day; the current
-            day, and queries with a `hostname`, `domain` or `protocol` filter, are
-            counted from all requests. `url` is built from the daily top 5 lists of
-            the domain and is approximate as soon as the window includes a day that
-            is over. `browser`, `platform`, `country` and `status_code` are counted
-            exactly. Also true when a query has more distinct values than can be ranked
-            at once and the rest is left out. Always false without a breakdown
+            day, and queries with a `hostname`, `forward`, `domain` or `protocol`
+            filter, are counted from all requests. `url` is built from the daily top
+            5 lists of the domain and is approximate as soon as the window includes
+            a day that is over. `browser`, `platform`, `country` and `status_code`
+            are counted exactly. Also true when a query has more distinct values than
+            can be ranked at once and the rest is left out. Always false without a
+            breakdown
           title: Breakdown Approximate
           type: boolean
         buckets:
@@ -15196,7 +14904,8 @@ components:
             scope (your organization, and its sub-organizations with `include_sub_organizations`).
             The current state, not the state during the window: it does not depend
             on the window, and it leaves out forwards deleted since, whose traffic
-            still counts in the totals'
+            still counts in the totals. With `hostname`, only the forward configured
+            for exactly that name counts; with `forward`, the rules of those forwards'
           title: Configured Forwards
           type: integer
         invoked_forwards:
@@ -15235,17 +14944,6 @@ components:
       - invoked_forwards
       - configured_forwards
       title: DomainForwardStatisticsTotals
-      type: object
-    DomainForwardStatusCodeStatsResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/StatusCodeStatsBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardStatusCodeStatsResponse
       type: object
     DomainForwardUpdateBulkCommand:
       properties:
@@ -15335,28 +15033,6 @@ components:
       required:
       - enabled
       title: DomainForwardUpdateBulkTemplate
-      type: object
-    DomainForwardUserAgentStatsResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/UserAgentStatsBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardUserAgentStatsResponse
-      type: object
-    DomainForwardVisitsByKeyResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/VisitsByKeyBucket'
-          title: Results
-          type: array
-      required:
-      - results
-      title: DomainForwardVisitsByKeyResponse
       type: object
     DomainForwardZone:
       properties:
@@ -15636,6 +15312,64 @@ components:
       - connected_account
       title: DomainListIncludeField
       type: string
+    DomainModificationDetails:
+      description: 'The outcome of one part of an update that completed after the
+        request was answered with 202.
+
+
+        One event per part, each carrying the request id the 202 returned, so an update
+        made of several
+
+        parts reports each one without the shape changing.'
+      properties:
+        detail_type:
+          const: domain_modification
+          default: domain_modification
+          title: Detail Type
+          type: string
+        part:
+          $ref: '#/components/schemas/DomainModificationPart'
+        request_id:
+          title: Request Id
+          type: string
+      required:
+      - request_id
+      - part
+      title: DomainModificationDetails
+      type: object
+    DomainModificationPart:
+      description: 'One part of an update: the fields a single registrar call carries,
+        and how it ended.'
+      properties:
+        after:
+          $ref: '#/components/schemas/JsonValue'
+        before:
+          $ref: '#/components/schemas/JsonValue'
+        fields:
+          items:
+            type: string
+          title: Fields
+          type: array
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        status:
+          $ref: '#/components/schemas/DomainModificationPartStatus'
+      required:
+      - fields
+      - status
+      title: DomainModificationPart
+      type: object
+    DomainModificationPartStatus:
+      enum:
+      - verified
+      - accepted
+      - failed
+      - unconfirmed
+      title: DomainModificationPartStatus
+      type: string
     DomainNameParts:
       properties:
         domain:
@@ -15675,6 +15409,192 @@ components:
       - value
       - unit
       title: DomainPeriod
+      type: object
+    DomainPreRegistrationDetail:
+      description: The `domain_pre_registration` part of an item.
+      properties:
+        domain:
+          description: Domain name (ASCII form)
+          title: Domain
+          type: string
+        hold_on:
+          description: When the funds are held at the then current price; what `needs_action`
+            lists must be provided by then
+          format: date-time
+          title: Hold On
+          type: string
+        missing_confirmations:
+          description: The keys of the TLD's `legal_requirements` confirmations not
+            yet given (with `confirmation_required`), e.g. `HTTPS_SUPPORT_CONFIRMATION`
+          items:
+            type: string
+          title: Missing Confirmations
+          type: array
+        needs_action:
+          description: 'What the customer must still provide. Treat a value you do
+            not know as an open action: codes can be added.'
+          items:
+            $ref: '#/components/schemas/DomainPreRegistrationNeedsAction'
+          title: Needs Action
+          type: array
+        phase:
+          $ref: '#/components/schemas/DomainPreRegistrationPhase'
+          description: 'The launch phase the item is submitted in. Treat a value you
+            do not know as a phase: phases can be added.'
+        phase_starts_on:
+          description: When the phase opens
+          format: date-time
+          title: Phase Starts On
+          type: string
+        premium:
+          description: Whether the domain is premium; `price` is then the registry's
+            premium price
+          title: Premium
+          type: boolean
+        stage:
+          $ref: '#/components/schemas/DomainPreRegistrationPublicStage'
+          description: 'Where the pre-registration stands. Treat a value you do not
+            know as `requested`: stages can be added.'
+      required:
+      - domain
+      - phase
+      - phase_starts_on
+      - premium
+      - hold_on
+      - stage
+      - needs_action
+      - missing_confirmations
+      title: DomainPreRegistrationDetail
+      type: object
+    DomainPreRegistrationItemCreate:
+      description: 'Pre-register a domain in an upcoming TLD launch. Free until the
+        funds are held shortly before submission;
+
+        an item without its SMD file is accepted and lists it under `needs_action`.'
+      properties:
+        domain:
+          description: Domain name to pre-register (Unicode or ASCII form)
+          examples:
+          - example.web
+          title: Domain
+          type: string
+        expected_price:
+          anyOf:
+          - $ref: '#/components/schemas/StrictMoneyDecimal'
+            gt: 0
+          - type: 'null'
+          description: 'The price you expect to pay for the registration period, a
+            decimal string with two decimals, as on `POST /v1/domains`: the price
+            `GET /v1/domains/check` shows. Required for a premium name, optional otherwise;
+            a price that differs from the current one is refused with `ERROR_ORDER_PRICE_CHANGED`.
+            The item is only submitted at this price: if the registry changes it before
+            the funds are held, the item waits for you to confirm the new one.'
+        phase:
+          $ref: '#/components/schemas/DomainPreRegistrationPhase'
+          description: 'The launch phase to submit in: one of the TLD''s `launch_phases.phases[].type`
+            or `general_availability`. A phase may already be open (it is then submitted
+            once complete); general availability only until it begins.'
+          examples:
+          - sunrise
+        registration:
+          $ref: '#/components/schemas/DomainPreRegistrationRegistration'
+          description: The registration submitted in the phase
+        signed_mark:
+          anyOf:
+          - maxLength: 65536
+            type: string
+          - type: 'null'
+          description: The SMD file from the Trademark Clearinghouse (the whole file
+            or its base64 block). Required before a phase with `smd_required` is submitted.
+          title: Signed Mark
+        type:
+          const: domain_pre_registration
+          description: Item type
+          title: Type
+          type: string
+      required:
+      - type
+      - domain
+      - phase
+      - registration
+      title: DomainPreRegistrationItemCreate
+      type: object
+    DomainPreRegistrationNeedsAction:
+      enum:
+      - signed_mark_required
+      - confirmation_required
+      title: DomainPreRegistrationNeedsAction
+      type: string
+    DomainPreRegistrationPhase:
+      description: A spec's launch phase types, plus general availability, which a
+        spec keeps as its own block.
+      enum:
+      - sunrise
+      - landrush
+      - eap
+      - limited_registration
+      - general_availability
+      title: DomainPreRegistrationPhase
+      type: string
+    DomainPreRegistrationPublicStage:
+      enum:
+      - requested
+      - needs_action
+      - held
+      - submitting
+      - registered
+      - failed
+      - canceled
+      title: DomainPreRegistrationPublicStage
+      type: string
+    DomainPreRegistrationRegistration:
+      description: 'The `POST /v1/domains` fields a pre-registration submits. The
+        auth code is generated, the price is confirmed
+
+        through `expected_price`, and a claims notice is accepted later.'
+      properties:
+        attributes:
+          anyOf:
+          - additionalProperties:
+              type: string
+            propertyNames:
+              $ref: '#/components/schemas/DomainAttributeKey'
+            type: object
+          - type: 'null'
+          description: Additional attributes of the domain, as on `POST /v1/domains`.
+            Carries the confirmations the TLD's `legal_requirements` ask for, e.g.
+            `https_support_confirmation` = `true` for `.web`.
+          title: Attributes
+        contacts:
+          anyOf:
+          - $ref: '#/components/schemas/DomainContactHandles'
+          - $ref: '#/components/schemas/ContactIdList'
+          description: The contacts of the domain
+          title: Contacts
+        create_zone:
+          default: false
+          description: Create a zone for the domain on OpusDNS nameserver infrastructure
+          title: Create Zone
+          type: boolean
+        nameservers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Nameserver'
+            type: array
+          - type: 'null'
+          description: The name servers for the domain
+          title: Nameservers
+        period:
+          $ref: '#/components/schemas/DomainPeriod'
+          description: The registration period of the domain
+        renewal_mode:
+          $ref: '#/components/schemas/RenewalMode'
+          description: The renewal mode of the domain
+      required:
+      - contacts
+      - period
+      - renewal_mode
+      title: DomainPreRegistrationRegistration
       type: object
     DomainRecommendationsContext:
       properties:
@@ -16076,6 +15996,20 @@ components:
           - example.com
           title: Name
           type: string
+        name_ace:
+          description: The domain name in its ASCII form.
+          examples:
+          - xn--dmin-moa0i.example
+          readOnly: true
+          title: Name Ace
+          type: string
+        name_unicode:
+          description: The domain name in Unicode.
+          examples:
+          - "d\xF6m\xE4in.example"
+          readOnly: true
+          title: Name Unicode
+          type: string
         nameservers:
           description: The nameservers of the domain
           items:
@@ -16115,9 +16049,11 @@ components:
           default: false
           description: "Whether the domain is read-only in OpusDNS. When `true`, the\
             \ domain is listed in your portfolio but cannot be managed \u2014 for\
-            \ example while it awaits a migration, is locked for legal reasons, or\
-            \ is managed at an external registrar. The flag is set and removed by\
-            \ OpusDNS; it cannot be changed through the API."
+            \ example while it awaits a migration or is locked for legal reasons.\
+            \ A domain held at another registrar is normally not read-only, but only\
+            \ the changes that OpusDNS can forward to that registrar are accepted.\
+            \ The flag is set and removed by OpusDNS; it cannot be changed through\
+            \ the API."
           title: Read Only
           type: boolean
         registered_on:
@@ -16237,6 +16173,8 @@ components:
       - sld
       - tld
       - roid
+      - name_ace
+      - name_unicode
       title: DomainResponse
       type: object
     DomainRestoreRequest:
@@ -16900,7 +16838,9 @@ components:
             \ update; a `monthly` stored before that rule applied is ignored at renewal.\n\
             - `music_registrant_attestation`: `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -16919,10 +16859,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           title: Attributes
         auth_code:
           anyOf:
@@ -17022,7 +16964,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17041,10 +16985,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           title: Attributes
         contacts:
           $ref: '#/components/schemas/DomainContactHandles'
@@ -17125,7 +17071,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17144,10 +17092,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           examples:
           - auto_renew_period: monthly
           title: Attributes
@@ -17180,7 +17130,10 @@ components:
           description: Expected price for premium domain confirmation
           title: Expected Price
         name:
-          description: The domain to be created
+          description: "The domain name, in Unicode (`d\xF6m\xE4in.example`) or in\
+            \ its ASCII form (`xn--dmin-moa0i.example`)."
+          examples:
+          - "d\xF6m\xE4in.example"
           title: Name
           type: string
         nameservers:
@@ -17230,7 +17183,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17249,10 +17204,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           examples:
           - auto_renew_period: monthly
           title: Attributes
@@ -17285,7 +17242,10 @@ components:
           description: Expected price for premium domain confirmation
           title: Expected Price
         name:
-          description: The domain to be created
+          description: "The domain name, in Unicode (`d\xF6m\xE4in.example`) or in\
+            \ its ASCII form (`xn--dmin-moa0i.example`)."
+          examples:
+          - "d\xF6m\xE4in.example"
           title: Name
           type: string
         nameservers:
@@ -17380,7 +17340,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17399,10 +17361,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           examples:
           - auto_renew_period: monthly
           title: Attributes
@@ -17504,7 +17468,9 @@ components:
             \ update; a `monthly` stored before that rule applied is ignored at renewal.\n\
             - `music_registrant_attestation`: `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17523,10 +17489,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           title: Attributes
         auth_code:
           anyOf:
@@ -17624,7 +17592,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17643,10 +17613,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           title: Attributes
         contacts:
           anyOf:
@@ -17731,7 +17703,9 @@ components:
             \ before that rule applied is ignored at renewal.\n- `music_registrant_attestation`:\
             \ `true`. `.music` registration.\n- `nic_it_compliance_confirmation`:\
             \ `true`. `.it` registration and transfer.\n- `travel_industry_acknowledgement`:\
-            \ `true`. `.travel` registration.\n- `internet_ee_registrant_agreement`:\
+            \ `true`. `.travel` registration.\n- `https_support_confirmation`, `no_false_affiliation_confirmation`,\
+            \ `registry_rights_acknowledgement`: `true`.\n  Registration on TLDs whose\
+            \ specification requires them, e.g. `.web`.\n- `internet_ee_registrant_agreement`:\
             \ `true`. `.ee` registration and registrant change.\n- `punktum_dk_terms_acceptance`:\
             \ `true`. `.dk` registration and registrant change.\n- `de_general_request_contact`,\
             \ `de_abuse_contact`: id of a contact whose `.de` attribute set has `DE_CONTACT_TYPE`\
@@ -17750,10 +17724,12 @@ components:
             \ and `yearly`. `.dk` also reads\n`punktum_dk_terms_acceptance` to confirm\
             \ a registrant change. An update cannot change what the registrant accepted\
             \ at\nregistration, so these are rejected on update: `music_registrant_attestation`,\
-            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`\
-            \ and the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance`\
-            \ and\n`internet_ee_registrant_agreement` stay settable for a registrant\
-            \ change but cannot be removed with an empty value.\n"
+            \ `nic_it_compliance_confirmation`,\n`travel_industry_acknowledgement`,\
+            \ `https_support_confirmation`, `no_false_affiliation_confirmation`,\n\
+            `registry_rights_acknowledgement` and the three `nor_id_applicant_*` keys.\
+            \ `punktum_dk_terms_acceptance` and\n`internet_ee_registrant_agreement`\
+            \ stay settable for a registrant change but cannot be removed with an\
+            \ empty value.\n"
           examples:
           - auto_renew_period: monthly
           title: Attributes
@@ -17810,6 +17786,29 @@ components:
       required:
       - domain_id
       title: DomainUpdatePayloadData
+      type: object
+    DomainUpdatePendingResponse:
+      properties:
+        name:
+          description: The domain name the update was requested for
+          title: Name
+          type: string
+        request_id:
+          description: Identifier of this update, carried by its outcome events
+          title: Request Id
+          type: string
+        status:
+          const: update_pending
+          default: update_pending
+          description: The registrar holding the domain has taken the update and is
+            still completing it. The outcome is reported as domain events carrying
+            `request_id`.
+          title: Status
+          type: string
+      required:
+      - name
+      - request_id
+      title: DomainUpdatePendingResponse
       type: object
     DomainUpdateWorkerPayload:
       properties:
@@ -19175,6 +19174,7 @@ components:
           anyOf:
           - discriminator:
               mapping:
+                domain_modification: '#/components/schemas/DomainModificationDetails'
                 domain_renewal: '#/components/schemas/DomainRenewalDetails'
                 domain_verification: '#/components/schemas/DomainVerificationDetails'
                 registrant_change: '#/components/schemas/RegistrantChangeDetails'
@@ -19183,6 +19183,7 @@ components:
             - $ref: '#/components/schemas/DomainRenewalDetails'
             - $ref: '#/components/schemas/DomainVerificationDetails'
             - $ref: '#/components/schemas/RegistrantChangeDetails'
+            - $ref: '#/components/schemas/DomainModificationDetails'
           - type: 'null'
           title: Details
         error:
@@ -19219,6 +19220,7 @@ components:
       - HOST
       - ACCOUNT
       - VANITY_NS_SET
+      - ORDER
       - RAW
       - DRAINED
       - UNKNOWN
@@ -19310,6 +19312,7 @@ components:
       - VANITY_NS_TERMINATION
       - CLONE
       - REGISTRANT_CHANGE
+      - MARKETPLACE_DOMAIN_PURCHASE
       title: EventType
       type: string
     EventVersion:
@@ -19361,19 +19364,6 @@ components:
       required:
       - start_date
       title: GeneralAvailabilityBase
-      type: object
-    GeoStatsBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-      required:
-      - key
-      - total
-      title: GeoStatsBucket
       type: object
     GetPricesResponse:
       properties:
@@ -20677,6 +20667,13 @@ components:
           - type: 'null'
           description: Start date of the phase
           title: Start Date
+        submit_mode:
+          anyOf:
+          - $ref: '#/components/schemas/LaunchPhaseSubmitMode'
+          - type: 'null'
+          description: 'How pre-registrations are submitted: `at_open` at the phase
+            start in first-come, first-served order, `on_demand` as soon as each one
+            is complete and the phase is open'
         supported:
           description: Whether this phase is supported
           title: Supported
@@ -20689,11 +20686,18 @@ components:
       - supported
       title: LaunchPhaseBase
       type: object
+    LaunchPhaseSubmitMode:
+      enum:
+      - at_open
+      - on_demand
+      title: LaunchPhaseSubmitMode
+      type: string
     LaunchPhaseType:
       enum:
       - sunrise
       - landrush
       - eap
+      - limited_registration
       title: LaunchPhaseType
       type: string
     LaunchPhasesBase:
@@ -21079,17 +21083,6 @@ components:
       - expected_price
       title: MarketplaceDomainPurchaseItemCreate
       type: object
-    MarketplaceDomainPurchasePublicReason:
-      description: What an API caller sees of why an item is not going as planned;
-        the meanings are in docs/api/orders.md.
-      enum:
-      - price_changed
-      - unavailable
-      - canceled_by_marketplace
-      - failed
-      - delayed
-      title: MarketplaceDomainPurchasePublicReason
-      type: string
     MarketplaceDomainPurchasePublicStage:
       description: What an API caller sees of an item's progress.
       enum:
@@ -21307,15 +21300,6 @@ components:
       - system
       - tool
       title: MessageRole
-      type: string
-    MetricsGrouping:
-      enum:
-      - url
-      - fqdn
-      - domain
-      - forward
-      - rule
-      title: MetricsGrouping
       type: string
     MonikerCredentialCreate:
       properties:
@@ -21676,6 +21660,7 @@ components:
       - CREATED
       - UPDATED
       - DELETED
+      - CANCELED
       - IMPORTED
       - SYNCED_AFTER_IMPORT
       - SYNCED
@@ -22019,7 +22004,9 @@ components:
         items:
           description: Items to order (one for now)
           items:
-            $ref: '#/components/schemas/MarketplaceDomainPurchaseItemCreate'
+            oneOf:
+            - $ref: '#/components/schemas/MarketplaceDomainPurchaseItemCreate'
+            - $ref: '#/components/schemas/DomainPreRegistrationItemCreate'
           maxItems: 1
           minItems: 1
           title: Items
@@ -22045,6 +22032,13 @@ components:
       - ERROR_ORDER_DELIVERY_NOT_AVAILABLE
       - ERROR_ORDER_DELIVERY_UNREADABLE
       - ERROR_ORDER_UNREADABLE
+      - ERROR_PRE_REGISTRATIONS_FEATURE_DISABLED
+      - ERROR_ORDER_PHASE_NOT_AVAILABLE
+      - ERROR_ORDER_PREMIUM_PRICE_REQUIRED
+      - ERROR_ORDER_PREMIUM_PERIOD_NOT_SUPPORTED
+      - ERROR_ORDER_CONFIRMATIONS_REQUIRED
+      - ERROR_ORDER_ITEM_BUSY
+      - ERROR_ORDER_NOT_CANCELABLE
       title: OrderErrorCodes
       type: string
     OrderItemDeliveryResponse:
@@ -22065,6 +22059,18 @@ components:
       - type
       title: OrderItemDeliveryResponse
       type: object
+    OrderItemReason:
+      description: What an API caller sees of why an item is not going as planned;
+        the meanings are in docs/api/orders.md.
+      enum:
+      - price_changed
+      - unavailable
+      - canceled_by_marketplace
+      - canceled_by_customer
+      - failed
+      - delayed
+      title: OrderItemReason
+      type: string
     OrderItemResponse:
       description: The fields every item type has, plus one optional object named
         after `type`. A new type adds one field.
@@ -22077,6 +22083,11 @@ components:
             returns what the item delivers now
           title: Delivery Available
           type: boolean
+        domain_pre_registration:
+          anyOf:
+          - $ref: '#/components/schemas/DomainPreRegistrationDetail'
+          - type: 'null'
+          description: Set when `type` is `domain_pre_registration`
         item_id:
           examples:
           - order_item_01h45ytscbebyvny4gc8cr8ma2
@@ -22095,12 +22106,13 @@ components:
           description: Price of the item, a decimal string with two decimals
         reason:
           anyOf:
-          - $ref: '#/components/schemas/MarketplaceDomainPurchasePublicReason'
+          - $ref: '#/components/schemas/OrderItemReason'
           - type: 'null'
-          description: 'Why the item was canceled or failed, or that an open item
-            is slow. Null while the item is on track, or when no problem is known.
-            Treat a value you do not know as `failed` on a final item and as `delayed`
-            on an open one: reasons can be added.'
+          description: 'Why the item was canceled or failed (`canceled_by_customer`
+            after `DELETE /v1/orders/{order_id}`), or that an open item is slow. Null
+            while the item is on track, or when no problem is known. Treat a value
+            you do not know as `failed` on a final item and as `delayed` on an open
+            one: reasons can be added.'
         status:
           $ref: '#/components/schemas/OrderStatus'
           description: '`pending` and `in_progress` are open, the others are final.
@@ -22120,6 +22132,7 @@ components:
     OrderItemType:
       enum:
       - marketplace_domain_purchase
+      - domain_pre_registration
       title: OrderItemType
       type: string
     OrderResponse:
@@ -24259,23 +24272,6 @@ components:
       - d
       title: PeriodUnit
       type: string
-    PlatformStatsBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-        unique:
-          title: Unique
-          type: integer
-      required:
-      - key
-      - total
-      - unique
-      title: PlatformStatsBucket
-      type: object
     PostTransferRequirements:
       enum:
       - update_contacts
@@ -24538,12 +24534,6 @@ components:
       - product_name
       title: ProductCreateRes
       type: object
-    Protocol:
-      enum:
-      - http
-      - https
-      title: Protocol
-      type: string
     PublicAuthRequestForm:
       properties:
         client_id:
@@ -24849,23 +24839,6 @@ components:
       - 308
       title: RedirectCode
       type: integer
-    ReferrerStatsBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-        unique:
-          title: Unique
-          type: integer
-      required:
-      - key
-      - total
-      - unique
-      title: ReferrerStatsBucket
-      type: object
     RegistrantChangeConfirmationMethod:
       enum:
       - designated_agent
@@ -25940,19 +25913,6 @@ components:
           type: array
       title: StatusChanges
       type: object
-    StatusCodeStatsBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-      required:
-      - key
-      - total
-      title: StatusCodeStatsBucket
-      type: object
     StatusTagResponse:
       properties:
         color:
@@ -26575,29 +26535,6 @@ components:
           - type: 'null'
           title: Radius
       title: Theme
-      type: object
-    TimeRange:
-      enum:
-      - 1h
-      - 1d
-      - 7d
-      - 30d
-      - 1y
-      title: TimeRange
-      type: string
-    TimeSeriesBucket:
-      properties:
-        timestamp:
-          format: date-time
-          title: Timestamp
-          type: string
-        total:
-          title: Total
-          type: integer
-      required:
-      - timestamp
-      - total
-      title: TimeSeriesBucket
       type: object
     TldBase:
       properties:
@@ -27341,23 +27278,6 @@ components:
       - email
       - locale
       title: User
-      type: object
-    UserAgentStatsBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-        unique:
-          title: Unique
-          type: integer
-      required:
-      - key
-      - total
-      - unique
-      title: UserAgentStatsBucket
       type: object
     UserAgreementAcceptance:
       properties:
@@ -28535,23 +28455,6 @@ components:
       - email
       title: VerificationType
       type: string
-    VisitsByKeyBucket:
-      properties:
-        key:
-          title: Key
-          type: string
-        total:
-          title: Total
-          type: integer
-        unique:
-          title: Unique
-          type: integer
-      required:
-      - key
-      - total
-      - unique
-      title: VisitsByKeyBucket
-      type: object
     WaitlistApplyRequest:
       description: What you say when applying for a product.
       properties:
@@ -29853,6 +29756,20 @@ components:
           - example.com
           title: Domain
           type: string
+        domain_ace:
+          description: The checked name in its ASCII form.
+          examples:
+          - xn--dmin-moa0i.example
+          readOnly: true
+          title: Domain Ace
+          type: string
+        domain_unicode:
+          description: The checked name in Unicode.
+          examples:
+          - "d\xF6m\xE4in.example"
+          readOnly: true
+          title: Domain Unicode
+          type: string
         error:
           anyOf:
           - $ref: '#/components/schemas/DomainAvailabilityError'
@@ -29886,6 +29803,8 @@ components:
       - domain
       - available
       - reason
+      - domain_ace
+      - domain_unicode
       title: DomainAvailabilityResponse
       type: object
   securitySchemes:
@@ -29958,7 +29877,7 @@ info:
     \n\n"
   summary: OpusDNS - your gateway to a seamless domain management experience.
   title: OpusDNS API
-  version: 2026-11-13-133452
+  version: 2026-11-24-150856
   x-logo:
     altText: OpusDNS API Reference
     url: https://d24lr4zqs1tgqh.cloudfront.net/c9505a20-5ae1-406c-b060-d392569caebf.jpg
@@ -32168,11 +32087,9 @@ paths:
         of failing the whole request.
       operationId: bulk_availability_v1_availability_get
       parameters:
-      - description: '
-
-          Specify one or more domains to check for availability.
-
-          '
+      - description: "\nSpecify one or more domains to check for availability.\n\n\
+          A name can be sent in Unicode (`d\xF6m\xE4in.example`) or in its ASCII form\n\
+          (`xn--dmin-moa0i.example`).\n"
         examples:
           list:
             summary: A list of domains
@@ -32183,11 +32100,9 @@ paths:
         name: domains
         required: true
         schema:
-          description: '
-
-            Specify one or more domains to check for availability.
-
-            '
+          description: "\nSpecify one or more domains to check for availability.\n\
+            \nA name can be sent in Unicode (`d\xF6m\xE4in.example`) or in its ASCII\
+            \ form\n(`xn--dmin-moa0i.example`).\n"
           items:
             maxLength: 1024
             type: string
@@ -32233,11 +32148,9 @@ paths:
         until the `done` event is received.
       operationId: stream_availability_v1_availability_stream_get
       parameters:
-      - description: '
-
-          Specify one or more domains to check for availability.
-
-          '
+      - description: "\nSpecify one or more domains to check for availability.\n\n\
+          A name can be sent in Unicode (`d\xF6m\xE4in.example`) or in its ASCII form\n\
+          (`xn--dmin-moa0i.example`).\n"
         examples:
           list:
             summary: A list of domains
@@ -32248,11 +32161,9 @@ paths:
         name: domains
         required: true
         schema:
-          description: '
-
-            Specify one or more domains to check for availability.
-
-            '
+          description: "\nSpecify one or more domains to check for availability.\n\
+            \nA name can be sent in Unicode (`d\xF6m\xE4in.example`) or in its ASCII\
+            \ form\n(`xn--dmin-moa0i.example`).\n"
           items:
             maxLength: 1024
             type: string
@@ -32268,30 +32179,39 @@ paths:
                 Data:
                   description: One event per domain, in the order the results arrive
                   summary: Availability data
-                  value: 'data: {"domain":"opusdns.com","status":"unavailable","error":null,"marketplace":null}'
+                  value: 'data: {"domain":"opusdns.com","domain_ace":"opusdns.com","domain_unicode":"opusdns.com","status":"unavailable","error":null,"marketplace":null,"is_premium":null}'
                 Event:
                   description: Sent last, after every domain's result
                   summary: Event
                   value: 'event: done'
+                IDN:
+                  description: '`domain_ace` and `domain_unicode` show the checked
+                    name in both forms'
+                  summary: Internationalized domain
+                  value: "data: {\"domain\":\"d\xF6m\xE4in.example\",\"domain_ace\"\
+                    :\"xn--dmin-moa0i.example\",\"domain_unicode\":\"d\xF6m\xE4in.example\"\
+                    ,\"status\":\"available\",\"error\":null,\"marketplace\":null,\"\
+                    is_premium\":null}"
                 Invalid:
                   description: An invalid domain is reported as unavailable, with
                     the problems in `error`
                   summary: Invalid domain
-                  value: "data: {\"domain\":\"m\u03C9nchen\u0436.com\",\"status\"\
-                    :\"unavailable\",\"error\":{\"type\":\"validation_error\",\"message\"\
-                    :\"The domain name m\u03C9nchen\u0436.com is not valid.\",\"code\"\
-                    :\"ERROR_DOMAIN_NAME_INVALID\",\"detail\":\"The domain name m\u03C9\
-                    nchen\u0436.com is not valid.\",\"tld\":\"com\",\"errors\":[{\"\
-                    code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\",\"detail\":\"\\\"\
-                    \u03C9\\\" (U+03C9) is not allowed in \\\"m\u03C9nchen\u0436\\\
-                    \" by the .com registry.\",\"label\":\"m\u03C9nchen\u0436\",\"\
-                    character\":\"\u03C9\",\"codepoint\":\"U+03C9\",\"position\":1},{\"\
-                    code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\",\"detail\":\"\\\"\
-                    \u0436\\\" (U+0436) is not allowed in \\\"m\u03C9nchen\u0436\\\
-                    \" by the .com registry.\",\"label\":\"m\u03C9nchen\u0436\",\"\
-                    character\":\"\u0436\",\"codepoint\":\"U+0436\",\"position\":7}],\"\
-                    title\":\"Domain Management Error\",\"status\":400},\"marketplace\"\
-                    :null}"
+                  value: "data: {\"domain\":\"d\u03C9m\xE4in\u0436.com\",\"domain_ace\"\
+                    :\"xn--dmin-moa855b6va.com\",\"domain_unicode\":\"d\u03C9m\xE4\
+                    in\u0436.com\",\"status\":\"unavailable\",\"error\":{\"type\"\
+                    :\"validation_error\",\"message\":\"The domain name d\u03C9m\xE4\
+                    in\u0436.com is not valid.\",\"code\":\"ERROR_DOMAIN_NAME_INVALID\"\
+                    ,\"detail\":\"The domain name d\u03C9m\xE4in\u0436.com is not\
+                    \ valid.\",\"tld\":\"com\",\"errors\":[{\"code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\"\
+                    ,\"detail\":\"\\\"\u03C9\\\" (U+03C9) is not allowed in \\\"d\u03C9\
+                    m\xE4in\u0436\\\" by the .com registry.\",\"label\":\"d\u03C9\
+                    m\xE4in\u0436\",\"character\":\"\u03C9\",\"codepoint\":\"U+03C9\"\
+                    ,\"position\":1},{\"code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\"\
+                    ,\"detail\":\"\\\"\u0436\\\" (U+0436) is not allowed in \\\"d\u03C9\
+                    m\xE4in\u0436\\\" by the .com registry.\",\"label\":\"d\u03C9\
+                    m\xE4in\u0436\",\"character\":\"\u0436\",\"codepoint\":\"U+0436\"\
+                    ,\"position\":6}],\"title\":\"Domain Management Error\",\"status\"\
+                    :400},\"marketplace\":null,\"is_premium\":null}"
               schema:
                 type: string
           description: Successful Response
@@ -32346,30 +32266,39 @@ paths:
                 Data:
                   description: One event per domain, in the order the results arrive
                   summary: Availability data
-                  value: 'data: {"domain":"opusdns.com","status":"unavailable","error":null,"marketplace":null}'
+                  value: 'data: {"domain":"opusdns.com","domain_ace":"opusdns.com","domain_unicode":"opusdns.com","status":"unavailable","error":null,"marketplace":null,"is_premium":null}'
                 Event:
                   description: Sent last, after every domain's result
                   summary: Event
                   value: 'event: done'
+                IDN:
+                  description: '`domain_ace` and `domain_unicode` show the checked
+                    name in both forms'
+                  summary: Internationalized domain
+                  value: "data: {\"domain\":\"d\xF6m\xE4in.example\",\"domain_ace\"\
+                    :\"xn--dmin-moa0i.example\",\"domain_unicode\":\"d\xF6m\xE4in.example\"\
+                    ,\"status\":\"available\",\"error\":null,\"marketplace\":null,\"\
+                    is_premium\":null}"
                 Invalid:
                   description: An invalid domain is reported as unavailable, with
                     the problems in `error`
                   summary: Invalid domain
-                  value: "data: {\"domain\":\"m\u03C9nchen\u0436.com\",\"status\"\
-                    :\"unavailable\",\"error\":{\"type\":\"validation_error\",\"message\"\
-                    :\"The domain name m\u03C9nchen\u0436.com is not valid.\",\"code\"\
-                    :\"ERROR_DOMAIN_NAME_INVALID\",\"detail\":\"The domain name m\u03C9\
-                    nchen\u0436.com is not valid.\",\"tld\":\"com\",\"errors\":[{\"\
-                    code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\",\"detail\":\"\\\"\
-                    \u03C9\\\" (U+03C9) is not allowed in \\\"m\u03C9nchen\u0436\\\
-                    \" by the .com registry.\",\"label\":\"m\u03C9nchen\u0436\",\"\
-                    character\":\"\u03C9\",\"codepoint\":\"U+03C9\",\"position\":1},{\"\
-                    code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\",\"detail\":\"\\\"\
-                    \u0436\\\" (U+0436) is not allowed in \\\"m\u03C9nchen\u0436\\\
-                    \" by the .com registry.\",\"label\":\"m\u03C9nchen\u0436\",\"\
-                    character\":\"\u0436\",\"codepoint\":\"U+0436\",\"position\":7}],\"\
-                    title\":\"Domain Management Error\",\"status\":400},\"marketplace\"\
-                    :null}"
+                  value: "data: {\"domain\":\"d\u03C9m\xE4in\u0436.com\",\"domain_ace\"\
+                    :\"xn--dmin-moa855b6va.com\",\"domain_unicode\":\"d\u03C9m\xE4\
+                    in\u0436.com\",\"status\":\"unavailable\",\"error\":{\"type\"\
+                    :\"validation_error\",\"message\":\"The domain name d\u03C9m\xE4\
+                    in\u0436.com is not valid.\",\"code\":\"ERROR_DOMAIN_NAME_INVALID\"\
+                    ,\"detail\":\"The domain name d\u03C9m\xE4in\u0436.com is not\
+                    \ valid.\",\"tld\":\"com\",\"errors\":[{\"code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\"\
+                    ,\"detail\":\"\\\"\u03C9\\\" (U+03C9) is not allowed in \\\"d\u03C9\
+                    m\xE4in\u0436\\\" by the .com registry.\",\"label\":\"d\u03C9\
+                    m\xE4in\u0436\",\"character\":\"\u03C9\",\"codepoint\":\"U+03C9\"\
+                    ,\"position\":1},{\"code\":\"ERROR_DOMAIN_CHARACTER_NOT_ALLOWED\"\
+                    ,\"detail\":\"\\\"\u0436\\\" (U+0436) is not allowed in \\\"d\u03C9\
+                    m\xE4in\u0436\\\" by the .com registry.\",\"label\":\"d\u03C9\
+                    m\xE4in\u0436\",\"character\":\"\u0436\",\"codepoint\":\"U+0436\"\
+                    ,\"position\":6}],\"title\":\"Domain Management Error\",\"status\"\
+                    :400},\"marketplace\":null,\"is_premium\":null}"
               schema:
                 type: string
           description: Successful Response
@@ -38249,1415 +38178,11 @@ paths:
       - domain_forward
       x-required-permissions:
       - domain_forwards:manage
-  /v1/domain-forwards/metrics:
-    get:
-      description: Retrieves overall metrics for domain forwards including total and
-        unique visit counts.
-      operationId: metrics_v1_domain_forwards_metrics_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_metrics:
-                  description: Basic metrics showing 1 invoked forward with 1,250
-                    total visits
-                  summary: Basic metrics example
-                  value:
-                    configured_forwards: 3
-                    invoked_forwards: 1
-                    total_visits: 1250
-                    unique_visits: 847
-                comprehensive_metrics:
-                  description: Comprehensive metrics showing 5 invoked forwards with
-                    15,842 total visits
-                  summary: Comprehensive metrics example
-                  value:
-                    configured_forwards: 12
-                    invoked_forwards: 5
-                    total_visits: 15842
-                    unique_visits: 9234
-              schema:
-                $ref: '#/components/schemas/DomainForwardMetricsResponse'
-          description: Domain forward metrics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get domain forward metrics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/browser:
-    get:
-      description: Retrieves visitor traffic broken down by browser type (Chrome,
-        Safari, Firefox, etc.) with total and unique visit counts.
-      operationId: browser_stats_v1_domain_forwards_metrics_browser_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_browser_stats:
-                  description: Shows top 4 browsers with visit counts and unique visitor
-                    counts
-                  summary: Basic browser statistics
-                  value:
-                    results:
-                    - key: Chrome
-                      total: 450
-                      unique: 320
-                    - key: Safari
-                      total: 280
-                      unique: 195
-                    - key: Firefox
-                      total: 195
-                      unique: 145
-                    - key: Edge
-                      total: 145
-                      unique: 107
-                comprehensive_browser_stats:
-                  description: Shows extended browser list with detailed visitor tracking
-                  summary: Comprehensive browser statistics
-                  value:
-                    results:
-                    - key: Chrome
-                      total: 6200
-                      unique: 4125
-                    - key: Safari
-                      total: 3850
-                      unique: 2680
-                    - key: Firefox
-                      total: 2680
-                      unique: 1950
-                    - key: Edge
-                      total: 1890
-                      unique: 1375
-                    - key: Opera
-                      total: 890
-                      unique: 620
-                    - key: Samsung Internet
-                      total: 452
-                      unique: 325
-              schema:
-                $ref: '#/components/schemas/DomainForwardBrowserStatsResponse'
-          description: Browser statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get browser statistics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/geo:
-    get:
-      description: Retrieves visitor traffic broken down by geographic location (country
-        code) with visit counts.
-      operationId: geo_stats_v1_domain_forwards_metrics_geo_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_geo_stats:
-                  description: Shows visits by country for top 4 regions
-                  summary: Basic geographic statistics
-                  value:
-                    results:
-                    - key: US
-                      total: 450
-                    - key: GB
-                      total: 220
-                    - key: DE
-                      total: 180
-                    - key: FR
-                      total: 145
-                comprehensive_geo_stats:
-                  description: Shows detailed geographic distribution across 8 countries
-                  summary: Comprehensive geographic statistics
-                  value:
-                    results:
-                    - key: US
-                      total: 5800
-                    - key: GB
-                      total: 2100
-                    - key: DE
-                      total: 1850
-                    - key: FR
-                      total: 1450
-                    - key: CA
-                      total: 980
-                    - key: AU
-                      total: 750
-                    - key: JP
-                      total: 620
-                    - key: IN
-                      total: 520
-              schema:
-                $ref: '#/components/schemas/DomainForwardGeoStatsResponse'
-          description: Geographic statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get geographic statistics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/platform:
-    get:
-      description: Retrieves visitor traffic broken down by platform (Windows, Macintosh,
-        iOS, Android, Linux) with total and unique visit counts.
-      operationId: platform_stats_v1_domain_forwards_metrics_platform_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_platform_stats:
-                  description: Shows distribution of visits across desktop and mobile
-                    platforms
-                  summary: Basic platform statistics
-                  value:
-                    results:
-                    - key: Windows
-                      total: 520
-                      unique: 380
-                    - key: Macintosh
-                      total: 350
-                      unique: 245
-                    - key: iOS
-                      total: 280
-                      unique: 200
-                    - key: Android
-                      total: 100
-                      unique: 75
-                comprehensive_platform_stats:
-                  description: Shows detailed platform breakdown including Linux and
-                    other systems
-                  summary: Comprehensive platform statistics
-                  value:
-                    results:
-                    - key: Windows
-                      total: 7200
-                      unique: 5100
-                    - key: Macintosh
-                      total: 4800
-                      unique: 3400
-                    - key: iOS
-                      total: 2100
-                      unique: 1500
-                    - key: Android
-                      total: 1250
-                      unique: 900
-                    - key: Linux
-                      total: 492
-                      unique: 350
-              schema:
-                $ref: '#/components/schemas/DomainForwardPlatformStatsResponse'
-          description: Platform statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get platform statistics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/referrer:
-    get:
-      description: Retrieves visitor referral sources (where traffic came from) with
-        total and unique visit counts.
-      operationId: referrer_stats_v1_domain_forwards_metrics_referrer_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_referrer_stats:
-                  description: Shows top referral sources directing traffic to forwards
-                  summary: Basic referrer statistics
-                  value:
-                    results:
-                    - key: https://google.com
-                      total: 450
-                      unique: 325
-                    - key: https://twitter.com
-                      total: 280
-                      unique: 195
-                    - key: direct
-                      total: 240
-                      unique: 180
-                    - key: https://reddit.com
-                      total: 95
-                      unique: 75
-                comprehensive_referrer_stats:
-                  description: Shows extended list of referral sources including unique
-                    visitor counts
-                  summary: Comprehensive referrer statistics
-                  value:
-                    results:
-                    - key: https://google.com
-                      total: 5800
-                      unique: 4200
-                    - key: https://twitter.com
-                      total: 3200
-                      unique: 2300
-                    - key: direct
-                      total: 2900
-                      unique: 2100
-                    - key: https://reddit.com
-                      total: 1450
-                      unique: 1050
-                    - key: https://linkedin.com
-                      total: 980
-                      unique: 720
-                    - key: https://facebook.com
-                      total: 512
-                      unique: 380
-              schema:
-                $ref: '#/components/schemas/DomainForwardReferrerStatsResponse'
-          description: Referrer statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get referrer statistics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/status-code:
-    get:
-      description: Retrieves distribution of HTTP redirect status codes (301, 302,
-        307, 308) used across forwards.
-      operationId: status_code_stats_v1_domain_forwards_metrics_status_code_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_status_code_stats:
-                  description: Shows distribution of HTTP redirect status codes (301,
-                    302, 307, 308)
-                  summary: Basic status code statistics
-                  value:
-                    results:
-                    - key: '301'
-                      total: 520
-                    - key: '302'
-                      total: 430
-                    - key: '307'
-                      total: 285
-                    - key: '308'
-                      total: 15
-                comprehensive_status_code_stats:
-                  description: Shows detailed redirect code usage patterns at scale
-                  summary: Comprehensive status code statistics
-                  value:
-                    results:
-                    - key: '301'
-                      total: 6800
-                    - key: '302'
-                      total: 5200
-                    - key: '307'
-                      total: 2850
-                    - key: '308'
-                      total: 992
-              schema:
-                $ref: '#/components/schemas/DomainForwardStatusCodeStatsResponse'
-          description: Status code statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get HTTP status code statistics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/time-series:
-    get:
-      description: Retrieves visit counts bucketed by time intervals (hourly, daily)
-        for the specified time range.
-      operationId: time_series_v1_domain_forwards_metrics_time_series_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                daily_time_series:
-                  description: Shows visit counts bucketed by day over a 7-day period
-                  summary: Daily time series example
-                  value:
-                    results:
-                    - timestamp: '2025-02-20T12:00:00Z'
-                      total: 2500
-                    - timestamp: '2025-02-19T12:00:00Z'
-                      total: 2350
-                    - timestamp: '2025-02-18T12:00:00Z'
-                      total: 2200
-                    - timestamp: '2025-02-17T12:00:00Z'
-                      total: 2050
-                    - timestamp: '2025-02-16T12:00:00Z'
-                      total: 1900
-                    - timestamp: '2025-02-15T12:00:00Z'
-                      total: 1750
-                    - timestamp: '2025-02-14T12:00:00Z'
-                      total: 1600
-                hourly_time_series:
-                  description: Shows visit counts bucketed by hour over a 24-hour
-                    period
-                  summary: Hourly time series example
-                  value:
-                    results:
-                    - timestamp: '2025-02-20T12:00:00Z'
-                      total: 150
-                    - timestamp: '2025-02-20T11:00:00Z'
-                      total: 140
-                    - timestamp: '2025-02-20T10:00:00Z'
-                      total: 130
-                    - timestamp: '2025-02-20T09:00:00Z'
-                      total: 120
-                    - timestamp: '2025-02-20T08:00:00Z'
-                      total: 110
-                    - timestamp: '2025-02-20T07:00:00Z'
-                      total: 100
-                    - timestamp: '2025-02-20T06:00:00Z'
-                      total: 90
-                    - timestamp: '2025-02-20T05:00:00Z'
-                      total: 80
-                    - timestamp: '2025-02-20T04:00:00Z'
-                      total: 70
-                    - timestamp: '2025-02-20T03:00:00Z'
-                      total: 60
-                    - timestamp: '2025-02-20T02:00:00Z'
-                      total: 50
-                    - timestamp: '2025-02-20T01:00:00Z'
-                      total: 40
-                    - timestamp: '2025-02-20T00:00:00Z'
-                      total: 30
-                    - timestamp: '2025-02-19T23:00:00Z'
-                      total: 20
-                    - timestamp: '2025-02-19T22:00:00Z'
-                      total: 10
-                    - timestamp: '2025-02-19T21:00:00Z'
-                      total: 0
-                    - timestamp: '2025-02-19T20:00:00Z'
-                      total: -10
-                    - timestamp: '2025-02-19T19:00:00Z'
-                      total: -20
-                    - timestamp: '2025-02-19T18:00:00Z'
-                      total: -30
-                    - timestamp: '2025-02-19T17:00:00Z'
-                      total: -40
-                    - timestamp: '2025-02-19T16:00:00Z'
-                      total: -50
-                    - timestamp: '2025-02-19T15:00:00Z'
-                      total: -60
-                    - timestamp: '2025-02-19T14:00:00Z'
-                      total: -70
-                    - timestamp: '2025-02-19T13:00:00Z'
-                      total: -80
-              schema:
-                $ref: '#/components/schemas/DomainForwardMetricsTimeSeriesResponse'
-          description: Time series metrics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get domain forward time series metrics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/user-agent:
-    get:
-      description: Retrieves visitor traffic broken down by user agent string with
-        total and unique visit counts.
-      operationId: user_agent_stats_v1_domain_forwards_metrics_user_agent_get
-      parameters:
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                basic_user_agent_stats:
-                  description: Shows top 3 user agents with visit distribution
-                  summary: Basic user agent statistics
-                  value:
-                    results:
-                    - key: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
-                      total: 320
-                      unique: 245
-                    - key: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
-                      total: 220
-                      unique: 165
-                    - key: Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X)
-                        AppleWebKit/605.1.15
-                      total: 180
-                      unique: 140
-                comprehensive_user_agent_stats:
-                  description: Shows extended user agent list with detailed metrics
-                  summary: Comprehensive user agent statistics
-                  value:
-                    results:
-                    - key: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
-                      total: 4200
-                      unique: 3100
-                    - key: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
-                      total: 2850
-                      unique: 2100
-                    - key: Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X)
-                        AppleWebKit/605.1.15
-                      total: 1850
-                      unique: 1350
-                    - key: Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36
-                      total: 920
-                      unique: 680
-              schema:
-                $ref: '#/components/schemas/DomainForwardUserAgentStatsResponse'
-          description: User agent statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get user agent statistics
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
-  /v1/domain-forwards/metrics/visits-by-key:
-    get:
-      description: Retrieves visit metrics grouped by a specified key (url, fqdn,
-        domain, forward, or rule) with total and unique visit counts.
-      operationId: visits_by_key_v1_domain_forwards_metrics_visits_by_key_get
-      parameters:
-      - description: 'Grouping key: url, fqdn, domain, forward, or rule'
-        in: query
-        name: grouping
-        required: false
-        schema:
-          $ref: '#/components/schemas/MetricsGrouping'
-          default: domain
-          description: 'Grouping key: url, fqdn, domain, forward, or rule'
-      - in: query
-        name: hostname
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Hostname
-      - in: query
-        name: domain
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-      - description: 'Filter by protocol: http or https'
-        in: query
-        name: protocol
-        required: false
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/Protocol'
-          - type: 'null'
-          description: 'Filter by protocol: http or https'
-          title: Protocol
-      - description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-        in: query
-        name: time_range
-        required: false
-        schema:
-          $ref: '#/components/schemas/TimeRange'
-          default: 1d
-          description: 'Time range: 1h, 1d, 7d, 30d, or 1y'
-      - description: 'Exclude platform values: Unknown, Bot'
-        in: query
-        name: exclude_bots
-        required: false
-        schema:
-          default: false
-          description: 'Exclude platform values: Unknown, Bot'
-          title: Exclude Bots
-          type: boolean
-      - $ref: '#/components/parameters/DatetimeFormatHeader'
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                visits_by_domain:
-                  description: Shows visit distribution when grouped by domain
-                  summary: Visits grouped by domain
-                  value:
-                    results:
-                    - key: example.com
-                      total: 1065
-                      unique: 770
-                    - key: subdomain.example.com
-                      total: 520
-                      unique: 380
-                    - key: api.example.com
-                      total: 310
-                      unique: 220
-                visits_by_forward:
-                  description: Shows visit distribution when grouped by source-to-destination
-                    forward mapping
-                  summary: Visits grouped by forward
-                  value:
-                    results:
-                    - key: example.com -> dest1.example.com
-                      total: 680
-                      unique: 480
-                    - key: subdomain.example.com -> dest2.example.com
-                      total: 520
-                      unique: 380
-                    - key: api.example.com -> api-v2.example.com
-                      total: 310
-                      unique: 220
-                visits_by_url:
-                  description: Shows visit distribution when grouped by request URL
-                  summary: Visits grouped by URL
-                  value:
-                    results:
-                    - key: example.com/
-                      total: 450
-                      unique: 320
-                    - key: example.com/about
-                      total: 280
-                      unique: 195
-                    - key: example.com/blog
-                      total: 240
-                      unique: 180
-                    - key: example.com/contact
-                      total: 95
-                      unique: 75
-              schema:
-                $ref: '#/components/schemas/DomainForwardVisitsByKeyResponse'
-          description: Visits by key statistics retrieved successfully
-        '400':
-          content:
-            application/json:
-              example:
-                detail: Cannot specify both 'hostname' and 'domain'. Use 'hostname'
-                  for exact match or 'domain' to filter by domain including all subdomains.
-          description: Invalid query parameters
-        '401':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_AUTHENTICATION
-                detail: Additional error context.
-                status: 401
-                title: Authentication Error
-                type: authentication
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_PERMISSION_DENIED
-                detail: Insufficient permissions to perform this action
-                status: 403
-                title: Permission Denied
-                type: permission-denied
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Forbidden
-        '422':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-        '503':
-          content:
-            application/problem+json:
-              example:
-                code: ERROR_DOMAIN_FORWARD_METRICS_TEMPORARILY_UNAVAILABLE
-                detail: Domain forward metrics are currently unavailable. Please try
-                  again later.
-                status: 503
-                title: Domain Forward Metrics Temporarily Unavailable
-                type: domain-forward-metrics-temporarily-unavailable
-              schema:
-                $ref: '#/components/schemas/Problem'
-          description: Service Unavailable
-      security:
-      - OAuth2PasswordBearer: []
-      - APIKeyHeader: []
-      summary: Get visits grouped by key
-      tags:
-      - domain_forward
-      x-required-permissions:
-      - domain_forwards:read
   /v1/domain-forwards/statistics:
     get:
       description: 'Counts the redirects your organization''s domain forwards served
         in a window, as totals and as a series of buckets, optionally with a top list
-        (`breakdown`). It replaces the `/metrics` routes, which will be deprecated.
+        (`breakdown`).
 
 
         The window is `start_date` to `end_date`, both days inclusive (YYYY-MM-DD,
@@ -39669,8 +38194,8 @@ paths:
         last 24 hours; give exactly one of the two pairs. The response gives the window
         as days (`start_date`, `end_date`) and as instants (`start`, `end`). Hourly
         counts are read in whole hours, so a time of day inside an hour does not cut
-        that hour, unless `hostname` or `protocol` is set: then the counts follow
-        the exact instants.
+        that hour, unless `hostname`, `forward` or `protocol` is set: then the counts
+        follow the exact instants.
 
 
         Every bucket the window touches is present, oldest first. `period_start` and
@@ -39686,18 +38211,21 @@ paths:
 
 
         Without a filter the counts cover all forwards of your organization, and with
-        `include_sub_organizations` its sub-organizations'' too. `hostname` (one forward,
-        exact) and `domain` (a domain and all its subdomains) exclude each other and
-        need view access to the zone.
+        `include_sub_organizations` its sub-organizations'' too. `forward` counts
+        the redirects of forwards as `breakdown=forward` names them, a wildcard forward
+        (`*.example.com`) included, and can be repeated to combine forwards. `hostname`
+        counts the redirects requested for one host name, whichever forward served
+        them. `domain` counts a registered domain and all its subdomains. The three
+        exclude each other and need view access to the zones they name.
 
 
         The window may start at most 35 days back at `hour`, and 25 months back at
-        `day`, `week` and `month`. With `hostname` or `protocol`, and for a top list
-        by `user_agent`, `referrer`, `fqdn`, `domain`, `forward` or `rule` with a
-        `domain` filter, it may start at most 35 days back. A window that starts earlier
-        is rejected with 400. Top lists are kept for 13 months: over a window that
-        starts earlier, the top list counts only the last 13 months, while the buckets
-        and totals reach further back.
+        `day`, `week` and `month`. With `hostname`, `forward` or `protocol`, and for
+        a top list by `user_agent`, `referrer`, `fqdn`, `domain`, `forward` or `rule`
+        with a `domain` filter, it may start at most 35 days back. A window that starts
+        earlier is rejected with 400. Top lists are kept for 13 months: over a window
+        that starts earlier, the top list counts only the last 13 months, while the
+        buckets and totals reach further back.
 
 
         `breakdown` is a list of rows, most redirects first; it is empty unless requested,
@@ -39706,21 +38234,20 @@ paths:
         redirected requests (`www.example.com/shop`, no query string). Request paths
         are kept for 13 months only as daily top lists: per domain and day, the 5
         values with the most hits, each with at least 3 hits that day. It therefore
-        needs a `domain` filter, cannot be combined with `hostname` or `protocol`,
-        and sums the daily lists, so a path that did not make a day''s list is missing
-        for that day. There is no list of URLs across all domains of an organization.
-        Asking for it without `domain`, or with `hostname` or `protocol`, is rejected
-        with 422. Country data is derived from IP addresses with GeoLite2 data created
-        by MaxMind (https://www.maxmind.com). Redirects without a referrer are grouped
-        as `direct`.
+        needs a `domain` filter, cannot be combined with `hostname`, `forward` or
+        `protocol`, and sums the daily lists, so a path that did not make a day''s
+        list is missing for that day. There is no list of URLs across all domains
+        of an organization. Asking for it without `domain`, or with `hostname`, `forward`
+        or `protocol`, is rejected with 422. Country data is derived from IP addresses
+        with GeoLite2 data created by MaxMind (https://www.maxmind.com). Redirects
+        without a referrer are grouped as `direct`.
 
 
         `unique_visits` and `invoked_forwards` are estimates (HyperLogLog), counted
         over the whole window rather than added up from the buckets, so the unique
         visits of the buckets do not add up to the total. `invoked_forwards` counts
-        distinct forwards that served a redirect; the `/metrics` route counts distinct
-        domain and path pairs, so the two are not comparable. `configured_forwards`
-        is the number of redirect rules configured now, whatever the window, so `invoked_forwards`
+        distinct forwards that served a redirect. `configured_forwards` is the number
+        of redirect rules configured now, whatever the window, so `invoked_forwards`
         can exceed it.
 
 
@@ -39728,16 +38255,20 @@ paths:
         the traffic of a deleted forward or domain, or of one moved to another organization,
         stays in the former owner''s totals, buckets and organization-wide top lists
         until retention ends, and the new owner sees only the traffic since it owns
-        the forward. `domain` and `hostname` filters work only for zones you currently
-        have.
+        the forward. `domain`, `hostname` and `forward` filters work only for zones
+        you currently have.
 
 
         The route answers 501 where statistics are not available in this environment.'
       operationId: get_domain_forward_statistics_v1_domain_forwards_statistics_get
       parameters:
-      - description: 'Only count redirects of this exact forward hostname. Excludes
-          `domain`. Reaches back 35 days only, like `protocol`: a window starting
-          earlier is rejected.'
+      - description: 'Only count redirects requested for this host name (FQDN), such
+          as `www.example.com`, whichever forward served them. To count the redirects
+          of a forward, a wildcard forward included, use `forward`. `configured_forwards`
+          then counts only the forward configured for exactly this name, so it is
+          0 for a host that a wildcard forward serves. Excludes `domain` and `forward`.
+          Reaches back 35 days only, like `protocol`: a window starting earlier is
+          rejected.'
         in: query
         name: hostname
         required: false
@@ -39745,12 +38276,17 @@ paths:
           anyOf:
           - type: string
           - type: 'null'
-          description: 'Only count redirects of this exact forward hostname. Excludes
-            `domain`. Reaches back 35 days only, like `protocol`: a window starting
-            earlier is rejected.'
+          description: 'Only count redirects requested for this host name (FQDN),
+            such as `www.example.com`, whichever forward served them. To count the
+            redirects of a forward, a wildcard forward included, use `forward`. `configured_forwards`
+            then counts only the forward configured for exactly this name, so it is
+            0 for a host that a wildcard forward serves. Excludes `domain` and `forward`.
+            Reaches back 35 days only, like `protocol`: a window starting earlier
+            is rejected.'
           title: Hostname
-      - description: Only count redirects of this domain and all its subdomains. Excludes
-          `hostname`.
+      - description: 'Only count redirects of the registered domain of this name and
+          all its subdomains: `www.example.com` counts all of `example.com`. Excludes
+          `hostname` and `forward`.'
         in: query
         name: domain
         required: false
@@ -39758,8 +38294,9 @@ paths:
           anyOf:
           - type: string
           - type: 'null'
-          description: Only count redirects of this domain and all its subdomains.
-            Excludes `hostname`.
+          description: 'Only count redirects of the registered domain of this name
+            and all its subdomains: `www.example.com` counts all of `example.com`.
+            Excludes `hostname` and `forward`.'
           title: Domain
       - description: First day of the window, inclusive (YYYY-MM-DD, UTC). Give `start_date`
           and `end_date`, or, with `granularity=hour` only, `start` and `end`.
@@ -39830,8 +38367,35 @@ paths:
           default: day
           description: Time-bucket size. Buckets start on the hour or the day (UTC);
             weeks start on Monday and months on the 1st.
+      - description: 'Only count redirects served by these forwards, named as `breakdown=forward`
+          lists them: `example.com`, `www.example.com`, or `*.example.com` for a wildcard
+          forward, which counts every host name it served. Repeat the parameter to
+          combine forwards, for example `forward=example.com&forward=*.example.com`
+          for a domain and its wildcard; at most 20. `configured_forwards` counts
+          the redirect rules of these forwards. Excludes `hostname` and `domain`.
+          Reaches back 35 days only, like `hostname`: a window starting earlier is
+          rejected.'
+        in: query
+        name: forward
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: 'Only count redirects served by these forwards, named as `breakdown=forward`
+            lists them: `example.com`, `www.example.com`, or `*.example.com` for a
+            wildcard forward, which counts every host name it served. Repeat the parameter
+            to combine forwards, for example `forward=example.com&forward=*.example.com`
+            for a domain and its wildcard; at most 20. `configured_forwards` counts
+            the redirect rules of these forwards. Excludes `hostname` and `domain`.
+            Reaches back 35 days only, like `hostname`: a window starting earlier
+            is rejected.'
+          title: Forward
       - description: 'Only count redirects requested over this protocol. Reaches back
-          35 days only, like `hostname`: a window starting earlier is rejected.'
+          35 days only, like `hostname` and `forward`: a window starting earlier is
+          rejected.'
         in: query
         name: protocol
         required: false
@@ -39840,7 +38404,8 @@ paths:
           - $ref: '#/components/schemas/HttpProtocol'
           - type: 'null'
           description: 'Only count redirects requested over this protocol. Reaches
-            back 35 days only, like `hostname`: a window starting earlier is rejected.'
+            back 35 days only, like `hostname` and `forward`: a window starting earlier
+            is rejected.'
           title: Protocol
       - description: 'Leave out bots: redirects whose platform is `Bot` or `Unknown`,
           and crawlers that their user agent names (Googlebot, Applebot, Meta''s crawlers
@@ -39876,10 +38441,10 @@ paths:
           path of the redirected requests (`www.example.com/shop`, no query string).
           Request paths are kept for 13 months only as daily top lists: per domain
           and day, the 5 values with the most hits, each with at least 3 hits that
-          day. It therefore needs a `domain` filter, cannot be combined with `hostname`
-          or `protocol`, and sums the daily lists, so a path that did not make a day''s
-          list is missing for that day. There is no list of URLs across all domains
-          of an organization.'
+          day. It therefore needs a `domain` filter, cannot be combined with `hostname`,
+          `forward` or `protocol`, and sums the daily lists, so a path that did not
+          make a day''s list is missing for that day. There is no list of URLs across
+          all domains of an organization.'
         in: query
         name: breakdown
         required: false
@@ -39895,9 +38460,9 @@ paths:
             string). Request paths are kept for 13 months only as daily top lists:
             per domain and day, the 5 values with the most hits, each with at least
             3 hits that day. It therefore needs a `domain` filter, cannot be combined
-            with `hostname` or `protocol`, and sums the daily lists, so a path that
-            did not make a day''s list is missing for that day. There is no list of
-            URLs across all domains of an organization.'
+            with `hostname`, `forward` or `protocol`, and sums the daily lists, so
+            a path that did not make a day''s list is missing for that day. There
+            is no list of URLs across all domains of an organization.'
       - description: How many items the breakdown lists.
         in: query
         name: breakdown_limit
@@ -41350,7 +39915,7 @@ paths:
             with tag_ids and the other filters.
           title: Has Tags
       - description: 'Filter by exact domain name, in Unicode or punycode: either
-          stored form matches. Only whole labels match across forms.'
+          stored form matches.'
         in: query
         name: name
         required: false
@@ -41359,11 +39924,11 @@ paths:
           - type: string
           - type: 'null'
           description: 'Filter by exact domain name, in Unicode or punycode: either
-            stored form matches. Only whole labels match across forms.'
+            stored form matches.'
           title: Name
       - description: Search domains by name (contains) or domain ID (exact match).
-          A name matches in Unicode or punycode, either stored form; only whole labels
-          match across forms.
+          A name matches in Unicode or punycode, either stored form, and accents are
+          ignored.
         in: query
         name: search
         required: false
@@ -41372,8 +39937,8 @@ paths:
           - type: string
           - type: 'null'
           description: Search domains by name (contains) or domain ID (exact match).
-            A name matches in Unicode or punycode, either stored form; only whole
-            labels match across forms.
+            A name matches in Unicode or punycode, either stored form, and accents
+            are ignored.
           title: Search
       - description: Filter by top-level domain (e.g., 'com', 'org'). Can be specified
           multiple times (union of all provided values).
@@ -41389,7 +39954,8 @@ paths:
           description: Filter by top-level domain (e.g., 'com', 'org'). Can be specified
             multiple times (union of all provided values).
           title: Tld
-      - description: Filter by second-level domain
+      - description: 'Filter by second-level domain, in Unicode or punycode: either
+          stored form matches.'
         in: query
         name: sld
         required: false
@@ -41397,7 +39963,8 @@ paths:
           anyOf:
           - type: string
           - type: 'null'
-          description: Filter by second-level domain
+          description: 'Filter by second-level domain, in Unicode or punycode: either
+            stored form matches.'
           title: Sld
       - description: Filter domains whose nameserver hostnames contain this text,
           e.g. `cloudflare` or `ns1.example.com`. Matches the nameservers the domain
@@ -41896,18 +40463,11 @@ paths:
         not cached.'
       operationId: epp_check_domain_v1_domains_check_get
       parameters:
-      - description: '
-
-          One or more fully-qualified domain names to check at the registry.
-
-
-          Each domain is checked for availability and, when applicable, enriched with
-
-          trademark claims information and premium pricing. The list of domains may
-
-          include a mix of TLDs.
-
-          '
+      - description: "\nOne or more fully-qualified domain names to check at the registry.\n\
+          \nEach domain is checked for availability and, when applicable, enriched\
+          \ with\ntrademark claims information and premium pricing. The list of domains\
+          \ may\ninclude a mix of TLDs.\n\nA name can be sent in Unicode (`d\xF6m\xE4\
+          in.example`) or in its ASCII form\n(`xn--dmin-moa0i.example`).\n"
         examples:
           list:
             summary: A list of domain names to check
@@ -41918,20 +40478,11 @@ paths:
         name: domains
         required: true
         schema:
-          description: '
-
-            One or more fully-qualified domain names to check at the registry.
-
-
-            Each domain is checked for availability and, when applicable, enriched
-            with
-
-            trademark claims information and premium pricing. The list of domains
-            may
-
-            include a mix of TLDs.
-
-            '
+          description: "\nOne or more fully-qualified domain names to check at the\
+            \ registry.\n\nEach domain is checked for availability and, when applicable,\
+            \ enriched with\ntrademark claims information and premium pricing. The\
+            \ list of domains may\ninclude a mix of TLDs.\n\nA name can be sent in\
+            \ Unicode (`d\xF6m\xE4in.example`) or in its ASCII form\n(`xn--dmin-moa0i.example`).\n"
           items:
             maxLength: 1024
             type: string
@@ -43832,7 +42383,20 @@ paths:
 
         transfer out, for example
 
-        `{"status_changes": {"remove": ["clientTransferProhibited"]}}`.'
+        `{"status_changes": {"remove": ["clientTransferProhibited"]}}`. <br>
+
+        A `read_only` domain held at another registrar is refused with 403. Otherwise
+        only its transfer
+
+        lock or its nameservers can be changed, one of the two per request; any other
+
+        field, glue records (`ip_addresses`), or both in one request are refused with
+        422 before anything is
+
+        sent to that registrar. If the registrar has not finished
+
+        the change when it answers, the response is 202 and the outcome is reported
+        as a domain event.'
       operationId: update_domain_v1_domains__domain_reference__patch
       parameters:
       - in: path
@@ -43862,6 +42426,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/DomainResponse'
           description: Successful Response
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainUpdatePendingResponse'
+          description: The domain is held at another registrar, which has taken the
+            transfer-lock or nameserver change but not finished it. Its outcome is
+            reported as a domain modification event carrying `request_id`; until then
+            a further update of the domain is refused with 409.
+        '403':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_DOMAIN_READ_ONLY
+                detail: Domain is held at an external registrar and is read only
+                domain_name: Additional error context.
+                status: 403
+                title: Domain Management Error
+                type: domain-read-only-external
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
         '404':
           content:
             application/problem+json:
@@ -43885,6 +42471,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Not Found
+        '409':
+          content:
+            application/problem+json:
+              examples:
+                Domain Management Error:
+                  value:
+                    code: ERROR_DOMAIN_TRANSFER_ON_RENEW_PENDING
+                    detail: A renewal is transferring this domain into OpusDNS; its
+                      nameservers cannot be changed until the transfer completes or
+                      fails
+                    domain_name: example.com
+                    status: 409
+                    title: Domain Management Error
+                    type: domain-transfer-on-renew-pending
+                Domain Update Pending:
+                  value:
+                    code: ERROR_DOMAIN_UPDATE_PENDING
+                    detail: An earlier update of this domain is still pending at the
+                      registry, retry once it has completed
+                    domain_name: example.com
+                    status: 409
+                    title: Domain Update Pending
+                    type: domain-update-pending
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Conflict
         '422':
           content:
             application/problem+json:
@@ -43911,9 +42523,59 @@ paths:
                     title: Domain Management Error
                     tld: lu
                     type: domain-registrant-change-not-supported
+                Registrar Credential Rejected:
+                  value:
+                    code: ERROR_REGISTRAR_CREDENTIAL_REJECTED
+                    detail: INTERNETX rejected the connected registrar credential
+                      holding the domain. Update the credential under Connected Registrars,
+                      then retry the update
+                    domain_name: example.com
+                    registrar: INTERNETX
+                    status: 422
+                    title: Registrar Credential Rejected
+                    type: domain-registrar-credential-rejected
+                Update Not Supported By Registrar:
+                  value:
+                    code: ERROR_DOMAIN_UPDATE_NOT_SUPPORTED_BY_REGISTRAR
+                    detail: The registrar holding the domain cannot change contacts
+                      through OpusDNS; nothing was sent to it
+                    domain_name: example.com
+                    status: 422
+                    title: Update Not Supported By Registrar
+                    type: domain-update-not-supported-by-registrar
+                    unsupported_fields:
+                    - contacts
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Unprocessable Content
+        '502':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_DOMAIN_REGISTRAR_UPDATE_FAILED
+                detail: 'The registrar holding the domain did not complete the update:
+                  Lock change rejected'
+                domain_name: example.com
+                status: 502
+                title: Registrar Update Failed
+                type: domain-registrar-update-failed
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Bad Gateway
+        '503':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_DOMAIN_REGISTRAR_UNAVAILABLE
+                detail: The registrar currently holding the domain is unavailable,
+                  please retry later
+                domain_name: example.com
+                status: 503
+                title: Registrar Unavailable
+                type: domain-registrar-unavailable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Service Unavailable
       security:
       - OAuth2PasswordBearer: []
       - APIKeyHeader: []
@@ -48096,21 +46758,24 @@ paths:
       x-required-permissions:
       - domains:read
     post:
-      description: 'Orders a domain listed on a marketplace. The order is accepted
-        (202) once the price and availability are confirmed; it then progresses on
-        its own, follow it with `GET /v1/orders/{order_id}`.
+      description: 'Orders a domain listed on a marketplace (`marketplace_domain_purchase`),
+        or pre-registers a domain in an upcoming TLD launch (`domain_pre_registration`).
+        The order is accepted (202) once it is checked; it then progresses on its
+        own, follow it with `GET /v1/orders/{order_id}`.
 
 
         Repeating a request with the same `idempotency_key` and body returns the original
         order with 200. The same key with a different body is refused with 409.
 
 
-        Only organizations billed in EUR can order; others are refused with 403 `ERROR_ORDER_CURRENCY_NOT_SUPPORTED`.
+        Only organizations billed in EUR can order from a marketplace; others are
+        refused with 403 `ERROR_ORDER_CURRENCY_NOT_SUPPORTED`.
 
 
-        The order''s price is reserved on the organization''s account before the order
-        is created; billing''s refusal (403 insufficient funds, 429 daily create limit)
-        creates no order.'
+        A marketplace order''s price is reserved on the organization''s account before
+        the order is created; billing''s refusal (403 insufficient funds, 429 daily
+        create limit) creates no order. A pre-registration reserves nothing when created:
+        its funds are held shortly before its launch phase opens.'
       operationId: create_order_v1_orders_post
       parameters:
       - $ref: '#/components/parameters/DatetimeFormatHeader'
@@ -48166,6 +46831,13 @@ paths:
                     status: 403
                     title: Permission Denied
                     type: permission-denied
+                Pre-Registrations Feature Disabled:
+                  value:
+                    code: ERROR_PRE_REGISTRATIONS_FEATURE_DISABLED
+                    detail: Domain pre-registrations are not enabled in this environment
+                    status: 403
+                    title: Pre-Registrations Feature Disabled
+                    type: pre-registrations-feature-disabled
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Forbidden
@@ -48205,6 +46877,15 @@ paths:
                     status: 409
                     title: Order Open Limit Reached
                     type: order-open-limit-reached
+                Order Premium Price Required:
+                  value:
+                    code: ERROR_ORDER_PREMIUM_PRICE_REQUIRED
+                    currency: USD
+                    detail: 'The domain is premium: confirm its price with expected_price'
+                    price: '500.00'
+                    status: 409
+                    title: Order Premium Price Required
+                    type: order-premium-price-required
                 Order Price Changed:
                   value:
                     actual_price: '12.50'
@@ -48228,9 +46909,40 @@ paths:
         '422':
           content:
             application/problem+json:
+              examples:
+                Order Confirmations Required:
+                  value:
+                    code: ERROR_ORDER_CONFIRMATIONS_REQUIRED
+                    detail: The 'HTTPS_SUPPORT_CONFIRMATION' attestation is required
+                      to register .web domains. Set attributes['https_support_confirmation']
+                      to 'true' to confirm.
+                    domain: example.web
+                    missing_confirmations:
+                    - HTTPS_SUPPORT_CONFIRMATION
+                    status: 422
+                    title: Order Confirmations Required
+                    type: order-confirmations-required
+                Order Phase Not Available:
+                  value:
+                    code: ERROR_ORDER_PHASE_NOT_AVAILABLE
+                    detail: 'example.web cannot be pre-registered for this phase:
+                      not offered by this TLD'
+                    domain: example.web
+                    status: 422
+                    title: Order Phase Not Available
+                    type: order-phase-not-available
+                Order Premium Period Not Supported:
+                  value:
+                    code: ERROR_ORDER_PREMIUM_PERIOD_NOT_SUPPORTED
+                    detail: 'example.web is premium: pre-register it for one year
+                      and renew it after registration'
+                    domain: example.web
+                    status: 422
+                    title: Order Premium Period Not Supported
+                    type: order-premium-period-not-supported
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
+                $ref: '#/components/schemas/Problem'
+          description: Unprocessable Content
         '500':
           content:
             application/problem+json:
@@ -48269,6 +46981,110 @@ paths:
       x-required-permissions:
       - domains:manage
   /v1/orders/{order_id}:
+    delete:
+      description: 'Cancels a `domain_pre_registration` order while its item is `requested`
+        (including `needs_action`): nothing is held for it yet, so it is canceled
+        at once. The order stays readable with status `canceled` and reason `canceled_by_customer`,
+        and the domain can be pre-registered again. Repeating the call on an order
+        canceled this way is a success.
+
+
+        Other order types and items past `requested` cannot be canceled (409 `ERROR_ORDER_NOT_CANCELABLE`).
+        409 `ERROR_ORDER_ITEM_BUSY` means the item is being processed at that moment:
+        retry after `Retry-After`.'
+      operationId: cancel_order_v1_orders__order_id__delete
+      parameters:
+      - in: path
+        name: order_id
+        required: true
+        schema:
+          examples:
+          - order_01h45ytscbebyvny4gc8cr8ma2
+          format: typeid
+          pattern: ^order_[0-7][0-9a-hjkmnpq-tv-z]{25}$
+          title: Order Id
+          type: string
+          x-typeid-prefix: order
+      - $ref: '#/components/parameters/DatetimeFormatHeader'
+      responses:
+        '204':
+          description: Successful Response
+        '403':
+          content:
+            application/problem+json:
+              examples:
+                Orders Feature Disabled:
+                  value:
+                    code: ERROR_ORDERS_FEATURE_DISABLED
+                    detail: Orders are not enabled in this environment
+                    status: 403
+                    title: Orders Feature Disabled
+                    type: orders-feature-disabled
+                Permission Denied:
+                  value:
+                    code: ERROR_PERMISSION_DENIED
+                    detail: Insufficient permissions to perform this action
+                    status: 403
+                    title: Permission Denied
+                    type: permission-denied
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Forbidden
+        '404':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_ORDER_NOT_FOUND
+                detail: Order not found
+                order_id: order_01h45ytscbebyvny4gc8cr8ma2
+                status: 404
+                title: Order Not Found
+                type: order-not-found
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Not Found
+        '409':
+          content:
+            application/problem+json:
+              examples:
+                Order Item Busy:
+                  value:
+                    code: ERROR_ORDER_ITEM_BUSY
+                    detail: The order item is being processed, please retry shortly
+                    status: 409
+                    title: Order Item Busy
+                    type: order-item-busy
+                Order Not Cancelable:
+                  value:
+                    code: ERROR_ORDER_NOT_CANCELABLE
+                    detail: Order order_01h45ytscbebyvny4gc8cr8ma2 cannot be canceled
+                      now
+                    order_id: order_01h45ytscbebyvny4gc8cr8ma2
+                    status: 409
+                    title: Order Not Cancelable
+                    type: order-not-cancelable
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Conflict
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+        '422':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - OAuth2PasswordBearer: []
+      - APIKeyHeader: []
+      summary: Cancel an order
+      tags:
+      - orders
+      x-required-permissions:
+      - domains:manage
     get:
       operationId: get_order_v1_orders__order_id__get
       parameters:
@@ -52166,6 +50982,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/Problem'
           description: Forbidden
+        '409':
+          content:
+            application/problem+json:
+              example:
+                code: ERROR_SSO_FALLBACK_ACCOUNT_PROTECTED
+                detail: A fallback account cannot be deleted while its organization
+                  enforces single sign-on
+                status: 409
+                title: SSO Error
+                type: sso-fallback-account-protected
+              schema:
+                $ref: '#/components/schemas/Problem'
+          description: Conflict
         '422':
           content:
             application/problem+json:
@@ -53980,7 +52809,8 @@ tags:
 - description: "Endpoints for ordering things on your organization's behalf, starting\
     \ with domains listed on a marketplace.\n\n### What an order is\n\nAn order is\
     \ a request to buy something, tracked until it is delivered or fails. Today an\
-    \ order has exactly one item, a domain bought on a marketplace (`marketplace_domain_purchase`).\
+    \ order has exactly one item: a domain bought on a marketplace (`marketplace_domain_purchase`)\
+    \ or a domain pre-registered in an upcoming TLD launch (`domain_pre_registration`).\
     \ Creating an order answers quickly; the purchase continues in the background,\
     \ so read the order to follow it.\n\n### Creating an order\n\n`POST /v1/orders`\n\
     \n```json\n{\n  \"idempotency_key\": \"checkout-2024-0001\",\n  \"items\": [\n\
@@ -54011,36 +52841,99 @@ tags:
     : false,\n      \"marketplace_domain_purchase\": {\n        \"domain\": \"example.com\"\
     ,\n        \"marketplace\": \"fruits\",\n        \"stage\": \"purchasing\"\n \
     \     }\n    }\n  ],\n  \"created_on\": \"2024-01-01T12:00:00Z\",\n  \"updated_on\"\
-    : \"2024-01-01T12:00:00Z\"\n}\n```\n\n### Idempotency\n\nRepeat a request with\
-    \ the same `idempotency_key` and the same body and you get `200 OK` with the original\
-    \ order, so retrying after a timeout is safe. The same key with a different body\
-    \ answers `409` (`ERROR_ORDER_IDEMPOTENCY_KEY_REUSED`). Domain names are compared\
-    \ in normalized form, so `Example.COM` and `example.com` count as the same body.\
-    \ The `idempotency_key` itself is compared case-insensitively, so `Checkout-1`\
-    \ and `checkout-1` are the same key.\n\n### Reading orders\n\n`GET /v1/orders/{order_id}`\
-    \ returns one order. `GET /v1/orders` lists your orders, filtered by `status`,\
-    \ `type`, `domain`, `search`, `created_after` and `created_before`. Both time\
-    \ bounds are inclusive: an order created at exactly `created_after` or `created_before`\
-    \ is returned, so consecutive windows share their boundary instant. `domain` matches\
-    \ one domain name exactly; `search` matches orders whose domain name contains\
-    \ the text (`%` and `_` count as themselves, it never matches an order ID, and\
-    \ with `domain` both must match). A Unicode name also matches its punycode form,\
-    \ but a partial Unicode label finds nothing, because orders store the ASCII form:\
-    \ search `b\xFCcher.de`, not `b\xFCch`.\n\nThe list is sorted by `sort_by` (`created_on`,\
-    \ the default, or `updated_on`) in the direction of `sort_order` (`desc`, the\
-    \ default, or `asc`); orders with the same time are ordered by their ID in the\
-    \ same direction, so paging is stable.\n\nAn order has `total_price` and `currency`\
-    \ (both `null` for an order that cannot be shown, see below); each item has `price`\
-    \ and `currency`. Prices are decimal strings with two decimals (`\"12.10\"`).\
-    \ Each item also has a `type` and an object named after that type with its own\
-    \ fields. For `marketplace_domain_purchase` that is `marketplace_domain_purchase`\
-    \ with `domain`, `marketplace` and `stage`. Every item also has `delivery_available`\
-    \ (see Delivery). Create requests send `expected_price` the same way.\n\nOne order\
-    \ that cannot be shown (its stored data is invalid) never fails the list. The\
-    \ list returns it as a stub: `order_id`, `status`, `created_on` and `updated_on`\
-    \ are set, `items` is an empty list, and `total_price` and `currency` are `null`.\
-    \ The entries on a page always match the pagination counts, so `total_items` and\
-    \ `has_next_page` can be trusted. If an order has an empty `items` or a `null`\
+    : \"2024-01-01T12:00:00Z\"\n}\n```\n\n### Pre-registering a domain\n\nA `domain_pre_registration`\
+    \ item reserves a name in an upcoming TLD launch (for example `.web`) and submits\
+    \ its registration the moment its launch phase opens. It is only available where\
+    \ pre-registrations are enabled (`403` `ERROR_PRE_REGISTRATIONS_FEATURE_DISABLED`\
+    \ otherwise).\n\n```json\n{\n  \"idempotency_key\": \"prereg-acme-web\",\n  \"\
+    items\": [\n    {\n      \"type\": \"domain_pre_registration\",\n      \"domain\"\
+    : \"acme.web\",\n      \"phase\": \"sunrise\",\n      \"registration\": {\n  \
+    \      \"contacts\": {\"registrant\": \"contact_01h455vb4pex5vsknk084sn02q\"},\n\
+    \        \"period\": {\"unit\": \"y\", \"value\": 1},\n        \"renewal_mode\"\
+    : \"renew\",\n        \"attributes\": {\n          \"https_support_confirmation\"\
+    : \"true\",\n          \"no_false_affiliation_confirmation\": \"true\",\n    \
+    \      \"registry_rights_acknowledgement\": \"true\"\n        }\n      },\n  \
+    \    \"signed_mark\": \"Marks: Acme\\n...-----BEGIN ENCODED SMD-----\\n...\\n-----END\
+    \ ENCODED SMD-----\",\n      \"expected_price\": null\n    }\n  ]\n}\n```\n\n\
+    - `type` is required for this item type.\n- `phase` is the launch phase to submit\
+    \ in: one of the TLD's `launch_phases.phases[].type` (`GET /v1/tlds/{tld}`) or\
+    \ `general_availability`. A phase that is already open may still be chosen (the\
+    \ item is submitted once complete); general availability only until it begins.\
+    \ A phase the TLD does not offer, one not open for pre-registration yet, or one\
+    \ that is too late is refused with `422` `ERROR_ORDER_PHASE_NOT_AVAILABLE`. An\
+    \ item that fails in its phase ends there; pre-register again for a later phase.\n\
+    - `registration` carries the `POST /v1/domains` fields: contacts, period, renewal\
+    \ mode, nameservers, zone and attributes. The confirmations the TLD's `legal_requirements`\
+    \ ask for go into `attributes` and are required when the item is created, as on\
+    \ `POST /v1/domains`: a missing one is refused with `422` `ERROR_ORDER_CONFIRMATIONS_REQUIRED`,\
+    \ which lists the keys in `missing_confirmations`.\n- `signed_mark` is the SMD\
+    \ file from the Trademark Clearinghouse, needed for a phase with `smd_required`\
+    \ (Sunrise).\n- `expected_price` is the price for the registration period, as\
+    \ on `POST /v1/domains`: the price `GET /v1/domains/check` shows (the registry's\
+    \ premium price, or your list price). It is required for a premium name (`409`\
+    \ `ERROR_ORDER_PREMIUM_PRICE_REQUIRED` carries the price) and optional otherwise;\
+    \ a premium name is pre-registered for one year only (`422` `ERROR_ORDER_PREMIUM_PERIOD_NOT_SUPPORTED`),\
+    \ renew it after registration for longer; a different price is refused with `409`\
+    \ `ERROR_ORDER_PRICE_CHANGED`. The price is locked when the item is created; if\
+    \ the registry changes it before the funds are held, the item waits for you to\
+    \ confirm the new price.\n\nThe item may be incomplete: a missing SMD file is\
+    \ listed in the item's `domain_pre_registration.needs_action` (`signed_mark_required`)\
+    \ and must be provided by `hold_on`. `confirmation_required` (with the keys in\
+    \ `missing_confirmations`) only appears if the TLD adds a confirmation after the\
+    \ item was created. Creating the item checks the domain with the registry: a name\
+    \ it reports taken or reserved is refused with `409` `ERROR_ORDER_ITEM_UNAVAILABLE`.\
+    \ Nothing is reserved when the item is created: `price` shows the locked `expected_price`,\
+    \ and the funds are held at `hold_on` (24 hours before the phase opens).\n\nA\
+    \ pre-registration item reads:\n\n```json\n{\n  \"type\": \"domain_pre_registration\"\
+    ,\n  \"status\": \"pending\",\n  \"price\": \"20.00\",\n  \"currency\": \"USD\"\
+    ,\n  \"delivery_available\": false,\n  \"domain_pre_registration\": {\n    \"\
+    domain\": \"acme.web\",\n    \"phase\": \"sunrise\",\n    \"phase_starts_on\"\
+    : \"2026-12-10T00:00:00Z\",\n    \"premium\": false,\n    \"hold_on\": \"2026-12-09T00:00:00Z\"\
+    ,\n    \"stage\": \"needs_action\",\n    \"needs_action\": [\"signed_mark_required\"\
+    ],\n    \"missing_confirmations\": []\n  }\n}\n```\n\n`stage` is `requested` (the\
+    \ request is recorded, not yet executed) or `needs_action` until the funds are\
+    \ held, then `held`, `submitting` and finally `registered`, `failed` or `canceled`.\n\
+    \nEach organization may hold one open pre-registration per domain; several organizations\
+    \ may pre-register the same domain, and the first created is submitted first,\
+    \ whether or not it was complete when created. An organization may hold up to\
+    \ 10000 open pre-registrations.\n\n### Canceling a pre-registration\n\nCancel\
+    \ it with `DELETE /v1/orders/{order_id}` (`204 No Content`) while its item is\
+    \ `requested`, which includes an item that `needs_action`. Nothing is held for\
+    \ it yet, so it is canceled at once. The order stays readable with status `canceled`\
+    \ and reason `canceled_by_customer`, and your organization can pre-register the\
+    \ domain again (a new order, at the back of the queue). Repeating the call is\
+    \ a success.\n\nA marketplace order, or an item past `requested`, is refused with\
+    \ `409` `ERROR_ORDER_NOT_CANCELABLE`. `409` `ERROR_ORDER_ITEM_BUSY` with `Retry-After`\
+    \ means the item is being processed at that moment.\n\n### Idempotency\n\nRepeat\
+    \ a request with the same `idempotency_key` and the same body and you get `200\
+    \ OK` with the original order, so retrying after a timeout is safe. The same key\
+    \ with a different body answers `409` (`ERROR_ORDER_IDEMPOTENCY_KEY_REUSED`).\
+    \ Domain names are compared in normalized form, so `Example.COM` and `example.com`\
+    \ count as the same body. The `idempotency_key` itself is compared case-insensitively,\
+    \ so `Checkout-1` and `checkout-1` are the same key.\n\n### Reading orders\n\n\
+    `GET /v1/orders/{order_id}` returns one order. `GET /v1/orders` lists your orders,\
+    \ filtered by `status`, `type`, `domain`, `search`, `created_after` and `created_before`.\
+    \ Both time bounds are inclusive: an order created at exactly `created_after`\
+    \ or `created_before` is returned, so consecutive windows share their boundary\
+    \ instant. `domain` matches one domain name exactly; `search` matches orders whose\
+    \ domain name contains the text (`%` and `_` count as themselves, it never matches\
+    \ an order ID, and with `domain` both must match). A Unicode name also matches\
+    \ its punycode form, but a partial Unicode label finds nothing, because orders\
+    \ store the ASCII form: search `b\xFCcher.de`, not `b\xFCch`.\n\nThe list is sorted\
+    \ by `sort_by` (`created_on`, the default, or `updated_on`) in the direction of\
+    \ `sort_order` (`desc`, the default, or `asc`); orders with the same time are\
+    \ ordered by their ID in the same direction, so paging is stable.\n\nAn order\
+    \ has `total_price` and `currency` (both `null` for an order that cannot be shown,\
+    \ see below); each item has `price` and `currency`. Prices are decimal strings\
+    \ with two decimals (`\"12.10\"`). Each item also has a `type` and an object named\
+    \ after that type with its own fields. For `marketplace_domain_purchase` that\
+    \ is `marketplace_domain_purchase` with `domain`, `marketplace` and `stage`. Every\
+    \ item also has `delivery_available` (see Delivery). Create requests send `expected_price`\
+    \ the same way.\n\nOne order that cannot be shown (its stored data is invalid)\
+    \ never fails the list. The list returns it as a stub: `order_id`, `status`, `created_on`\
+    \ and `updated_on` are set, `items` is an empty list, and `total_price` and `currency`\
+    \ are `null`. The entries on a page always match the pagination counts, so `total_items`\
+    \ and `has_next_page` can be trusted. If an order has an empty `items` or a `null`\
     \ `total_price`, show it as \"can't be displayed, contact support with the order\
     \ ID\". Fetching that order directly answers `500` `ERROR_ORDER_UNREADABLE` with\
     \ a generic message; contact support with the order ID.\n\n### Statuses and stages\n\
@@ -54065,7 +52958,8 @@ tags:
     \ | On | Meaning |\n| --- | --- | --- |\n| `price_changed` | `canceled` | The\
     \ marketplace price changed, so the domain was not bought |\n| `unavailable` |\
     \ `canceled` | The domain is no longer available |\n| `canceled_by_marketplace`\
-    \ | `canceled` | The marketplace canceled the purchase |\n| `failed` | `canceled`,\
+    \ | `canceled` | The marketplace canceled the purchase |\n| `canceled_by_customer`\
+    \ | `canceled` | You canceled the pre-registration |\n| `failed` | `canceled`,\
     \ `failed` | Any other failure. Nothing was taken from your account; any amount\
     \ set aside for the order is released |\n| `delayed` | `in_progress` | The item\
     \ is taking longer than usual. No action is needed from you; if it stays `delayed`,\
@@ -54092,35 +52986,67 @@ tags:
     \ a transfer at the registrar of your choice. We suggest transferring to OpusDNS\
     \ with the existing transfer API. Updating the registrant after the transfer is\
     \ up to you.\n\nA code past `auth_code_expires_on` may be rejected by the gaining\
-    \ registrar. Contact support to get a new one.\n\n### Errors\n\nErrors follow\
-    \ RFC 9457 problem details; `code` identifies the error. The `ERROR_ORDER_*` codes\
-    \ are published in the API spec as the `OrderErrorCodes` enum.\n\n| Status | Code\
-    \ | Meaning |\n| --- | --- | --- |\n| 403 | `ERROR_ORDERS_FEATURE_DISABLED` |\
-    \ Orders are not enabled in this environment |\n| 403 | `ERROR_ORDER_CURRENCY_NOT_SUPPORTED`\
+    \ registrar. Contact support to get a new one.\n\n### Events\n\nOrder progress\
+    \ also appears in the event feed: `GET /v1/events?object_type=ORDER`, and add\
+    \ `object_id=<order id>` for one order. The events have `type` `MARKETPLACE_DOMAIN_PURCHASE`.\
+    \ Listing events needs the view-events permission (`VIEW_EVENTS`); API keys need\
+    \ `events:read`.\n\n| Subtype | When | Message |\n| --- | --- | --- |\n| `NOTIFICATION`\
+    \ | The domain was bought on the marketplace; the item shows stage `awaiting_code`\
+    \ | `Order for <domain> placed` |\n| `SUCCESS` | The authorization code is ready;\
+    \ the item's `delivery_available` is `true` | `Auth code for <domain> is ready`\
+    \ |\n| `CANCELED` | The order was canceled; `error.code` is the item's `reason`\
+    \ (`price_changed`, `unavailable` or `canceled_by_marketplace`) | `Order for <domain>\
+    \ was canceled` |\n| `FAILURE` | The order failed: the item's `reason` is `failed`,\
+    \ and `error.code` is `failed` | `Order for <domain> failed` |\n\n`<domain>` is\
+    \ the ASCII form. An event never carries the authorization code: read it through\
+    \ Delivery. The order stays the source of truth and an event is a notification,\
+    \ so read the order for its state.\n\nAcknowledge an event with `PATCH /v1/events/{event_id}`\
+    \ (needs `MANAGE_EVENTS`; API keys need `events:manage`); acknowledged events\
+    \ leave the default list. Creating an order writes no event, because the create\
+    \ call returns the order, and an order that is slow or stuck (`reason` `delayed`)\
+    \ writes none either.\n\nHistory below records the changes to an order in the\
+    \ archive; the event feed notifies you of the milestones above.\n\n### Errors\n\
+    \nErrors follow RFC 9457 problem details; `code` identifies the error. The `ERROR_ORDER_*`\
+    \ codes are published in the API spec as the `OrderErrorCodes` enum.\n\n| Status\
+    \ | Code | Meaning |\n| --- | --- | --- |\n| 403 | `ERROR_ORDERS_FEATURE_DISABLED`\
+    \ | Orders are not enabled in this environment |\n| 403 | `ERROR_ORDER_CURRENCY_NOT_SUPPORTED`\
     \ | Marketplace orders are available to organizations billed in EUR |\n| 403 |\
-    \ `ERROR_BILLING_INSUFFICIENT_FUNDS` | Your organization's account cannot cover\
-    \ the order |\n| 404 | `ERROR_ORDER_NOT_FOUND` | No such order for your organization\
-    \ |\n| 404 | `ERROR_ORDER_ITEM_NOT_FOUND` | The order has no such item |\n| 409\
-    \ | `ERROR_ORDER_IDEMPOTENCY_KEY_REUSED` | The key was already used with a different\
-    \ body |\n| 409 | `ERROR_ORDER_SUBJECT_IN_PROGRESS` | Another order for this domain\
-    \ is already in progress |\n| 409 | `ERROR_ORDER_PRICE_CHANGED` | The price changed;\
-    \ the response carries `expected_price`, `actual_price` and their `currency` |\n\
-    | 409 | `ERROR_ORDER_ITEM_UNAVAILABLE` | The domain is not available for purchase\
+    \ `ERROR_PRE_REGISTRATIONS_FEATURE_DISABLED` | Domain pre-registrations are not\
+    \ enabled in this environment |\n| 403 | `ERROR_BILLING_INSUFFICIENT_FUNDS` |\
+    \ Your organization's account cannot cover the order |\n| 404 | `ERROR_ORDER_NOT_FOUND`\
+    \ | No such order for your organization |\n| 404 | `ERROR_ORDER_ITEM_NOT_FOUND`\
+    \ | The order has no such item |\n| 409 | `ERROR_ORDER_IDEMPOTENCY_KEY_REUSED`\
+    \ | The key was already used with a different body |\n| 409 | `ERROR_ORDER_SUBJECT_IN_PROGRESS`\
+    \ | Another order for this domain is already in progress (for a pre-registration:\
+    \ your organization already has one for it) |\n| 409 | `ERROR_ORDER_PRICE_CHANGED`\
+    \ | The price changed; the response carries `expected_price`, `actual_price` and\
+    \ their `currency` |\n| 409 | `ERROR_ORDER_PREMIUM_PRICE_REQUIRED` | The domain\
+    \ is premium; send `expected_price` set to the `price` in the response |\n| 409\
+    \ | `ERROR_ORDER_ITEM_UNAVAILABLE` | The domain is not available for purchase\
     \ |\n| 409 | `ERROR_ORDER_ITEM_NOT_DELIVERABLE` | The domain cannot be delivered\
     \ to you (for example, its TLD cannot be handed over by auth code) |\n| 409 |\
     \ `ERROR_ORDER_OPEN_LIMIT_REACHED` | Too many open orders; wait for some to finish\
+    \ |\n| 409 | `ERROR_ORDER_NOT_CANCELABLE` | The order cannot be canceled: a marketplace\
+    \ order, or an item past `requested` |\n| 409 | `ERROR_ORDER_ITEM_BUSY` | The\
+    \ item is being processed at that moment; retry after the `Retry-After` seconds\
     \ |\n| 409 | `ERROR_ORDER_DELIVERY_NOT_AVAILABLE` | Nothing is delivered yet,\
     \ or the item is not at a stage where it can be read; read the order and check\
-    \ the item's `delivery_available` |\n| 500 | `ERROR_ORDER_DELIVERY_UNREADABLE`\
+    \ the item's `delivery_available` |\n| 422 | `ERROR_ORDER_PHASE_NOT_AVAILABLE`\
+    \ | The requested launch phase cannot be pre-registered; `detail` says why |\n\
+    | 422 | `ERROR_ORDER_PREMIUM_PERIOD_NOT_SUPPORTED` | The domain is premium: pre-register\
+    \ it for one year and renew it after registration |\n| 422 | `ERROR_ORDER_CONFIRMATIONS_REQUIRED`\
+    \ | A confirmation the TLD requires is missing; `missing_confirmations` lists\
+    \ the keys to set to `\"true\"` in `registration.attributes` |\n| 500 | `ERROR_ORDER_DELIVERY_UNREADABLE`\
     \ | The stored delivery could not be read; contact support |\n| 500 | `ERROR_ORDER_UNREADABLE`\
     \ | The order's stored data cannot be shown; contact support |\n| 503 | `ERROR_AUTHORIZATION_UNAVAILABLE`\
     \ | The permission check could not be completed; retry later |\n| 503 | `ERROR_ORDER_SERVICE_UNAVAILABLE`\
     \ | Temporary failure; retry after the `Retry-After` seconds, with the same `idempotency_key`\
     \ |\n\n### History\n\nChanges to an order are recorded in the archive. Query `GET\
     \ /v1/archive/object-logs` with `object_type=Order` (and `object_id` set to the\
-    \ order ID) to see them. Reading the history needs the view-audit-logs permission\
-    \ (`VIEW_AUDIT_LOGS`), which is separate from the permission to read orders: a\
-    \ caller who can read an order may still be refused its history.\n"
+    \ order ID) to see them: action `CREATED` when it is created, `CANCELED` when\
+    \ you cancel it, `UPDATED` for every other change. Reading the history needs the\
+    \ view-audit-logs permission (`VIEW_AUDIT_LOGS`), which is separate from the permission\
+    \ to read orders: a caller who can read an order may still be refused its history.\n"
   name: orders
   x-displayName: Orders
 - description: 'Endpoints for creating and managing organizations.

@@ -13,11 +13,12 @@ namespace OpusDNS\Client\Enum;
  * What an API caller sees of why an item is not going as planned; the meanings are in
  * docs/api/orders.md.
  */
-enum MarketplaceDomainPurchasePublicReason: string
+enum OrderItemReason: string
 {
     case PRICE_CHANGED = 'price_changed';
     case UNAVAILABLE = 'unavailable';
     case CANCELED_BY_MARKETPLACE = 'canceled_by_marketplace';
+    case CANCELED_BY_CUSTOMER = 'canceled_by_customer';
     case FAILED = 'failed';
     case DELAYED = 'delayed';
 }
