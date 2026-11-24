@@ -95,13 +95,12 @@ final class DomainService
      *     supplied; to filter on whether an object has any user tag, use has_tags. Server default: match_any.
      * @param bool|null $hasTags true returns only objects that carry at least one user tag, false only objects that
      *     carry none. Status tags are not counted. Combines with tag_ids and the other filters.
-     * @param string|null $name Filter by exact domain name, in Unicode or punycode: either stored form matches. Only
-     *     whole labels match across forms.
+     * @param string|null $name Filter by exact domain name, in Unicode or punycode: either stored form matches.
      * @param string|null $search Search domains by name (contains) or domain ID (exact match). A name matches in
-     *     Unicode or punycode, either stored form; only whole labels match across forms.
+     *     Unicode or punycode, either stored form, and accents are ignored.
      * @param list<string>|null $tld Filter by top-level domain (e.g., 'com', 'org'). Can be specified multiple times
      *     (union of all provided values).
-     * @param string|null $sld Filter by second-level domain
+     * @param string|null $sld Filter by second-level domain, in Unicode or punycode: either stored form matches.
      * @param string|null $nameserver Filter domains whose nameserver hostnames contain this text, e.g. `cloudflare`
      *     or `ns1.example.com`. Matches the nameservers the domain currently delegates to. The text is matched
      *     literally, so `%` and `_` are not wildcards; a trailing dot on a single label anchors at a label boundary,
@@ -254,7 +253,8 @@ final class DomainService
      *
      * @param list<string> $domains One or more fully-qualified domain names to check at the registry. Each domain is
      *     checked for availability and, when applicable, enriched with trademark claims information and premium
-     *     pricing. The list of domains may include a mix of TLDs.
+     *     pricing. The list of domains may include a mix of TLDs. A name can be sent in Unicode (`dömäin.example`)
+     *     or in its ASCII form (`xn--dmin-moa0i.example`).
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
@@ -882,7 +882,11 @@ final class DomainService
      * status will set the `transfer_lock` property. <br> `transfer_lock` is read-only and cannot be set
      * here: send it in the request body and it is ignored, leaving the lock unchanged. Use
      * `status_changes` to release a lock before a transfer out, for example `{"status_changes": {"remove":
-     * ["clientTransferProhibited"]}}`.
+     * ["clientTransferProhibited"]}}`. <br> A `read_only` domain held at another registrar is refused with
+     * 403. Otherwise only its transfer lock or its nameservers can be changed, one of the two per request;
+     * any other field, glue records (`ip_addresses`), or both in one request are refused with 422 before
+     * anything is sent to that registrar. If the registrar has not finished the change when it answers,
+     * the response is 202 and the outcome is reported as a domain event.
      *
      * Required permissions: domains:manage
      *

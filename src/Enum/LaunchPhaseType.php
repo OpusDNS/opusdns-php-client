@@ -14,4 +14,5 @@ enum LaunchPhaseType: string
     case SUNRISE = 'sunrise';
     case LANDRUSH = 'landrush';
     case EAP = 'eap';
+    case LIMITED_REGISTRATION = 'limited_registration';
 }

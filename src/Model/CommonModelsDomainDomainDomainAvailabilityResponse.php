@@ -20,6 +20,8 @@ final class CommonModelsDomainDomainDomainAvailabilityResponse implements ApiMod
     /**
      * @param bool $available True if the domain is available for registration
      * @param string $domain The domain name that was checked
+     * @param string $domainAce The checked name in its ASCII form.
+     * @param string $domainUnicode The checked name in Unicode.
      * @param string|null $claimsKey Trademark claims key returned when the TLD is in its claims phase and the domain
      *     matches a TMCH-registered mark. When present, the corresponding claims notice must be retrieved and
      *     acknowledged before registration.
@@ -36,6 +38,8 @@ final class CommonModelsDomainDomainDomainAvailabilityResponse implements ApiMod
     public function __construct(
         public readonly bool $available,
         public readonly string $domain,
+        public readonly string $domainAce,
+        public readonly string $domainUnicode,
         public readonly ?string $claimsKey = null,
         public readonly ?DomainAvailabilityError $error = null,
         public readonly bool $isPremium = false,
@@ -52,6 +56,8 @@ final class CommonModelsDomainDomainDomainAvailabilityResponse implements ApiMod
         return new self(
             available: $data['available'],
             domain: $data['domain'],
+            domainAce: $data['domain_ace'],
+            domainUnicode: $data['domain_unicode'],
             claimsKey: $data['claims_key'] ?? null,
             error: isset($data['error']) ? DomainAvailabilityError::fromArray($data['error']) : null,
             isPremium: $data['is_premium'] ?? false,
@@ -68,6 +74,8 @@ final class CommonModelsDomainDomainDomainAvailabilityResponse implements ApiMod
         return Serializer::normalize([
             'available' => $this->available,
             'domain' => $this->domain,
+            'domain_ace' => $this->domainAce,
+            'domain_unicode' => $this->domainUnicode,
             'claims_key' => $this->claimsKey,
             'error' => $this->error,
             'is_premium' => $this->isPremium,

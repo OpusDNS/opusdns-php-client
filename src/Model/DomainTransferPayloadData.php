@@ -16,7 +16,8 @@ use OpusDNS\Client\Serializer;
 final class DomainTransferPayloadData implements ApiModel
 {
     /**
-     * @param string $name The domain to be created
+     * @param string $name The domain name, in Unicode (`dömäin.example`) or in its ASCII form
+     *     (`xn--dmin-moa0i.example`).
      * @param RenewalMode|string $renewalMode The renewal mode of the domain
      * @param array<string, string>|null $attributes Additional attributes of the domain, keyed by attribute name.
      *     Values are strings. Customer-settable keys: - `auto_renew_period`: `monthly` or `yearly`. All TLDs on
@@ -29,6 +30,8 @@ final class DomainTransferPayloadData implements ApiModel
      *     and update; a `monthly` stored before that rule applied is ignored at renewal. -
      *     `music_registrant_attestation`: `true`. `.music` registration. - `nic_it_compliance_confirmation`: `true`.
      *     `.it` registration and transfer. - `travel_industry_acknowledgement`: `true`. `.travel` registration. -
+     *     `https_support_confirmation`, `no_false_affiliation_confirmation`, `registry_rights_acknowledgement`:
+     *     `true`. Registration on TLDs whose specification requires them, e.g. `.web`. -
      *     `internet_ee_registrant_agreement`: `true`. `.ee` registration and registrant change. -
      *     `punktum_dk_terms_acceptance`: `true`. `.dk` registration and registrant change. -
      *     `de_general_request_contact`, `de_abuse_contact`: id of a contact whose `.de` attribute set has
@@ -43,7 +46,8 @@ final class DomainTransferPayloadData implements ApiModel
      *     value removes the stored attribute, except for `auto_renew_period`, whose only accepted values are
      *     `monthly` and `yearly`. `.dk` also reads `punktum_dk_terms_acceptance` to confirm a registrant change. An
      *     update cannot change what the registrant accepted at registration, so these are rejected on update:
-     *     `music_registrant_attestation`, `nic_it_compliance_confirmation`, `travel_industry_acknowledgement` and
+     *     `music_registrant_attestation`, `nic_it_compliance_confirmation`, `travel_industry_acknowledgement`,
+     *     `https_support_confirmation`, `no_false_affiliation_confirmation`, `registry_rights_acknowledgement` and
      *     the three `nor_id_applicant_*` keys. `punktum_dk_terms_acceptance` and `internet_ee_registrant_agreement`
      *     stay settable for a registrant change but cannot be removed with an empty value.
      * @param string|null $authCode The auth code for the domain. Omit it for a domain the organization holds through

@@ -30,7 +30,8 @@ final class AvailabilityService
      * Check the availability of one or more domains. Invalid domains are reported per domain (status
      * 'unavailable' with error details) instead of failing the whole request.
      *
-     * @param list<string> $domains Specify one or more domains to check for availability.
+     * @param list<string> $domains Specify one or more domains to check for availability. A name can be sent in
+     *     Unicode (`dömäin.example`) or in its ASCII form (`xn--dmin-moa0i.example`).
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.
@@ -55,7 +56,8 @@ final class AvailabilityService
      * Stream domain availability results using Server-Sent Events (SSE) until the `done` event is
      * received.
      *
-     * @param list<string> $domains Specify one or more domains to check for availability.
+     * @param list<string> $domains Specify one or more domains to check for availability. A name can be sent in
+     *     Unicode (`dömäin.example`) or in its ASCII form (`xn--dmin-moa0i.example`).
      * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
      *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
      *     serialized as RFC 3339 with a `Z` suffix.

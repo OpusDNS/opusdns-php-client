@@ -11,13 +11,14 @@ namespace OpusDNS\Client\Model;
 
 use OpusDNS\Client\ApiModel;
 use OpusDNS\Client\Serializer;
+use OpusDNS\Client\Union;
 
 final class OrderCreate implements ApiModel
 {
     /**
      * @param string $idempotencyKey Caller-chosen key, unique per organization. Repeating a request with the same
      *     key and body returns the original order.
-     * @param list<MarketplaceDomainPurchaseItemCreate> $items Items to order (one for now)
+     * @param list<MarketplaceDomainPurchaseItemCreate|DomainPreRegistrationItemCreate> $items Items to order (one for now)
      */
     public function __construct(
         public readonly string $idempotencyKey,
@@ -32,7 +33,7 @@ final class OrderCreate implements ApiModel
     {
         return new self(
             idempotencyKey: $data['idempotency_key'],
-            items: array_map(static fn (array $item): MarketplaceDomainPurchaseItemCreate => MarketplaceDomainPurchaseItemCreate::fromArray($item), $data['items']),
+            items: array_map(static fn (array $item) => Union::hydrate($item, [DomainPreRegistrationItemCreate::class => ['type', 'domain', 'phase', 'registration'], MarketplaceDomainPurchaseItemCreate::class => ['domain', 'marketplace', 'expected_price']]), $data['items']),
         );
     }
 

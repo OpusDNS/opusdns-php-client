@@ -12,4 +12,5 @@ namespace OpusDNS\Client\Enum;
 enum OrderItemType: string
 {
     case MARKETPLACE_DOMAIN_PURCHASE = 'marketplace_domain_purchase';
+    case DOMAIN_PRE_REGISTRATION = 'domain_pre_registration';
 }

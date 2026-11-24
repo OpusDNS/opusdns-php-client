@@ -80,17 +80,20 @@ final class OrdersService
     /**
      * Create an order
      *
-     * Orders a domain listed on a marketplace. The order is accepted (202) once the price and availability
-     * are confirmed; it then progresses on its own, follow it with `GET /v1/orders/{order_id}`.
+     * Orders a domain listed on a marketplace (`marketplace_domain_purchase`), or pre-registers a domain
+     * in an upcoming TLD launch (`domain_pre_registration`). The order is accepted (202) once it is
+     * checked; it then progresses on its own, follow it with `GET /v1/orders/{order_id}`.
      *
      * Repeating a request with the same `idempotency_key` and body returns the original order with 200.
      * The same key with a different body is refused with 409.
      *
-     * Only organizations billed in EUR can order; others are refused with 403
+     * Only organizations billed in EUR can order from a marketplace; others are refused with 403
      * `ERROR_ORDER_CURRENCY_NOT_SUPPORTED`.
      *
-     * The order's price is reserved on the organization's account before the order is created; billing's
-     * refusal (403 insufficient funds, 429 daily create limit) creates no order.
+     * A marketplace order's price is reserved on the organization's account before the order is created;
+     * billing's refusal (403 insufficient funds, 429 daily create limit) creates no order. A
+     * pre-registration reserves nothing when created: its funds are held shortly before its launch phase
+     * opens.
      *
      * Required permissions: domains:manage
      *
@@ -130,6 +133,34 @@ final class OrdersService
         );
 
         return $this->client->hydrate($response, static fn (array $data): OrderResponse => OrderResponse::fromArray($data));
+    }
+
+    /**
+     * Cancel an order
+     *
+     * Cancels a `domain_pre_registration` order while its item is `requested` (including `needs_action`):
+     * nothing is held for it yet, so it is canceled at once. The order stays readable with status
+     * `canceled` and reason `canceled_by_customer`, and the domain can be pre-registered again. Repeating
+     * the call on an order canceled this way is a success.
+     *
+     * Other order types and items past `requested` cannot be canceled (409 `ERROR_ORDER_NOT_CANCELABLE`).
+     * 409 `ERROR_ORDER_ITEM_BUSY` means the item is being processed at that moment: retry after
+     * `Retry-After`.
+     *
+     * Required permissions: domains:manage
+     *
+     * @param string|null $xDatetimeFormat Deprecated: has no effect and will be removed from this specification on
+     *     2026-11-12; the API keeps ignoring it if sent. Response datetimes are always normalized to UTC and
+     *     serialized as RFC 3339 with a `Z` suffix.
+     */
+    public function cancelOrder(string $orderId, ?string $xDatetimeFormat = null): void
+    {
+        $this->client->request(
+            'DELETE',
+            Endpoint::ORDERS_BY_ORDER_ID,
+            path: ['order_id' => $orderId],
+            headers: ['X-Datetime-Format' => $xDatetimeFormat],
+        );
     }
 
     /**

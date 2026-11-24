@@ -19,6 +19,8 @@ final class DomainResponse implements ApiModel
 {
     /**
      * @param string $name The domain name
+     * @param string $nameAce The domain name in its ASCII form.
+     * @param string $nameUnicode The domain name in Unicode.
      * @param string $roid The registry object id of the domain
      * @param string $sld The second level domain
      * @param string $tld The top level domain of the domain
@@ -52,8 +54,9 @@ final class DomainResponse implements ApiModel
      *     no date is scheduled. More values may be added; treat unknown values as 'other'.
      * @param string|null $ownerId The organization that owns the domain TypeID prefix: organization.
      * @param bool $readOnly Whether the domain is read-only in OpusDNS. When `true`, the domain is listed in your
-     *     portfolio but cannot be managed — for example while it awaits a migration, is locked for legal reasons,
-     *     or is managed at an external registrar. The flag is set and removed by OpusDNS; it cannot be changed
+     *     portfolio but cannot be managed — for example while it awaits a migration or is locked for legal
+     *     reasons. A domain held at another registrar is normally not read-only, but only the changes that OpusDNS
+     *     can forward to that registrar are accepted. The flag is set and removed by OpusDNS; it cannot be changed
      *     through the API.
      * @param \DateTimeImmutable|null $registeredOn When the domain was registered
      * @param DomainRegistrantChangeResponse|null $registrantChange The change of registrant in progress, or else the
@@ -79,6 +82,8 @@ final class DomainResponse implements ApiModel
      */
     public function __construct(
         public readonly string $name,
+        public readonly string $nameAce,
+        public readonly string $nameUnicode,
         public readonly string $roid,
         public readonly string $sld,
         public readonly string $tld,
@@ -122,6 +127,8 @@ final class DomainResponse implements ApiModel
     {
         return new self(
             name: $data['name'],
+            nameAce: $data['name_ace'],
+            nameUnicode: $data['name_unicode'],
             roid: $data['roid'],
             sld: $data['sld'],
             tld: $data['tld'],
@@ -165,6 +172,8 @@ final class DomainResponse implements ApiModel
     {
         return Serializer::normalize([
             'name' => $this->name,
+            'name_ace' => $this->nameAce,
+            'name_unicode' => $this->nameUnicode,
             'roid' => $this->roid,
             'sld' => $this->sld,
             'tld' => $this->tld,

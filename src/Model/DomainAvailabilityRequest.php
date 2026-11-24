@@ -16,7 +16,8 @@ use OpusDNS\Client\Serializer;
 final class DomainAvailabilityRequest implements ApiModel
 {
     /**
-     * @param list<string> $domains
+     * @param list<string> $domains The domain names to check. A name can be sent in Unicode (`dömäin.example`) or
+     *     in its ASCII form (`xn--dmin-moa0i.example`).
      * @param list<string|MarketplaceName>|null $marketplaces Marketplaces to check, by name, or `all` for every
      *     marketplace. A taken domain that can be bought on one of them is reported as `market_available`.
      *     Best-effort: such a domain may still be reported as `unavailable`. Empty or omitted: no marketplace is

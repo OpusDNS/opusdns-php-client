@@ -24,11 +24,11 @@ final class DomainForwardStatisticsResponse implements ApiModel
      * @param bool $breakdownApproximate True when the `breakdown` list may miss values or count them too low. For
      *     `user_agent`, `referrer`, `fqdn`, `domain`, `forward` and `rule`, days that are over are usually read from
      *     daily top lists, in which a value that did not make a day's list is missing for that day; the current day,
-     *     and queries with a `hostname`, `domain` or `protocol` filter, are counted from all requests. `url` is
-     *     built from the daily top 5 lists of the domain and is approximate as soon as the window includes a day
-     *     that is over. `browser`, `platform`, `country` and `status_code` are counted exactly. Also true when a
-     *     query has more distinct values than can be ranked at once and the rest is left out. Always false without a
-     *     breakdown
+     *     and queries with a `hostname`, `forward`, `domain` or `protocol` filter, are counted from all requests.
+     *     `url` is built from the daily top 5 lists of the domain and is approximate as soon as the window includes
+     *     a day that is over. `browser`, `platform`, `country` and `status_code` are counted exactly. Also true when
+     *     a query has more distinct values than can be ranked at once and the rest is left out. Always false without
+     *     a breakdown
      * @param list<DomainForwardStatisticsBucket> $buckets One entry per bucket the window touches, oldest first,
      *     including buckets without redirects (0) and buckets without data (null)
      * @param \DateTimeImmutable $end End of the window as an instant (UTC), exclusive: the day after `end_date` at

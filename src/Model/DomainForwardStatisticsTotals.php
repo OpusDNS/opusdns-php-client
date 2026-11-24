@@ -18,7 +18,8 @@ final class DomainForwardStatisticsTotals implements ApiModel
      * @param int $configuredForwards Number of redirect rules currently configured for the filtered scope (your
      *     organization, and its sub-organizations with `include_sub_organizations`). The current state, not the
      *     state during the window: it does not depend on the window, and it leaves out forwards deleted since, whose
-     *     traffic still counts in the totals
+     *     traffic still counts in the totals. With `hostname`, only the forward configured for exactly that name
+     *     counts; with `forward`, the rules of those forwards
      * @param int|null $invokedForwards Estimated number of distinct forwards (`rule_source_forward`: the forward's
      *     hostname, `*.example.com` for a wildcard) that served at least one redirect, counted with a HyperLogLog
      *     sketch. The `/metrics` route counts distinct domain and path pairs instead, so the two figures are not

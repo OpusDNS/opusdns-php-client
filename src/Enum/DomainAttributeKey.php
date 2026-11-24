@@ -26,6 +26,9 @@ enum DomainAttributeKey: string
     case PUNKTUM_DK_TERMS_ACCEPTANCE = 'punktum_dk_terms_acceptance';
     case PUNKTUM_DK_TRACKING_NO = 'punktum_dk_tracking_no';
     case INTERNET_EE_REGISTRANT_AGREEMENT = 'internet_ee_registrant_agreement';
+    case HTTPS_SUPPORT_CONFIRMATION = 'https_support_confirmation';
+    case NO_FALSE_AFFILIATION_CONFIRMATION = 'no_false_affiliation_confirmation';
+    case REGISTRY_RIGHTS_ACKNOWLEDGEMENT = 'registry_rights_acknowledgement';
     case PROMOTION = 'promotion';
     case PROMOTION_ELIGIBILITY = 'promotion_eligibility';
     case DOMAIN_CONTACT_ATTRIBUTES = 'domain_contact_attributes';
