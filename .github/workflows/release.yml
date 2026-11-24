@@ -32,6 +32,11 @@ jobs:
     # apt and switch the host's default php, so jobs on one host could run with
     # each other's version. The official image gives every job its own PHP.
     container: php:8.3-cli
+    defaults:
+      run:
+        # The image's sh is dash. The steps were written for bash, the default
+        # shell on GitHub-hosted runners: the version step uses a here-string.
+        shell: bash
 
     env:
       # Keeps Composer's cache in the container instead of the runner's home.
