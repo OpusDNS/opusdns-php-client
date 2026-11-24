@@ -1,4 +1,4 @@
-ARG PHP_VERSION
+ARG PHP_VERSION=8.3
 FROM php:${PHP_VERSION}-cli-alpine
 
 # Composer release and the SHA-256 of its composer.phar.
