@@ -17,6 +17,11 @@ jobs:
     # apt and switch the host's default php, so jobs on one host could run with
     # each other's version. The official image gives every job its own PHP.
     container: php:${{ matrix.php }}-cli
+    defaults:
+      run:
+        # The image's sh is dash. The steps were written for bash, the default
+        # shell on GitHub-hosted runners.
+        shell: bash
     strategy:
       fail-fast: false
       matrix:
