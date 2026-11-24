@@ -22,50 +22,29 @@ jobs:
   update:
     name: Sync and regenerate
     runs-on: self-hosted
-    # Each host runs several runners. setup-php would install PHP on the host with
-    # apt and switch the host's default php, so jobs on one host could run with
-    # each other's version. The official image gives every job its own PHP.
-    container: php:8.3-cli
-    defaults:
-      run:
-        # The image's sh is dash. The steps were written for bash, the default
-        # shell on GitHub-hosted runners.
-        shell: bash
+    timeout-minutes: 15
 
     env:
-      # Keeps Composer's cache in the container instead of the runner's home.
-      COMPOSER_CACHE_DIR: /tmp/composer-cache
+      PHP_IMAGE: opusdns-php-client-ci:8.3
 
     steps:
-      # git before checkout, or actions/checkout downloads the tree without .git.
-      - name: Install git, unzip and Composer
-        env:
-          DEBIAN_FRONTEND: noninteractive
-          # Bump both together. The checksum is on https://getcomposer.org/download/.
-          COMPOSER_VERSION: 2.11.3
-          COMPOSER_SHA256: 04f8b003da4e3a2459056591fbfebd02b4dc3e5adeb158616b90cf55a65113ec
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends git unzip
-          # The workspace belongs to the runner user, and the container runs as root.
-          git config --system --add safe.directory "$GITHUB_WORKSPACE"
-          curl -fsSL -o /usr/local/bin/composer "https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar"
-          echo "${COMPOSER_SHA256}  /usr/local/bin/composer" | sha256sum -c -
-          chmod +x /usr/local/bin/composer
-
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Build the PHP image
+        run: docker build --pull --build-arg PHP_VERSION=8.3 --tag "$PHP_IMAGE" .github/php
+
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress
+        run: .github/php/run composer install --no-interaction --no-progress
 
       - name: Sync the specification from api-spec
-        run: bin/spec-sync --ref "${{ github.event.inputs.ref || 'main' }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REF: ${{ github.event.inputs.ref || 'main' }}
+        run: .github/php/run bin/spec-sync --ref "$REF"
 
       - name: Regenerate the client
-        run: composer generate
+        run: .github/php/run composer generate
 
       - name: Detect changes
         id: diff
@@ -81,11 +60,11 @@ jobs:
 
       - name: Run tests
         if: steps.diff.outputs.changed == 'true'
-        run: composer test
+        run: .github/php/run composer test
 
       - name: Run static analysis
         if: steps.diff.outputs.changed == 'true'
-        run: composer stan
+        run: .github/php/run composer stan
 
       - name: Open pull request
         if: steps.diff.outputs.changed == 'true'
@@ -105,9 +84,3 @@ jobs:
             automated
             spec-update
           delete-branch: true
-
-      # Files written in the container belong to root on the host. Hand them back
-      # to the runner user, or the next job on this runner cannot clean them up.
-      - name: Hand the workspace back to the runner user
-        if: always()
-        run: chown -R "$(stat -c '%u:%g' "$GITHUB_WORKSPACE/../..")" "$GITHUB_WORKSPACE" "$HOME"

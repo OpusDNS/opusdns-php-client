@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Runs a command in the image named by PHP_IMAGE, as the calling user, with the
+# current directory mounted at the same path.
+
+set -euo pipefail
+
+exec docker run --rm \
+    --user "$(id -u):$(id -g)" \
+    --env HOME=/tmp \
+    --env GITHUB_TOKEN \
+    --volume "$PWD:$PWD" \
+    --workdir "$PWD" \
+    "$PHP_IMAGE" "$@"
